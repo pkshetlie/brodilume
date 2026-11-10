@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224 224" role="img" aria-labelledby="title">
+  <title id="title">Icône Brodilume</title>
+  <path fill="#241B33" d="M0 52C0 23.281 23.281 0 52 0L172 0C200.719 0 224 23.281 224 52C224 52 224 52 224 52L224 172C224 200.719 200.719 224 172 224L52 224C23.281 224 0 200.719 0 172Z"/>
+  <path d="M45 149C48 163 57 172 70 172C84 172 94 161 94 147L94 69C94 62 98 58 105 58L120 58C140 58 152 69 152 84C152 100 140 111 121 111L113 111C145 111 165 118 165 142C165 160 150 173 130 173L113 173" fill="none" stroke="#B8F1D7" stroke-width="11.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path fill="#FFC396" d="M177 36C179 47 183 51 194 53C183 55 179 59 177 70C175 59 171 55 160 53C171 51 175 47 177 36Z"/>
+</svg>

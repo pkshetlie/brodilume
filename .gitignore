@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+
+# fichiers générés (aperçus, exports, vidéo de présentation)
+out/
+
+# raccourci Windows (contient un chemin propre à ce PC)
+*.lnk
+
+# fichiers de test personnels (non publiés)
+samples/
+bonjour*.png
+
+# fabrication de l'exécutable
+build/
+dist/
+.build-venv/
+*.spec

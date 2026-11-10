@@ -1,0 +1,5 @@
+Pillow>=10
+numpy>=1.24
+scipy>=1.10
+scikit-image>=0.21
+pyembroidery>=1.5   # exports vp3, pes, dst, jef, exp, xxx, u01
