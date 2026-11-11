@@ -1118,6 +1118,7 @@ class App(BaseTk):
         s.min_area_mm2 = 0.3
         s.smooth_mm = 0.2
         s.details = 1
+        s.satin = True          # point satin le long des traits : lettres nettes
         s.notes = "Créé par Brodilume"
         return s
 
@@ -1163,6 +1164,7 @@ class App(BaseTk):
         self.v_font = tk.StringVar()
         self.v_align = tk.StringVar(value=self.ALIGNS[1][1])
         self.v_tspacing = tk.DoubleVar(value=1.2)
+        self.v_satin = tk.BooleanVar(value=True)
         box = ttk.LabelFrame(parent, text=_("Texte à broder"), padding=8)
         box.pack(fill="x")
         self.txt_box = tk.Text(box, height=4, width=30, wrap="word", font=("Segoe UI", 11), undo=True,
@@ -1197,11 +1199,16 @@ class App(BaseTk):
         ttk.Label(lb, text=_("Interligne")).grid(row=2, column=0, sticky="w", pady=2)
         ttk.Spinbox(lb, from_=0.8, to=3.0, increment=0.1, textvariable=self.v_tspacing, width=6).grid(
             row=2, column=1, sticky="e", pady=2)
+        ttk.Checkbutton(lb, text=_("Point satin (recommandé pour les lettres)"), variable=self.v_satin).grid(
+            row=3, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        ttk.Label(lb, text=_("Décoché : remplissage tatami, pour de très grosses lettres."), style="Muted.TLabel",
+                  wraplength=250, justify="left").grid(row=4, column=0, columnspan=2, sticky="w")
         ttk.Label(parent, text=_("Taille : largeur dans le panneau Propriétés, ou les coins du cadre. Des lettres "
                                  "de moins de 5 mm de haut se brodent mal."),
                   style="Muted.TLabel", wraplength=270, justify="left").pack(anchor="w", pady=(8, 0))
         self.v_align.trace_add("write", lambda *a: self._text_changed(100))
         self.v_tspacing.trace_add("write", lambda *a: self._text_changed())
+        self.v_satin.trace_add("write", lambda *a: self._satin_changed())
 
     def _fill_text_panel(self, it):
         """Champs du panneau Texte = texte sélectionné (sans relancer de génération)."""
@@ -1214,7 +1221,16 @@ class App(BaseTk):
         self.v_font.set(t.get("font", ""))
         self.v_align.set(dict(self.ALIGNS).get(t.get("align", "center"), self.ALIGNS[1][1]))
         self.v_tspacing.set(t.get("spacing", 1.2))
+        self.v_satin.set(bool(getattr(it.settings, "satin", False)))
         self.sw_text.config(bg="#%02x%02x%02x" % tuple(t.get("rgb", (0, 0, 0))))
+
+    def _satin_changed(self):
+        it = self.cur()
+        if self._loading or not it or it.text is None or it.settings.satin == bool(self.v_satin.get()):
+            return
+        self._snapshot()
+        it.settings.satin = bool(self.v_satin.get())
+        self.regenerate(it)
 
     def _text_modified(self, _e=None):
         if not self.txt_box.edit_modified():
@@ -1943,6 +1959,7 @@ class App(BaseTk):
             return
         # réglages absents du panneau : gardés (largeur, lissage d'un texte…)
         s.width_mm, s.smooth_mm, s.jump_mm = it.settings.width_mm, it.settings.smooth_mm, it.settings.jump_mm
+        s.satin = it.settings.satin
         it.settings = s
         if self.v_auto.get():
             self.regenerate(it, delay=700)

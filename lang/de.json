@@ -472,6 +472,8 @@
   "Tajima, Ricoma, Happy, SWF, Barudan ; Brother PR ; la plupart des machines multi-têtes": "Tajima, Ricoma, Happy, SWF, Barudan; Brother PR; die meisten Mehrkopfmaschinen",
   "Barudan": "Barudan",
   "Barudan, Toyota (machines professionnelles)": "Barudan, Toyota (Profimaschinen)",
-  "Pour ce format, installez pyembroidery : python -m pip install pyembroidery": "Für dieses Format installieren Sie pyembroidery: python -m pip install pyembroidery"
+  "Pour ce format, installez pyembroidery : python -m pip install pyembroidery": "Für dieses Format installieren Sie pyembroidery: python -m pip install pyembroidery",
+  "Point satin (recommandé pour les lettres)": "Plattstich (empfohlen für Buchstaben)",
+  "Décoché : remplissage tatami, pour de très grosses lettres.": "Nicht angekreuzt: Tatami-Füllung, für sehr große Buchstaben."
  }
 }

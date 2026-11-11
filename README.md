@@ -111,8 +111,12 @@ argument (glisser une image ou un .vp4 sur le .bat l'ouvre directement).
 - **Importer une police…** : un fichier .ttf / .otf / .ttc est copié dans `%APPDATA%\Brodilume\polices`.
   Il n'est pas installé dans Windows et reste disponible dans Brodilume pour les textes suivants.
   Un projet `.brodi` qui l'utilise l'emporte avec lui : il reste modifiable sur un autre PC.
-- Les lettres sont brodées comme une image d'une seule couleur (remplissage tatami) : la taille se règle
-  dans Propriétés ou avec les coins du cadre, la densité et l'angle dans le panneau Image.
+- Les lettres sont brodées en **point satin** : des points serrés d'un bord à l'autre de chaque trait, qui
+  suivent sa direction, avec une sous-couche au milieu. Chaque lettre d'un seul tenant se brode sans coupe :
+  la sous-couche part au bout du trait, le satin revient en la recouvrant. Les coins, la pointe d'un V,
+  les croisements et les empattements sont remplis en petit tatami, dessous.
+  Case « Point satin » décochée (ou trait de plus de 7 mm de large) : remplissage tatami, comme une image.
+- La taille se règle dans Propriétés ou avec les coins du cadre, la densité dans le panneau Image.
   Des lettres de moins de 5 mm de haut se brodent mal ; les polices très fines rendent mieux en grand.
 
 ## Langue
@@ -213,6 +217,7 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 - `vp4/vp3.py` : lecture du format .vp3.
 - `vp4/projectfile.py` : fichier projet .brodi.
 - `vp4/fonts.py` : polices (installées, importées) et dessin du texte à broder.
+- `vp4/satin.py` : point satin le long des traits (axe médian des lettres, colonnes, parcours sans saut).
 - `i18n.py` et `lang/` : traduction de l'interface (français, anglais, allemand).
 - `vp4/export.py` : exports (vp4, vp3, pes, dst…) et détection des clés USB.
 - `vp4/project.py` : éléments (position, rotation, échelle), gomme, assemblage du motif final.
@@ -226,7 +231,8 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 
 ## Limites
 
-- Uniquement du remplissage : pas de point satin ni de contour, les traits très fins (< 1 mm) disparaissent.
+- Images : uniquement du remplissage (le point satin est réservé aux textes), pas de contour ; les traits
+  très fins (< 1 mm) disparaissent.
 - Le format a été reconstitué par rétro-ingénierie. Les fichiers générés s'ouvrent correctement dans
   CREATIVATE Embroidery (mySewnet) ; ils n'ont pas encore été brodés sur la machine.
 

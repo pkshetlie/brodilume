@@ -32,6 +32,7 @@ class Settings:
     angle_deg: float = 45.0        # angle du remplissage
     underlay: bool = True          # sous-couche (stabilise le tissu, couvre mieux)
     details: int = 1               # petits détails effacés par le lissage : 0 aucun, 1 éclats, 2 tous
+    satin: bool = False            # point satin le long des traits (texte) au lieu du tatami
     # fusions de couleurs demandées : [(polygone local / (largeur*10) ou None, fil source, fil gardé)]
     # fil = (marque, code, rgb) ; fil gardé = (marque, code, nom, rgb)
     recolor: list = field(default_factory=list)
@@ -346,6 +347,18 @@ def _order(runs, start_pt):
     return path
 
 
+def segment_inside(mask, p, q, res=RES):
+    """Le segment p-q (unités) reste-t-il dans le masque (pixels de `res` unités) ?"""
+    n = max(2, int(math.hypot(q[0] - p[0], q[1] - p[1]) / (res / 2)) + 1)
+    h, w = mask.shape
+    for t in np.linspace(0, 1, n):
+        x = int((p[0] + (q[0] - p[0]) * t) / res)
+        y = int((p[1] + (q[1] - p[1]) * t) / res)
+        if not (0 <= x < w and 0 <= y < h and mask[y, x]):
+            return False
+    return True
+
+
 def _tatami(mask, spacing_mm, stitch_mm, angle_deg, jump_mm, start=(0, 0)):
     """Remplissage d'un masque. Opérations absolues ('s'|'move', x, y) dans le repère du masque."""
     ang = angle_deg % 180
@@ -371,6 +384,7 @@ def _tatami(mask, spacing_mm, stitch_mm, angle_deg, jump_mm, start=(0, 0)):
         return CX + c * dx + sn * dy, CY - sn * dx + c * dy
 
     L = stitch_mm * 10
+    inside = ndimage.binary_dilation(rot, iterations=1)  # bouts de rang posés sur le bord : tolérance 1 px
     ops, last = [], None
     for idx, ltr in _order(runs, fwd(*start)):
         k, x0, x1, comp, y = runs[idx]
@@ -385,7 +399,10 @@ def _tatami(mask, spacing_mm, stitch_mm, angle_deg, jump_mm, start=(0, 0)):
         if not ltr:
             mids.reverse()
         pts = [(a, y)] + [(m, y) for m in mids] + [(b, y)]
-        far = last is None or comp != last[2] or math.hypot(pts[0][0] - last[0], pts[0][1] - last[1]) > jump_mm * 10
+        # liaison piquée seulement si elle est courte ET reste dans la forme ; sinon coupe + saut
+        # (sans cela, le fil passe au-dessus du vide, ex. entre les jambes d'un M)
+        far = last is None or comp != last[2] or math.hypot(pts[0][0] - last[0], pts[0][1] - last[1]) > jump_mm * 10 \
+            or not segment_inside(inside, last[:2], pts[0])
         ops.append(("move" if far else "s", *back(*pts[0])))
         ops += [("s", *back(*p)) for p in pts[1:]]
         last = (pts[-1][0], pts[-1][1], comp)
@@ -427,9 +444,41 @@ def fill_points(mask: np.ndarray, s: Settings):
             seq = [(op, x + ox, y + oy) for op, x, y in seq]
             # liaison courte entre sous-couche et remplissage : simple point (sera recouvert)
             if ops and seq[0][0] == "move" and \
-                    math.hypot(seq[0][1] - ops[-1][1], seq[0][2] - ops[-1][2]) <= s.jump_mm * 10:
+                    math.hypot(seq[0][1] - ops[-1][1], seq[0][2] - ops[-1][2]) <= s.jump_mm * 10 and \
+                    segment_inside(ndimage.binary_dilation(comp, iterations=1),
+                                   (ops[-1][1] - ox, ops[-1][2] - oy), (seq[0][1] - ox, seq[0][2] - oy)):
                 seq[0] = ("s", seq[0][1], seq[0][2])
             ops += seq
+        if ops:
+            pos = (ops[-1][1], ops[-1][2])
+    return ops
+
+
+def satin_points(mask: np.ndarray, s: Settings):
+    """Point satin le long des traits (lettres) ; une forme trop large pour du satin est remplie en tatami."""
+    from .satin import satin_ops
+    lab, n = ndimage.label(mask)
+    slices = ndimage.find_objects(lab)
+    left = set(range(1, n + 1))
+    pos, ops = (0.0, 0.0), []
+    spacing = min(0.6, max(0.25, s.row_spacing_mm))
+
+    def center(k):
+        sl = slices[k - 1]
+        return ((sl[1].start + sl[1].stop) * RES / 2, (sl[0].start + sl[0].stop) * RES / 2)
+
+    while left:
+        k = min(left, key=lambda j: math.hypot(center(j)[0] - pos[0], center(j)[1] - pos[1]))
+        left.discard(k)
+        sl = slices[k - 1]
+        oy, ox = (sl[0].start - 1) * RES, (sl[1].start - 1) * RES
+        comp = np.pad(lab[sl] == k, 1)
+        local = (pos[0] - ox, pos[1] - oy)
+        seq = satin_ops(comp, RES, spacing, local,
+                        fill_fallback=lambda m: _tatami(m, s.row_spacing_mm, s.stitch_mm, s.angle_deg, s.jump_mm))
+        if seq is None:  # trait trop large : tatami (avec sous-couche) comme pour une image
+            seq = fill_points(comp, s)
+        ops += [(op, x + ox, y + oy) for op, x, y in seq]
         if ops:
             pos = (ops[-1][1], ops[-1][2])
     return ops
@@ -619,7 +668,7 @@ def image_to_design(img: Image.Image, s: Settings, progress=None) -> Design:
     for k, (t, mask, thin) in enumerate(items):
         if progress:
             progress(k, len(items) + len(late))
-        ops = fill_points(mask, s) if mask.any() else []
+        ops = (satin_points(mask, s) if s.satin else fill_points(mask, s)) if mask.any() else []
         if thin.any():
             ops += line_points(thin, s, (ops[-1][1], ops[-1][2]) if ops else (0.0, 0.0))
         if ops:
