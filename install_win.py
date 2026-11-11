@@ -133,7 +133,7 @@ def register(version: str, associate: bool) -> None:
         _set(k, "DisplayIcon", exe + ",0")
         _set(k, "InstallLocation", install_dir())
         _set(k, "UninstallString", '"%s" --uninstall' % exe)
-        _set(k, "URLInfoAbout", "https://github.com/Rhokapa/brodilume")
+        _set(k, "URLInfoAbout", "https://github.com/pkshetlie/brodilume")
         _set(k, "NoModify", 1, winreg.REG_DWORD)
         _set(k, "NoRepair", 1, winreg.REG_DWORD)
         size_kb = os.path.getsize(exe) // 1024 if os.path.exists(exe) else 0

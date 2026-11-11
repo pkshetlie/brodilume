@@ -14,7 +14,7 @@ import urllib.request
 import webbrowser
 
 VERSION = "1.0.0"
-REPO = "Rhokapa/brodilume"          # dépôt GitHub public (propriétaire/nom)
+REPO = "pkshetlie/brodilume"          # dépôt GitHub public (propriétaire/nom)
 API_LATEST = "https://api.github.com/repos/%s/releases/latest" % REPO
 PAGE_LATEST = "https://github.com/%s/releases/latest" % REPO
 ALLOWED_HOSTS = ("https://github.com/", "https://objects.githubusercontent.com/")
