@@ -34,6 +34,8 @@ from toolbar import ToolBar, Tooltip  # noqa: E402
 import theme  # noqa: E402
 from vp4 import export as exporter  # noqa: E402
 from vp4 import fonts as fontlib  # noqa: E402
+from vp4 import hoops  # noqa: E402
+import hoopdialog  # noqa: E402
 from vp4.projectfile import save_project, load_project, EXT as PROJECT_EXT  # noqa: E402
 
 try:  # glisser-déposer dans la fenêtre (facultatif : pip install tkinterdnd2)
@@ -427,6 +429,7 @@ class App(BaseTk):
         self.theme_mode = shortcuts.load_setting("theme", "system")
         hp = shortcuts.load_setting("hoop", {}) or {}
         self.hoop_mm = (float(hp.get("w", 260)), float(hp.get("h", 200)))
+        self.hoop_info = hp if isinstance(hp, dict) else {}   # marque / machine / cercle choisis
         self._theme_name = theme.apply(self, self.theme_mode)
         self.geometry("1440x880")
         self.minsize(1100, 680)
@@ -626,6 +629,16 @@ class App(BaseTk):
         self.btn_usb = ttk.Button(top, text=_("⇪ Envoyer sur la clé USB"), command=self.send_usb_default)
         self.btn_usb.pack(side="left", padx=(0, 4))
         Tooltip(self.btn_usb, lambda: self._usb_tip())
+        self.hoop_menu = tk.Menu(self, tearoff=0)
+        self.hoop_menu.add_command(label=_("Choisir le cercle…"), command=self.choose_hoop)
+        self.hoop_menu.add_separator()
+        self.hoop_menu.add_command(label=_("Ajuster le motif au cercle"), command=self.fit_design)
+        self.hoop_menu.add_command(label=_("Centrer le motif dans le cercle"),
+                                   command=lambda: self.fit_design(center_only=True))
+        self.btn_hoop = ttk.Menubutton(top, text="", menu=self.hoop_menu)
+        self.btn_hoop.pack(side="left", padx=(8, 4))
+        Tooltip(self.btn_hoop, lambda: _("Cercle à broder : choisir la machine et le cercle, ajuster le motif"))
+        self._update_hoop_button()
         ttk.Button(top, text="⚙", width=3, command=self.open_settings).pack(side="right")
         ttk.Button(top, text="◐", width=3, command=self.toggle_theme).pack(side="right", padx=(0, 3))
 
@@ -881,6 +894,7 @@ class App(BaseTk):
             "save": lambda c: self.save(), "export": lambda c: self.export_png(),
             "open": lambda c: self.open_project(), "save_as": lambda c: self.save_as(),
             "export_vp4": lambda c: self.export_format("vp4"), "usb": lambda c: self.send_usb_default(),
+            "choose_hoop": lambda c: self.choose_hoop(), "fit_hoop": lambda c: self.fit_design(),
             "close": lambda c: self.close_project(), "quit": lambda c: self.quit_app(),
             "regen": lambda c: self.regenerate(self.cur()), "settings": lambda c: self.open_settings(),
             "tool_move": lambda c: self.v_tool.set("move"), "tool_pick": lambda c: self.v_tool.set("pick"),
@@ -1808,6 +1822,7 @@ class App(BaseTk):
         lbl = _("Envoyer sur la clé USB…") + ("" if drives else _("  — aucune clé détectée"))
         m.add_command(label=lbl, accelerator=k("usb"), command=self.send_usb_default, state=st(has and drives))
         m.add_separator()
+        m.add_command(label=_("Choisir le cercle…"), accelerator=k("choose_hoop"), command=self.choose_hoop)
         m.add_command(label=_("Paramètres…"), accelerator=k("settings"), command=self.open_settings)
         m.add_command(label=_("Vérifier les mises à jour…"), command=lambda: self._start_update_check(manual=True))
         m.add_command(label=_("À propos de Brodilume"), command=self.about)
@@ -2958,31 +2973,91 @@ class App(BaseTk):
 
     # ------------------------------------------------------------------ affichage
     def _apply_hoop(self, des):
-        """Taille du cercle choisie dans les Paramètres -> aperçu et fichier .vp4.
-        Jusqu'à 260 × 200 mm, on écrit le cercle « UniLarge3 » (vérifié avec mySewnet) ; au-delà,
-        le nom Universal_LxH du logiciel (non vérifié)."""
+        """Cercle choisi -> cercle écrit dans le fichier .vp4 (le .vp4 ne connaît que les cercles de mySewnet).
+
+        Jusqu'à 260 × 200 mm : « UniLarge3 » (Universal Large Hoop 3, vérifié avec mySewnet). Au-delà : le
+        plus petit cercle Universal du catalogue qui contient le cercle choisi (UniLarge4, UniLarge5…)."""
         if des is None:
             return des
         w, h = self.hoop_mm
-        des.hoop_size = (int(round(h * 10)), int(round(w * 10)))
-        if w <= 260 and h <= 200:
-            des.hoop_name, des.hoop_group = "UniLarge3", "Universal"
-            des.hoop_size = (2000, 2600)
-        else:
-            des.hoop_name, des.hoop_group = "Universal_%dx%d" % (round(w), round(h)), "Universal"
+        des.hoop_group = "Universal"
+        uni = hoops.universal_for(w, h) if max(w, h) > 260 or min(w, h) > 200 else None
+        if uni:
+            des.hoop_name, des.hoop_size = uni
+        elif max(w, h) <= 260 and min(w, h) <= 200:
+            des.hoop_name, des.hoop_size = "UniLarge3", (2000, 2600)
+        else:  # plus grand que tous les cercles Universal
+            des.hoop_name, des.hoop_size = "Universal_%dx%d" % (round(w), round(h)), (int(round(h * 10)),
+                                                                                   int(round(w * 10)))
         return des
 
-    def set_hoop(self, w, h, save=True):
+    def set_hoop(self, w, h, save=True, info=None):
         self.hoop_mm = (float(w), float(h))
+        self.hoop_info = dict(info) if info else {"w": float(w), "h": float(h)}
         if save:
             try:
-                shortcuts.save_setting("hoop", {"w": float(w), "h": float(h)})
+                shortcuts.save_setting("hoop", self.hoop_info)
             except OSError:
                 pass
         self.view.hoop = (self.hoop_mm[0] * 10, self.hoop_mm[1] * 10)
         self.recompose(True)
         self.view.fit(True)
-        self.v_status.set(_("Espace de broderie : %g × %g mm") % self.hoop_mm)
+        self._update_hoop_button()
+        self.v_status.set(_("Cercle : %s") % hoopdialog.describe(self.hoop_info, self.hoop_mm))
+
+    def _update_hoop_button(self):
+        if hasattr(self, "btn_hoop"):
+            self.btn_hoop.config(text="◯  " + hoopdialog.describe(self.hoop_info, self.hoop_mm))
+
+    def choose_hoop(self, after=None):
+        """Fenêtre « Cercle à broder » ; si le motif dépasse le nouveau cercle, propose de le réduire."""
+        def chosen(size, info):
+            self.set_hoop(*size, info=info)
+            if after:
+                after()
+            bb = self.design.bbox() if self.design and self.design.blocks else None
+            if bb:
+                dw, dh = (bb[2] - bb[0]) / 10, (bb[3] - bb[1]) / 10
+                if dw > size[0] + 0.05 or dh > size[1] + 0.05:
+                    if self.ask_yes_no(_("Cercle à broder"),
+                                       _("Le motif (%.0f × %.0f mm) dépasse ce cercle (%g × %g mm).\n\n"
+                                         "Le réduire pour qu'il tienne, centré ?") % (dw, dh, size[0], size[1])):
+                        self.fit_design()
+        hoopdialog.HoopDialog(self, chosen)
+
+    def fit_design(self, center_only=False, margin_mm=5.0):
+        """Tout le motif mis à l'échelle du cercle (marge de 5 mm) et centré ; center_only : seulement centré.
+        Les images et textes sont régénérés à leur nouvelle taille (densité des points conservée)."""
+        if not self.design or not self.design.blocks:
+            self.v_status.set(_("Rien à ajuster : importez d'abord une image ou une broderie."))
+            return
+        if any(it.generating or it in self._queue for it in self.items):
+            self.message(APP_NAME, kind="info",
+                         text=_("Une image est encore en cours de génération, réessayez dans un instant."))
+            return
+        x0, y0, x1, y1 = self.design.bbox()
+        W, H = self.hoop_mm[0] * 10, self.hoop_mm[1] * 10
+        m = margin_mm * 10
+        f = 1.0 if center_only else min((W - 2 * m) / max(1, x1 - x0), (H - 2 * m) / max(1, y1 - y0))
+        if f <= 0:
+            return
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        self._snapshot()
+        for it in self.items:
+            it.x, it.y = (it.x - cx) * f, (it.y - cy) * f
+            if abs(f - 1) > 1e-3:
+                it.scale *= f
+                if it.generated:
+                    it.settings.width_mm = round(it.settings.width_mm * f, 1)
+                    self.regenerate(it)
+        self.refresh_panels()
+        self.recompose(True)
+        self.view.fit(True)
+        if center_only:
+            self.v_status.set(_("Motif centré dans le cercle"))
+        else:
+            self.v_status.set(_("Motif ajusté au cercle : %.0f × %.0f mm (× %.2f)")
+                              % ((x1 - x0) * f / 10, (y1 - y0) * f / 10, f))
 
     def recompose(self, keep_view=False):
         self.mark_dirty()

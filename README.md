@@ -146,9 +146,16 @@ chaque texte français du code y a sa traduction ; `python tests/test_i18n.py` v
   Maj+molette = en largeur ; bouton du milieu (ou droit) + glisser = déplacer la vue, avec Maj = sur un
   seul axe ; Espace maintenu + glisser = main temporaire (Espace seul = simulation) ; flèches sans
   élément sélectionné et Ctrl+flèches = défiler (Maj : plus vite) ; Ctrl+0 = taille réelle, Ctrl+1 = cercle entier.
-- **Espace de broderie** : Paramètres > Général, cercles « Universal » de 100 × 100 à 360 × 350 mm ou
-  taille personnalisée. Jusqu'à 260 × 200 mm le fichier indique UniLarge3 (vérifié) ; au-delà, le nom
-  Universal_LxH du logiciel (à vérifier dans mySewnet).
+- **Cercle à broder** : bouton ◯ en haut de la fenêtre (ou Ctrl+H, Fichier > Choisir le cercle) :
+  marque, machine et cercle parmi plus de 100 machines (Pfaff, Husqvarna Viking, Brother, Baby Lock,
+  Janome, Bernina, Singer…), orientation pivotée ou naturelle, ou taille personnalisée. L'aperçu montre
+  si le motif tient ; s'il dépasse, Brodilume propose de le réduire. Le même bouton offre « Ajuster le
+  motif au cercle » (agrandir ou réduire, marge de 5 mm) et « Centrer le motif dans le cercle ».
+  Le catalogue est dans `vp4/hoops.json`. Les cercles à plusieurs positions (Grand Dream, cercles
+  pivotants) ne sont pas proposés : Brodilume brode en une seule fois.
+- **Cercle dans le fichier .vp4** : le format ne connaît que les cercles de mySewnet. Jusqu'à 260 × 200 mm,
+  le fichier indique « Universal Large Hoop 3 » (UniLarge3, vérifié) ; au-delà, le plus petit cercle
+  Universal qui contient le cercle choisi (UniLarge4, UniLarge5). Les autres formats ne stockent que les points.
 - **Thème** clair ou sombre : par défaut celui de Windows (suivi en direct). ◐ ou Ctrl+Maj+T bascule ;
   Paramètres > Général pour revenir à « Comme Windows ».
 - Outil **Sélection** (V) : glisser un élément pour le déplacer (flèches : 1 mm, Maj+flèches : 10 mm),
@@ -218,6 +225,7 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 - `vp4/projectfile.py` : fichier projet .brodi.
 - `vp4/fonts.py` : polices (installées, importées) et dessin du texte à broder.
 - `vp4/satin.py` : point satin le long des traits (axe médian des lettres, colonnes, parcours sans saut).
+- `vp4/hoops.json`, `vp4/hoops.py`, `hoopdialog.py` : cercles à broder par marque et machine, fenêtre de choix.
 - `i18n.py` et `lang/` : traduction de l'interface (français, anglais, allemand).
 - `vp4/export.py` : exports (vp4, vp3, pes, dst…) et détection des clés USB.
 - `vp4/project.py` : éléments (position, rotation, échelle), gomme, assemblage du motif final.

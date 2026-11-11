@@ -11,7 +11,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SOURCES = ["app.py", "shortcuts.py", "theme.py", "installer.py", "install_win.py", "vp4/export.py"]
+SOURCES = ["app.py", "shortcuts.py", "theme.py", "installer.py", "install_win.py", "hoopdialog.py", "vp4/export.py"]
 LANGS = ["en", "de"]
 PLACEHOLDER = re.compile(r"%(?:\([^)]*\))?[-+ #0]*\d*(?:\.\d+)?[sdfgrx%]")
 

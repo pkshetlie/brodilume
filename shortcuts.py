@@ -36,6 +36,8 @@ ACTIONS = [
         ("export_vp4", _("Exporter en .vp4"), ["Ctrl+E"]),
         ("export", _("Exporter l'aperçu PNG"), ["Ctrl+Maj+E"]),
         ("usb", _("Envoyer sur la clé USB"), ["Ctrl+U"]),
+        ("choose_hoop", _("Choisir le cercle à broder"), ["Ctrl+H"]),
+        ("fit_hoop", _("Ajuster le motif au cercle"), []),
         ("regen", _("Régénérer l'image"), ["F5"]),
         ("settings", _("Paramètres et raccourcis"), ["Ctrl+,", "F1"]),
         ("close", _("Fermer le projet"), ["Ctrl+W"]),
@@ -86,8 +88,6 @@ MOUSE_HELP = [
     (_("Espace maintenu + glisser"), _("Déplacer la vue (main temporaire)")),
     (_("Double-clic (outil Couleurs)"), _("Toutes les parties du fil")),
 ]
-HOOPS = [(100, 100), (120, 115), (120, 120), (150, 150), (170, 100), (180, 130), (200, 200), (225, 140),
-         (240, 150), (260, 200), (260, 260), (360, 200), (360, 260), (360, 350)]
 DEFAULTS = {a: list(keys) for _, acts in ACTIONS for a, _, keys in acts}
 LABELS = {a: label for _, acts in ACTIONS for a, label, _ in acts}
 # actions qui gardent Maj comme variante (déplacement de 10 mm au lieu de 1 mm)
@@ -241,32 +241,17 @@ class SettingsDialog(tk.Toplevel):
         self.btn_restart = ttk.Button(lrow, text="", command=app.restart)
         self.lbl_lang = ttk.Label(gen, text="", style="Muted.TLabel", wraplength=640)
         self.lbl_lang.pack(anchor="w", pady=(4, 0))
-        ttk.Label(gen, text=_("Espace de broderie (cercle)"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
+        ttk.Label(gen, text=_("Cercle à broder"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
         hrow = ttk.Frame(gen)
         hrow.pack(anchor="w")
-        w0, h0 = app.hoop_mm
-        names = ["%d × %d mm" % wh for wh in HOOPS] + [_("Personnalisé")]
-        cur = "%d × %d mm" % (w0, h0)
-        self.v_hoop = tk.StringVar(value=cur if cur in names else _("Personnalisé"))
-        self.v_hw, self.v_hh = tk.DoubleVar(value=w0), tk.DoubleVar(value=h0)
-        cb = ttk.Combobox(hrow, textvariable=self.v_hoop, values=names, state="readonly", width=16)
-        cb.pack(side="left")
-        ttk.Label(hrow, text="  " + _("largeur")).pack(side="left")
-        ttk.Spinbox(hrow, from_=50, to=500, increment=5, textvariable=self.v_hw, width=6).pack(side="left", padx=4)
-        ttk.Label(hrow, text=_("hauteur")).pack(side="left")
-        ttk.Spinbox(hrow, from_=50, to=500, increment=5, textvariable=self.v_hh, width=6).pack(side="left", padx=4)
-        ttk.Label(hrow, text="mm").pack(side="left")
-        ttk.Button(hrow, text=_("Appliquer"), command=self.apply_hoop).pack(side="left", padx=(10, 0))
-
-        def preset(_e=None):
-            if self.v_hoop.get() != _("Personnalisé"):
-                w, h = HOOPS[names.index(self.v_hoop.get())]
-                self.v_hw.set(w)
-                self.v_hh.set(h)
-                self.apply_hoop()
-        cb.bind("<<ComboboxSelected>>", preset)
-        ttk.Label(gen, text=_("Cercles « Universal » de mySewnet. Jusqu'à 260 × 200 mm, le fichier indique le cercle "
-                            "UniLarge3 (vérifié) ; au-delà, son nom Universal_LxH (à vérifier dans mySewnet)."),
+        import hoopdialog
+        self.lbl_hoop = ttk.Label(hrow, text=hoopdialog.describe(app.hoop_info, app.hoop_mm))
+        self.lbl_hoop.pack(side="left")
+        ttk.Button(hrow, text=_("Choisir le cercle…"),
+                   command=lambda: app.choose_hoop(after=lambda: self.lbl_hoop.config(
+                       text=hoopdialog.describe(app.hoop_info, app.hoop_mm)))).pack(side="left", padx=(12, 0))
+        ttk.Label(gen, text=_("Marque, machine et cercle (plus de 100 machines), ou taille personnalisée. Aussi "
+                            "accessible par le bouton du cercle, en haut de la fenêtre."),
                   style="Muted.TLabel", wraplength=640).pack(anchor="w", pady=(4, 0))
         ttk.Label(gen, text=_("Mises à jour"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
         import updater
@@ -405,14 +390,6 @@ class SettingsDialog(tk.Toplevel):
                                                        "de Brodilume."))
         self.btn_restart.config(text=i18n.translate(code, "Relancer maintenant"))
         self.btn_restart.pack(side="left", padx=(10, 0))
-
-    def apply_hoop(self):
-        try:
-            w, h = float(self.v_hw.get()), float(self.v_hh.get())
-        except (tk.TclError, ValueError):
-            return
-        if 20 <= w <= 1000 and 20 <= h <= 1000:
-            self.app.set_hoop(w, h)
 
     def ok(self):
         self.app.set_bindings(self.keys)

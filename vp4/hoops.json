@@ -1,0 +1,3328 @@
+{
+ "about": "Cercles à broder par marque et par machine : nom commercial et taille utile (mm), largeur x hauteur dans l'orientation naturelle (bras de la machine vers le haut). Les identifiants sont ceux des fichiers Husqvarna Viking / Pfaff (.vp4) pour les cercles Universal.",
+ "brands": [
+  {
+   "id": "pfaff",
+   "name": "Pfaff"
+  },
+  {
+   "id": "hv",
+   "name": "Husqvarna Viking"
+  },
+  {
+   "id": "brother",
+   "name": "Brother"
+  },
+  {
+   "id": "babylock",
+   "name": "Baby Lock"
+  },
+  {
+   "id": "janome",
+   "name": "Janome"
+  },
+  {
+   "id": "bernina",
+   "name": "Bernina"
+  },
+  {
+   "id": "singer",
+   "name": "Singer"
+  },
+  {
+   "id": "happy",
+   "name": "Happy"
+  },
+  {
+   "id": "toyota",
+   "name": "Toyota"
+  },
+  {
+   "id": "universal",
+   "name": "Universal (mySewnet)"
+  }
+ ],
+ "machines": [
+  {
+   "id": "pfaff2124",
+   "brand": "pfaff",
+   "name": "2124",
+   "hoops": [
+    "Pff_80x80_Round",
+    "Pff_120x115_214x",
+    "Pff_120x115_Round",
+    "Pff_225x140_Large"
+   ]
+  },
+  {
+   "id": "pfaff2134",
+   "brand": "pfaff",
+   "name": "2134",
+   "hoops": [
+    "Pff_80x80_214x",
+    "Pff_80x80_Round",
+    "Pff_100x80_214x_Cap",
+    "Pff_120x115_214x",
+    "Pff_120x115_Round",
+    "Pff_180x100_Endless",
+    "Pff_225x140_Large"
+   ]
+  },
+  {
+   "id": "pfaff2140",
+   "brand": "pfaff",
+   "name": "2140",
+   "hoops": [
+    "Pff_80x50_Petite",
+    "Pff_80x80_214x",
+    "Pff_80x80_Round",
+    "Pff_100x80_214x_Cap",
+    "Pff_120x115_214x",
+    "Pff_120x115_Round",
+    "Pff_130x130_AllFabric",
+    "Pff_180x100_Endless",
+    "Pff_225x140_Large"
+   ]
+  },
+  {
+   "id": "pfaff2144",
+   "brand": "pfaff",
+   "name": "2144",
+   "hoops": [
+    "Pff_80x50_Petite",
+    "Pff_80x80_214x",
+    "Pff_80x80_Round",
+    "Pff_100x80_214x_Cap",
+    "Pff_120x115_214x",
+    "Pff_120x115_Round",
+    "Pff_130x130_AllFabric",
+    "Pff_180x100_Endless",
+    "Pff_225x140_Large"
+   ]
+  },
+  {
+   "id": "pfaff2170",
+   "brand": "pfaff",
+   "name": "2170",
+   "hoops": [
+    "Pff_80x50_Petite",
+    "Pff_80x80_214x",
+    "Pff_80x80_Round",
+    "Pff_100x80_214x_Cap",
+    "Pff_120x115_214x",
+    "Pff_120x115_Round",
+    "Pff_130x130_AllFabric",
+    "Pff_180x100_Endless",
+    "Pff_225x140_Large"
+   ]
+  },
+  {
+   "id": "pfaff7570",
+   "brand": "pfaff",
+   "name": "7570",
+   "hoops": [
+    "Pff_80x80_75xx",
+    "Pff_120x115_75xx"
+   ]
+  },
+  {
+   "id": "pfaffCreativambition640",
+   "brand": "pfaff",
+   "name": "ambition™ 640",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_240x150"
+   ]
+  },
+  {
+   "id": "pfaffCreativeExpect350",
+   "brand": "pfaff",
+   "name": "creative expect™ 350",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_170x100_Mid"
+   ]
+  },
+  {
+   "id": "pfaffCreativeExpression750",
+   "brand": "pfaff",
+   "name": "creative expression™ 750",
+   "hoops": [
+    "Pff_40x40_Spring",
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Square",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_180x100_Endless",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "P80_240x150",
+    "Pff_240x150_Metal",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "pfaffCreativeIcon",
+   "brand": "pfaff",
+   "name": "creative icon™",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_200x200_Metal",
+    "P80_240x150",
+    "Pff_240x150_Metal",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_260x260",
+    "P80_360x200",
+    "Pff_360x260_Supreme"
+   ]
+  },
+  {
+   "id": "pfaffCreativeIcon2",
+   "brand": "pfaff",
+   "name": "creative icon™ 2",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_200x200_Metal",
+    "P80_240x150",
+    "Pff_240x150_Metal",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_260x260",
+    "P80_360x200",
+    "Pff_360x260_Supreme"
+   ]
+  },
+  {
+   "id": "pfaffCreativperformance",
+   "brand": "pfaff",
+   "name": "creative performance™",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "pfaffCreativePerformance950",
+   "brand": "pfaff",
+   "name": "creative performance™ 950",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_200x200_Metal",
+    "P80_240x150",
+    "Pff_240x150_Metal",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_260x260",
+    "P80_360x200",
+    "Pff_360x260_Supreme"
+   ]
+  },
+  {
+   "id": "pfaffCreativeSensation",
+   "brand": "pfaff",
+   "name": "creative sensation™",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "pfaffCreativeSensationPro",
+   "brand": "pfaff",
+   "name": "creative sensation™ pro",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "pfaffCreativeStylistMN110",
+   "brand": "pfaff",
+   "name": "Creative Stylist™ MN 110",
+   "hoops": [
+    "Multineedle_MH-0612",
+    "Multineedle_70x50",
+    "Multineedle_MH-0712",
+    "Multineedle_SH-0823",
+    "Multineedle_MH-0812",
+    "Multineedle_110x110",
+    "Multineedle_SH-1229",
+    "Multineedle_CH-1311",
+    "Multineedle_HH-1514",
+    "Multineedle_AH-1814",
+    "Multineedle_190x140",
+    "Multineedle_Cap_260x60",
+    "Multineedle_310x210"
+   ]
+  },
+  {
+   "id": "pfaffCreativeVision",
+   "brand": "pfaff",
+   "name": "creative vision™",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "PfaffCreative1_5",
+   "brand": "pfaff",
+   "name": "creative™ 1.5",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_240x150"
+   ]
+  },
+  {
+   "id": "pfaffCreative3_0",
+   "brand": "pfaff",
+   "name": "creative™ 3.0",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite"
+   ]
+  },
+  {
+   "id": "pfaffCreative4_0",
+   "brand": "pfaff",
+   "name": "creative™ 4.0",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "pfaffCreativpe4_5",
+   "brand": "pfaff",
+   "name": "creative™ 4.5",
+   "hoops": [
+    "Pff_80x80_PetiteSquare",
+    "Pff_100x100_Metal",
+    "P80_120x120",
+    "P80_150x150",
+    "P80_150x150_WrapAndTexture",
+    "P80_180x100_Endless",
+    "P80_180x130_Air",
+    "P80_180x130_Metal",
+    "Pff_200x200",
+    "Pff_240x150_Metal",
+    "P80_240x150",
+    "Pff_260x150_Endless",
+    "P80_260x200_Elite",
+    "P80_360x200"
+   ]
+  },
+  {
+   "id": "hvDesignerBrilliance",
+   "brand": "hv",
+   "name": "DESIGNER BRILLIANCE™ 80",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Air",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerDiamondDeLuxe",
+   "brand": "hv",
+   "name": "DESIGNER DIAMOND deLuxe™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Metal",
+    "Hv_120x120",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_150x150_Quilt",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerDiamond",
+   "brand": "hv",
+   "name": "DESIGNER DIAMOND™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Metal",
+    "Hv_120x120",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_150x150_Quilt",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerEpic",
+   "brand": "hv",
+   "name": "DESIGNER EPIC™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_200x200_Metal",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_260x260_Mega_Quilters_Hoop",
+    "Hv_360x200_Royal",
+    "Hv_360x260_Designer_Imperial"
+   ]
+  },
+  {
+   "id": "hvDesignerEpic2",
+   "brand": "hv",
+   "name": "DESIGNER EPIC™ 2",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_200x200_Metal",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_260x260_Mega_Quilters_Hoop",
+    "Hv_360x200_Royal",
+    "Hv_360x260_Designer_Imperial"
+   ]
+  },
+  {
+   "id": "hvDesignerQuartz29",
+   "brand": "hv",
+   "name": "Designer Quartz 29",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_170x100_Mid"
+   ]
+  },
+  {
+   "id": "hvDesignerRuby90",
+   "brand": "hv",
+   "name": "DESIGNER RUBY 90™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_200x200_Metal",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_260x260_Mega_Quilters_Hoop",
+    "Hv_360x200_Royal",
+    "Hv_360x260_Designer_Imperial"
+   ]
+  },
+  {
+   "id": "hvDesignerRubydeLuxe",
+   "brand": "hv",
+   "name": "DESIGNER RUBY deLuxe™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Spring",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_180x130_Design",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerRubyRoyal",
+   "brand": "hv",
+   "name": "DESIGNER RUBY Royale™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Spring",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_180x130_Design",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerRuby",
+   "brand": "hv",
+   "name": "DESIGNER RUBY™",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Spring",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_180x130_Design",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerShapphire85",
+   "brand": "hv",
+   "name": "DESIGNER SAPPHIRE™ 85",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerTopaz20",
+   "brand": "hv",
+   "name": "DESIGNER TOPAZ™ 20",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Spring",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Design",
+    "Hv_180x130_Air",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown"
+   ]
+  },
+  {
+   "id": "hvDesignerTopaz25",
+   "brand": "hv",
+   "name": "DESIGNER TOPAZ™ 25",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Metal",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large"
+   ]
+  },
+  {
+   "id": "hvDesignerTopaz30",
+   "brand": "hv",
+   "name": "DESIGNER TOPAZ™ 30",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Air",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerTopaz40",
+   "brand": "hv",
+   "name": "DESIGNER TOPAZ™ 40",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Metal",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Metal",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large"
+   ]
+  },
+  {
+   "id": "hvDesignerTopaz50",
+   "brand": "hv",
+   "name": "DESIGNER TOPAZ™ 50",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Design",
+    "Hv_180x130_Air",
+    "Hv_180x130_Metal",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvDesignerI",
+   "brand": "hv",
+   "name": "DESIGNER™ I",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_150x150_Quilt",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x130_Design",
+    "Hv_180x130_Air",
+    "Hv_240x150_Large",
+    "Hv_360x150_MegaSingle"
+   ]
+  },
+  {
+   "id": "hvDesignerSE",
+   "brand": "hv",
+   "name": "DESIGNER™ SE",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_100x100_Designer_Standard",
+    "Hv_100x100_Spring",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x100_EndlessII",
+    "Hv_180x130_Metal",
+    "Hv_180x130_Air",
+    "Hv_180x130_Design",
+    "Hv_200x200",
+    "Hv_240x150_Jewel",
+    "Hv_240x150_Large",
+    "Hv_240x150_Metal",
+    "HV_260x150_Endless",
+    "Hv_260x200_Crown",
+    "Hv_360x200_Royal"
+   ]
+  },
+  {
+   "id": "hvIris",
+   "brand": "hv",
+   "name": "IRIS™",
+   "hoops": [
+    "Hv_40x40_Rose_MiniSpring",
+    "Hv_100x100_Rose_Standard"
+   ]
+  },
+  {
+   "id": "hvDesignerJade35",
+   "brand": "hv",
+   "name": "JADE™ 35",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "HV_80x80_SmallSquare",
+    "Hv_100x100_Metal",
+    "Hv_120x120",
+    "Hv_150x150_Quilt",
+    "Hv_150x150_WrapAndTexture",
+    "Hv_180x100_EndlessII",
+    "Hv_240x150_Jewel"
+   ]
+  },
+  {
+   "id": "hvPlatinum950E",
+   "brand": "hv",
+   "name": "PLATINUM™ 950E",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_240x150_Large",
+    "Hv_360x150_MegaSingle"
+   ]
+  },
+  {
+   "id": "hvPlatinumMN-1000",
+   "brand": "hv",
+   "name": "PLATINUM™ MN | 1000",
+   "hoops": [
+    "Multineedle_MH-0612",
+    "Multineedle_70x50",
+    "Multineedle_MH-0712",
+    "Multineedle_SH-0823",
+    "Multineedle_MH-0812",
+    "Multineedle_110x110",
+    "Multineedle_SH-1229",
+    "Multineedle_CH-1311",
+    "Multineedle_HH-1514",
+    "Multineedle_AH-1814",
+    "Multineedle_190x140",
+    "Multineedle_Cap_260x60",
+    "Multineedle_310x210"
+   ]
+  },
+  {
+   "id": "hvPlatinumPlus",
+   "brand": "hv",
+   "name": "PLATINUM™ Plus",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_240x150_Large",
+    "Hv_360x150_MegaSingle"
+   ]
+  },
+  {
+   "id": "hvQuiltDesignerII",
+   "brand": "hv",
+   "name": "QUILT DESIGNER™ II",
+   "hoops": [
+    "Hv_40x40_Designer_MiniSpring",
+    "Hv_100x100_Spring",
+    "Hv_100x100_Designer_Standard",
+    "Hv_150x150_Quilt",
+    "Hv_170x100_Endless",
+    "Hv_170x100_Mid",
+    "Hv_180x130_Design",
+    "Hv_180x130_Air",
+    "Hv_240x150_Large",
+    "Hv_360x150_MegaSingle"
+   ]
+  },
+  {
+   "id": "hvRose",
+   "brand": "hv",
+   "name": "ROSE™",
+   "hoops": [
+    "Hv_40x40_Rose_MiniSpring",
+    "Hv_100x100_Rose_Standard"
+   ]
+  },
+  {
+   "id": "hvScandinavia300",
+   "brand": "hv",
+   "name": "SCANDINAVIA™ 300",
+   "hoops": [
+    "Hv_40x40_Rose_MiniSpring",
+    "Hv_100x100_Rose_Standard"
+   ]
+  },
+  {
+   "id": "hvScandinavia400",
+   "brand": "hv",
+   "name": "SCANDINAVIA™ 400",
+   "hoops": [
+    "Hv_40x40_Rose_MiniSpring",
+    "Hv_100x100_Rose_Standard"
+   ]
+  },
+  {
+   "id": "brotherEntrepreneurPR-1000",
+   "brand": "brother",
+   "name": "Entrepreneur PR-1050X / PR-1000 / PR-1000e",
+   "hoops": [
+    "BrotherPRCLP45B_45x24",
+    "Brother_PRCLPM1_Clamp_Frame_M_100x100",
+    "Brother_PRMF50_Magnetic_Frame_50x50",
+    "Brother_PRHCK1_Compact_Frame_S_38x44",
+    "Brother_PRHCK1_Compact_Frame_S_41x70",
+    "Brother_PRHCK1_Compact_Frame_S_33x75",
+    "Brother_PRHCK1_Compact_Frame_S_50x50",
+    "Brother_PRHSL200",
+    "Brother_PRH60",
+    "Brother_PRH100",
+    "Brother_PRH180",
+    "Brother_PRPQF200",
+    "Brother_PRH300",
+    "Brother_PRPH360",
+    "Brother_PRPBF1",
+    "Brother_PRPRFK1_100",
+    "Brother_PRPRFK1_130",
+    "Brother_PRPRFK1_160",
+    "Brother_PRCFH1",
+    "Brother_PRCF3",
+    "Brother_PRPCF1",
+    "Brother_PRCL1",
+    "Brother_SAFF022_2_5x4",
+    "Brother_SAFF022_2x4",
+    "Brother_SAFF022_3x4",
+    "Brother_SAFF022_5x4",
+    "Brother_SAFF022_6r",
+    "Brother_SAFF022_7x5",
+    "Brother_SAFF022_7x7",
+    "Brother_EMP6_60",
+    "Brother_EMP6_100",
+    "Brother_EMP6_180",
+    "Brother_EMP6_300"
+   ]
+  },
+  {
+   "id": "brotherEntrepreneurPR-650_PR-620_PR-600_PR-600II_PR-600IIUPG",
+   "brand": "brother",
+   "name": "Entrepreneur PR-670 / PR-650 / PR-620 / PR-600 / PR-600II / PR-600IIUPG",
+   "hoops": [
+    "BrotherPRCLP45B_45x24",
+    "Brother_PRCLPM1_Clamp_Frame_M_100x100",
+    "Brother_PRMF50_Magnetic_Frame_50x50",
+    "Brother_PRHCK1_Compact_Frame_S_38x44",
+    "Brother_PRHCK1_Compact_Frame_S_41x70",
+    "Brother_PRHCK1_Compact_Frame_S_33x75",
+    "Brother_PRHCK1_Compact_Frame_S_50x50",
+    "Brother_PRHSL200",
+    "Brother_PRH60",
+    "Brother_PRH100",
+    "Brother_PRH180",
+    "Brother_PRPQF200",
+    "Brother_PRH300",
+    "Brother_PRPRFK1_100",
+    "Brother_PRPRFK1_130",
+    "Brother_PRPRFK1_160",
+    "Brother_PRCFH1",
+    "Brother_PRCF3",
+    "Brother_PRCL1",
+    "Brother_SAFF022_2_5x4",
+    "Brother_SAFF022_2x4",
+    "Brother_SAFF022_3x4",
+    "Brother_SAFF022_5x4",
+    "Brother_SAFF022_6r",
+    "Brother_SAFF022_7x5",
+    "Brother_SAFF022_7x7",
+    "Brother_EMP6_60",
+    "Brother_EMP6_100",
+    "Brother_EMP6_180",
+    "Brother_EMP6_300"
+   ]
+  },
+  {
+   "id": "brotherInnov-is1250_1200_1000_PE-780_770_750_700II_700",
+   "brand": "brother",
+   "name": "Innov-is 1250 / 1200 / 1000 / PE-780 / 770 / 750 / 700II / 700",
+   "hoops": [
+    "Brother2000_20x60",
+    "Brother2000_30x50",
+    "Brother2000_40x30",
+    "Brother2000_100x100",
+    "Brother2000_180x130"
+   ]
+  },
+  {
+   "id": "brotherInnov-is2800_2500_1500",
+   "brand": "brother",
+   "name": "Innov-is 2800 / 2500 / 1500",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA441"
+   ]
+  },
+  {
+   "id": "brotherInnov-is5000_4000_Duetta4500",
+   "brand": "brother",
+   "name": "Innov-is 5000 / 4000 / Duetta 4500",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "BrotherInnov_300x180"
+   ]
+  },
+  {
+   "id": "brotherInnov-is950_900_P-1000_PE-300S_LB-6770PRW_6800PRW_SE-400_350_270",
+   "brand": "brother",
+   "name": "Innov-is 950 / 900 / P-1000 / PE-300S / LB-6770PRW / 6800PRW / SE-400 / 350 / 270",
+   "hoops": [
+    "Brother2000_20x60",
+    "Brother1000_25x47",
+    "Brother1000_33x27",
+    "Brother2000_100x100"
+   ]
+  },
+  {
+   "id": "brotherInnov-isV3_DreamMakerXE",
+   "brand": "brother",
+   "name": "Innov-is V3 / DreamVE XE VE2200",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "Brother_150x150_Quilting",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "BrotherInnov_300x180"
+   ]
+  },
+  {
+   "id": "brotherInnov-isV5_DreamCreatorXE",
+   "brand": "brother",
+   "name": "Innov-is V5 / DreamCreator XE VM5100",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "Brother_150x150_Quilting",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "BrotherInnov_300x180"
+   ]
+  },
+  {
+   "id": "brotherInnov-isV7_DreamWeaverXE",
+   "brand": "brother",
+   "name": "Innov-is V7 / DreamWeaver XE VM6200D",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "Brother_150x150_Quilting",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "BrotherInnov_300x180"
+   ]
+  },
+  {
+   "id": "brotherinnov-isXV8500D",
+   "brand": "brother",
+   "name": "Innov-is XV8500D / Dream Machine",
+   "hoops": [
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA447",
+    "Brother_XF9309-001_240x360",
+    "BrotherInnov_20x60",
+    "Brother_150x150_Quilting",
+    "Brother_SA446",
+    "Brother_SA441",
+    "Brother_240x240",
+    "Brother_Border_100x300",
+    "Brother_SABF6000D"
+   ]
+  },
+  {
+   "id": "brotherLuminaireinnov-isXP1",
+   "brand": "brother",
+   "name": "Luminaire Innov-is XP1",
+   "hoops": [
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA447",
+    "Brother_XF9309-001_240x360",
+    "BrotherInnov_20x60",
+    "Brother_150x150_Quilting",
+    "Brother_SA446",
+    "Brother_SA441",
+    "Brother_240x240",
+    "BrotherInnov_272x272",
+    "BrotherInnov_408x272",
+    "Brother_Border_100x300",
+    "Brother_SABF6000D"
+   ]
+  },
+  {
+   "id": "brotherEntrepreneurVR",
+   "brand": "brother",
+   "name": "PRS-100 / VR",
+   "hoops": [
+    "Brother_PRH60",
+    "Brother_PRH100",
+    "Brother_PRH180",
+    "Brother_PRPRFK1_100",
+    "Brother_PRPRFK1_130",
+    "Brother_PRPRFK1_160",
+    "BrotherPRCLP45B_45x24",
+    "Brother_PRCLPM1_Clamp_Frame_M_100x100",
+    "Brother_PRPQF200",
+    "Brother_VRFF200_200x200_Flat",
+    "Brother_VRTF200_200x200",
+    "Brother_VRBF180_Border_180x100",
+    "Brother_PRMF50_Magnetic_Frame_50x50",
+    "Brother_PRHCK1_Compact_Frame_S_38x44",
+    "Brother_PRHCK1_Compact_Frame_S_41x70",
+    "Brother_PRHCK1_Compact_Frame_S_33x75",
+    "Brother_PRHCK1_Compact_Frame_S_50x50"
+   ]
+  },
+  {
+   "id": "brotherSuperGalaxie2100_2000_PC-8500_8200_6500",
+   "brand": "brother",
+   "name": "Super Galaxie 2100 / 2000 / PC-8500 / 8200 / 6500",
+   "hoops": [
+    "Brother2000_20x60",
+    "Brother2000_30x50",
+    "Brother2000_40x30",
+    "Brother2000_100x100",
+    "Brother2000_180x130"
+   ]
+  },
+  {
+   "id": "brotherULT-2003_2002_2001_SuperGalaxie3000",
+   "brand": "brother",
+   "name": "ULT-2003 / 2002 / 2001 / Super Galaxie 3000",
+   "hoops": [
+    "Brother3000_20x60",
+    "Brother3000_30x50",
+    "Brother3000_40x30",
+    "Brother3000_100x100",
+    "Brother3000_180x130",
+    "Brother3000_260x160"
+   ]
+  },
+  {
+   "id": "brotherQuattro2NV6700D_Quattro6000D_Innov-isI",
+   "brand": "brother",
+   "name": "XE1 / XJ1 / Quattro 2 NV6700D / Quattro 6000D / Innov-is I",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "Brother_SABF6000D",
+    "BrotherInnov_300x180",
+    "Brother_SA446",
+    "Brother_SA447"
+   ]
+  },
+  {
+   "id": "babylockAlliance",
+   "brand": "babylock",
+   "name": "Alliance",
+   "hoops": [
+    "Brother_PRH60",
+    "Brother_PRH100",
+    "Brother_PRH180",
+    "Brother_PRPRFK1_100",
+    "Brother_PRPRFK1_130",
+    "Brother_PRPRFK1_160",
+    "BrotherPRCLP45B_45x24",
+    "Brother_PRCLPM1_Clamp_Frame_M_100x100",
+    "Brother_PRPQF200",
+    "Brother_VRBF180_Border_180x100",
+    "Brother_PRMF50_Magnetic_Frame_50x50",
+    "Brother_PRHCK1_Compact_Frame_S_38x44",
+    "Brother_PRHCK1_Compact_Frame_S_41x70",
+    "Brother_PRHCK1_Compact_Frame_S_33x75",
+    "Brother_PRHCK1_Compact_Frame_S_50x50"
+   ]
+  },
+  {
+   "id": "babylockEmbroideryIntrepid",
+   "brand": "babylock",
+   "name": "Intrepid",
+   "hoops": [
+    "Brother_PRH60",
+    "Brother_PRH100",
+    "Brother_PRH180",
+    "Brother_PRH300",
+    "Brother_PRPRFK1_100",
+    "Brother_PRPRFK1_130",
+    "Brother_PRPRFK1_160",
+    "Brother_PRCFH1",
+    "Brother_PRCF3",
+    "Brother_PRCL1",
+    "Brother_SAFF022_2_5x4",
+    "Brother_SAFF022_2x4",
+    "Brother_SAFF022_3x4",
+    "Brother_SAFF022_5x4",
+    "Brother_SAFF022_6r",
+    "Brother_SAFF022_7x5",
+    "Brother_SAFF022_7x7",
+    "Brother_EMP6_60",
+    "Brother_EMP6_100",
+    "Brother_EMP6_180",
+    "Brother_EMP6_300"
+   ]
+  },
+  {
+   "id": "babylockMeridianAltair",
+   "brand": "babylock",
+   "name": "Meridian / Altair",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "BLMA_150x150",
+    "BLMA_240x240",
+    "BrotherInnov_300x180",
+    "Brother_Border_100x300",
+    "Brother3000_260x160",
+    "Brother_SABF6000D",
+    "Brother_SA446",
+    "Brother_SA447",
+    "Brother_240x240",
+    "Brother_XF9309-001_240x360"
+   ]
+  },
+  {
+   "id": "babylockPathfinder_Arial",
+   "brand": "babylock",
+   "name": "Pathfinder / Arial",
+   "hoops": [
+    "BrotherInnov_20x60",
+    "BrotherInnov_30x50",
+    "BrotherInnov_40x30",
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA441",
+    "Brother_SABF6000D",
+    "BrotherInnov_300x180",
+    "Brother_SA446",
+    "Brother_SA447"
+   ]
+  },
+  {
+   "id": "babylockSolaris",
+   "brand": "babylock",
+   "name": "Solaris",
+   "hoops": [
+    "BrotherInnov_100x100",
+    "BrotherInnov_180x130",
+    "Brother_SA447",
+    "Brother_XF9309-001_240x360",
+    "BrotherInnov_20x60",
+    "Brother_150x150_Quilting",
+    "Brother_SA446",
+    "Brother_SA441",
+    "Brother_240x240",
+    "BrotherInnov_272x272",
+    "BrotherInnov_408x272",
+    "Brother_Border_100x300",
+    "Brother_SABF6000D"
+   ]
+  },
+  {
+   "id": "janomeMB4",
+   "brand": "janome",
+   "name": "MB4 / 7",
+   "hoops": [
+    "JanomeMB4_240x200_M1",
+    "JanomeMB4_110x126_M2",
+    "JanomeMB4_50x50_M3",
+    "JanomeMB4_100x126_Flat_Hat_Hoop",
+    "JanomeMB4_30x30_J1",
+    "JanomeMB4_24x54_J2",
+    "JanomeMB4_64x28_J3",
+    "JanomeMB4_42x67_J4",
+    "JanomeMB4_46x46_J5",
+    "JanomeMB4_66x66_J6",
+    "JanomeMB4_110x95_J7",
+    "JanomeMB4_120x121_J8",
+    "JanomeMB4_25x25_QSnap",
+    "JanomeMB4_25x50_QSnap",
+    "JanomeMB4_25x150_QSnap",
+    "JanomeMB4_40x200_Left_QSnap",
+    "JanomeMB4_50x50_QSnap",
+    "JanomeMB4_50x100_QSnap",
+    "JanomeMB4_75x200_Left_QSnap",
+    "JanomeMB4_100x75_QSnap",
+    "JanomeMB4_100x40_QSnap",
+    "JanomeMB4_100x25_QSnap",
+    "JanomeMB4_125x125_QSnap",
+    "JanomeMB4_125x65_QSnap",
+    "JanomeMB4_125x50_QSnap",
+    "JanomeMB4_150x150_QSnap",
+    "JanomeMB4_150x50_QSnap",
+    "JanomeMB4_150x200_QSnap",
+    "JanomeMB4_300x40_QSnap",
+    "JanomeMB4_300x65_QSnap",
+    "JanomeMB4_300x75_QSnap",
+    "JanomeMB4_300x100_QSnap",
+    "JanomeMB4_300x200_QSnap",
+    "JanomeS1_37x59",
+    "JanomeS2_28x50",
+    "JanomeT1_34x34",
+    "JanomeT2_54x54",
+    "JanomeT3_84x84",
+    "JanomeT4_112x112",
+    "JanomeT5_142x142",
+    "JanomeT6_78x168"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft10001_10000",
+   "brand": "janome",
+   "name": "Memory Craft 10001 / 10000",
+   "hoops": [
+    "JanomeMc10000_50x50",
+    "JanomeMC10000_110x126_Hat_Hoop_Insert",
+    "JanomeMC10000_110x126_Spring_F",
+    "JanomeMc10000_110x126",
+    "JanomeMc10000_200x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft11000",
+   "brand": "janome",
+   "name": "Memory Craft 11000",
+   "hoops": [
+    "JanomeMc11000_50x50",
+    "JanomeMC11000_110x126_Hat_Hoop_Insert",
+    "JanomeMc11000_110x126",
+    "Janome_Acufil_180x180",
+    "JanomeMC11000_200x140",
+    "Janome_Acufil_200x140",
+    "JanomeMc11000_200x200"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft11000SpecialEdition",
+   "brand": "janome",
+   "name": "Memory Craft 11000 Special Edition",
+   "hoops": [
+    "JanomeMc11000_50x50",
+    "JanomeMC11000_110x126_Hat_Hoop_Insert",
+    "JanomeMc11000_110x126",
+    "Janome_Acufil_180x180",
+    "JanomeMC11000_200x140",
+    "Janome_Acufil_200x140",
+    "JanomeMc11000_200x200"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft12000",
+   "brand": "janome",
+   "name": "Memory Craft 12000",
+   "hoops": [
+    "Janome_FA10",
+    "Janome_SQ14",
+    "Janome_SQ23",
+    "Janome_GR",
+    "Janome_Acufil_220x220",
+    "Janome_HH10_100x90",
+    "Janome_MC15000_180x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft14000",
+   "brand": "janome",
+   "name": "Memory Craft 14000",
+   "hoops": [
+    "Janome_FA10",
+    "Janome_SQ14",
+    "Janome_SQ23",
+    "Janome_GR",
+    "Janome_Acufil_220x220",
+    "Janome_HH10_100x90",
+    "Janome_MC15000_180x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft15000",
+   "brand": "janome",
+   "name": "Memory Craft 15000",
+   "hoops": [
+    "Janome_FA10",
+    "Janome_SQ14",
+    "Janome_SQ23",
+    "Janome_GR",
+    "Janome_Acufil_220x220",
+    "Janome_HH10_100x90",
+    "Janome_MC15000_180x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft200E",
+   "brand": "janome",
+   "name": "Memory Craft 200E",
+   "hoops": [
+    "JanomeMC200E_50x50",
+    "JanomeMC200E_140x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft350E_300E",
+   "brand": "janome",
+   "name": "Memory Craft 350E / 300E",
+   "hoops": [
+    "JanomeMc10000_50x50",
+    "JanomeMC10000_110x126_Hat_Hoop_Insert",
+    "JanomeMC10000_110x126_Spring_F",
+    "JanomeMc10000_110x126",
+    "JanomeMc10000_200x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft400E",
+   "brand": "janome",
+   "name": "Memory Craft 400E",
+   "hoops": [
+    "JanomeRE10B_100x40",
+    "JanomeSQ14B_140x140",
+    "JanomeRE20B_140x200",
+    "JanomeASQ18B_184x184",
+    "JanomeSQ20B_200x200",
+    "JanomeHH10b"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft450E",
+   "brand": "janome",
+   "name": "Memory Craft 450E",
+   "hoops": [
+    "JanomeRE10B_100x40",
+    "JanomeSQ14B_140x140",
+    "JanomeRE20B_140x200",
+    "JanomeASQ18B_184x184",
+    "JanomeSQ20B_200x200",
+    "JanomeRE28B_200x280",
+    "JanomeHH10b"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft500E",
+   "brand": "janome",
+   "name": "Memory Craft 500E",
+   "hoops": [
+    "JanomeRE10B_100x40",
+    "JanomeSQ14B_140x140",
+    "JanomeRE20B_140x200",
+    "JanomeASQ18B_184x184",
+    "JanomeSQ20B_200x200",
+    "JanomeRE28B_200x280",
+    "JanomeHH10b"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft9000_8000_5700_5000",
+   "brand": "janome",
+   "name": "Memory Craft 9000 / 8000 / 5700 / 5000",
+   "hoops": [
+    "JanomeMC9000_70x85_Circular",
+    "JanomeMc9000_90x126",
+    "JanomeMC9000_90x126_Circular"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft9700_9500",
+   "brand": "janome",
+   "name": "Memory Craft 9700 / 9500",
+   "hoops": [
+    "JanomeMc10000_50x50",
+    "JanomeMC10000_110x126_Hat_Hoop_Insert",
+    "JanomeMC10000_110x126_Spring_F",
+    "JanomeMc10000_110x126",
+    "JanomeMc10000_200x140"
+   ]
+  },
+  {
+   "id": "janomeMemoryCraft9900",
+   "brand": "janome",
+   "name": "Memory Craft 9900 / Skyline S9",
+   "hoops": [
+    "Janome_FA10a",
+    "Janome_MC9900_200x170",
+    "Janome_SQ14a"
+   ]
+  },
+  {
+   "id": "bernina580_560",
+   "brand": "bernina",
+   "name": "590 / 580 / 570 / 560 / 540 / 530 / 500",
+   "hoops": [
+    "Bernina_50x72",
+    "Bernina_130x100",
+    "BerninaOval_255x145",
+    "BerninaMidiHoop_265x165"
+   ]
+  },
+  {
+   "id": "bernina780_750",
+   "brand": "bernina",
+   "name": "790 / 780 / 770 / 750 / 720 / 700",
+   "hoops": [
+    "Bernina_50x72",
+    "Bernina_130x100",
+    "BerninaOval_255x145",
+    "BerninaMidiHoop_265x165",
+    "BerninaMaxiHoop_400x210",
+    "Bernina780_400x210_Jumbo_Hoop"
+   ]
+  },
+  {
+   "id": "bernina830",
+   "brand": "bernina",
+   "name": "880 / 830",
+   "hoops": [
+    "Bernina_50x72",
+    "Bernina_130x100",
+    "BerninaOval_255x145",
+    "BerninaMidiHoop_265x165",
+    "BerninaMaxiHoop_400x210",
+    "Bernina830_400x260_Jumbo_Hoop"
+   ]
+  },
+  {
+   "id": "berninaArtista185_180_175_165",
+   "brand": "bernina",
+   "name": "Artista 180 / 175 / 165",
+   "hoops": [
+    "Bernina_40x60",
+    "Bernina_130x100",
+    "Bernina_200x155"
+   ]
+  },
+  {
+   "id": "berninaAurora440_430",
+   "brand": "bernina",
+   "name": "Aurora 440 / 430",
+   "hoops": [
+    "Bernina_50x72",
+    "Bernina200_130x100",
+    "BerninaOval_255x145"
+   ]
+  },
+  {
+   "id": "berninaArtista730_640_630_200",
+   "brand": "bernina",
+   "name": "Aurora Artista 730 / 640 / 630 / 200 / 185",
+   "hoops": [
+    "Bernina_50x72",
+    "Bernina200_130x100",
+    "BerninaOval_255x145"
+   ]
+  },
+  {
+   "id": "berninaChicago7",
+   "brand": "bernina",
+   "name": "Chicago 7",
+   "hoops": [
+    "Bernette_40x40",
+    "Bernette_100x100",
+    "Bernette_170x110"
+   ]
+  },
+  {
+   "id": "berninaDeco650_600_500",
+   "brand": "bernina",
+   "name": "Deco 650 / 600 / 500",
+   "hoops": [
+    "BrotherPe_10x50",
+    "BrotherPe_20x40",
+    "BrotherPe_25x20",
+    "BrotherPe_20x30",
+    "BrotherPe_45x20",
+    "BrotherPe_50x10",
+    "BrotherPe_70x70",
+    "BrotherPe_110x110",
+    "Brother_SA419"
+   ]
+  },
+  {
+   "id": "singerEM200",
+   "brand": "singer",
+   "name": "EM200",
+   "hoops": [
+    "SingerEM200_SE340_100x100",
+    "SingerEM200_SE340_180x100_Endless",
+    "SingerEM200_SE340_260x150"
+   ]
+  },
+  {
+   "id": "singerFuturaXL400_Quartet",
+   "brand": "singer",
+   "name": "Futura™ XL-400 / Quartet",
+   "hoops": [
+    "SingerXL6000_Small",
+    "SingerXL6000_Medium",
+    "SingerXL6000_Continuous",
+    "SingerXL6000_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumFuturaCE-100",
+   "brand": "singer",
+   "name": "Quantum Futura™ CE-100",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumFuturaCE-150",
+   "brand": "singer",
+   "name": "Quantum Futura™ CE-150",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumFuturaCE-200",
+   "brand": "singer",
+   "name": "Quantum Futura™ CE-200",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumFuturaCE-250",
+   "brand": "singer",
+   "name": "Quantum Futura™ CE-250",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumFuturaCE-350",
+   "brand": "singer",
+   "name": "Quantum Futura™ CE-350",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumXL-100",
+   "brand": "singer",
+   "name": "Quantum XL-100",
+   "hoops": [
+    "SingerXL100_Small",
+    "SingerXL100_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumXL-1000",
+   "brand": "singer",
+   "name": "Quantum XL-1000",
+   "hoops": [
+    "SingerXL1000_Small",
+    "SingerXL1000_Medium",
+    "SingerXL1000_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumXL-150",
+   "brand": "singer",
+   "name": "Quantum XL-150",
+   "hoops": [
+    "SingerXL1000_Small",
+    "SingerXL1000_Medium",
+    "SingerXL1000_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumXL-5000",
+   "brand": "singer",
+   "name": "Quantum XL-500",
+   "hoops": [
+    "SingerXL6000_Small",
+    "SingerXL6000_Medium",
+    "SingerXL6000_Continuous",
+    "SingerXL6000_Large"
+   ]
+  },
+  {
+   "id": "singerQuantumXL-6000",
+   "brand": "singer",
+   "name": "Quantum XL-6000",
+   "hoops": [
+    "SingerXL6000_Small",
+    "SingerXL6000_Medium",
+    "SingerXL6000_Continuous",
+    "SingerXL6000_Large"
+   ]
+  },
+  {
+   "id": "singerS10",
+   "brand": "singer",
+   "name": "S10",
+   "hoops": [
+    "SingerS10_50x50",
+    "SingerS10_140x140"
+   ]
+  },
+  {
+   "id": "singerSE300",
+   "brand": "singer",
+   "name": "SE300",
+   "hoops": [
+    "SingerEM200_SE340_100x100",
+    "SingerEM200_SE340_180x100_Endless",
+    "SingerEM200_SE340_260x150"
+   ]
+  },
+  {
+   "id": "singerSE340",
+   "brand": "singer",
+   "name": "SE340",
+   "hoops": [
+    "SingerEM200_SE340_100x100",
+    "SingerEM200_SE340_180x100_Endless",
+    "SingerEM200_SE340_260x150"
+   ]
+  },
+  {
+   "id": "singerSE918x_SE915x",
+   "brand": "singer",
+   "name": "SE9150 / SE9155 / SE9180 / SE9185",
+   "hoops": [
+    "Singer_Mini_Embroidery_Spring_Hoop_40x40",
+    "Singer_Standard_Hoop_100x100",
+    "Singer_Midsize_Hoop_170x100"
+   ]
+  },
+  {
+   "id": "singerES-1000",
+   "brand": "singer",
+   "name": "SES-1000",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "singerES-2000",
+   "brand": "singer",
+   "name": "SES-2000",
+   "hoops": [
+    "SingerCE350_Small",
+    "SingerCE350_Large"
+   ]
+  },
+  {
+   "id": "happyHCD1501",
+   "brand": "happy",
+   "name": "HCD1501",
+   "hoops": [
+    "HappyHCD1501_420x440_Wooden_Hoop",
+    "HappyHCD1501_320x320_Square_Frame",
+    "HappyHCD1501_210_Extra_Large_Round_Hoop",
+    "HappyHCD1501_180_Large_Round_Hoop",
+    "HappyHCD1501_150_Standard_Round_Hoop",
+    "HappyHCD1501_120_Small_Round_Hoop",
+    "HappyHCD1501_80x360_Wide_Cap_Frame",
+    "HappyHCD1501_70x180_Low_Profile_Cap_Frame"
+   ]
+  },
+  {
+   "id": "happyHCS1201",
+   "brand": "happy",
+   "name": "HCS1201",
+   "hoops": [
+    "HappyHCD1201_285x290_Square_Frame",
+    "HappyHCD1201_67x290_Wide_Cap_Frame",
+    "HappyHCD1201_67_Low_Profile_Cap_Frame"
+   ]
+  },
+  {
+   "id": "toyotaExpert",
+   "brand": "toyota",
+   "name": "Expert",
+   "hoops": [
+    "ToyotaX_Arm21_Round",
+    "ToyotaX_Arm25_Round",
+    "ToyotaX_Arm32x25_Rect",
+    "ToyotaX_Arm46x25_Rect",
+    "ToyotaX_Arm46x30_Rect"
+   ]
+  },
+  {
+   "id": "universal",
+   "brand": "universal",
+   "name": "Universal",
+   "hoops": [
+    "UniSquare1",
+    "UniSquare4",
+    "UniSquare2",
+    "UniMid1",
+    "UniLarge1",
+    "UniSquare3",
+    "UniLarge2",
+    "UniLarge3",
+    "UniSquare5",
+    "UniLarge4",
+    "UniLarge5"
+   ]
+  }
+ ],
+ "hoops": {
+  "BLMA_150x150": {
+   "name": "Embroidery Hoop 150mm x 150mm",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "BLMA_240x240": {
+   "name": "Embroidery Hoop 240mm x 240mm",
+   "w": 240.0,
+   "h": 240.0
+  },
+  "Bernette_100x100": {
+   "name": "Bernette Square Hoop 100mm x 100mm",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Bernette_170x110": {
+   "name": "Bernette Hoop 170mm x 110mm",
+   "w": 110.0,
+   "h": 170.0
+  },
+  "Bernette_40x40": {
+   "name": "Bernette Square Hoop 40mm x 40mm",
+   "w": 40.0,
+   "h": 40.0
+  },
+  "Bernina200_130x100": {
+   "name": "Medium Hoop 130mm x 100mm",
+   "w": 100.0,
+   "h": 130.0
+  },
+  "Bernina780_400x210_Jumbo_Hoop": {
+   "name": "Jumbo Hoop 400mm x 210mm",
+   "w": 210.0,
+   "h": 400.0
+  },
+  "Bernina830_400x260_Jumbo_Hoop": {
+   "name": "Jumbo Hoop 400mm x 260mm",
+   "w": 260.0,
+   "h": 400.0
+  },
+  "BerninaMaxiHoop_400x210": {
+   "name": "Maxi Hoop 400mm x 210mm",
+   "w": 210.0,
+   "h": 400.0
+  },
+  "BerninaMidiHoop_265x165": {
+   "name": "Midi Hoop 265mm x 165mm",
+   "w": 165.0,
+   "h": 265.0
+  },
+  "BerninaOval_255x145": {
+   "name": "Large Oval Hoop 255mm x 145mm",
+   "w": 145.0,
+   "h": 255.0
+  },
+  "Bernina_130x100": {
+   "name": "Medium Hoop 130mm x 100mm",
+   "w": 100.0,
+   "h": 130.0
+  },
+  "Bernina_200x155": {
+   "name": "Large Hoop 200mm x 155mm",
+   "w": 155.0,
+   "h": 200.0
+  },
+  "Bernina_40x60": {
+   "name": "Small Hoop 40mm x 60mm",
+   "w": 60.0,
+   "h": 40.0
+  },
+  "Bernina_50x72": {
+   "name": "Small Hoop 50mm x 72mm",
+   "w": 72.0,
+   "h": 50.0
+  },
+  "Brother1000_25x47": {
+   "name": "Small Hoop 25mm x 47mm",
+   "w": 47.0,
+   "h": 25.0
+  },
+  "Brother1000_33x27": {
+   "name": "Small Hoop 33mm x 27mm",
+   "w": 27.0,
+   "h": 33.0
+  },
+  "Brother2000_100x100": {
+   "name": "Regular Hoop 100mm x 100mm",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother2000_180x130": {
+   "name": "Large Hoop 180mm x 130mm",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "Brother2000_20x60": {
+   "name": "Small Hoop 20mm x 60mm",
+   "w": 60.0,
+   "h": 20.0
+  },
+  "Brother2000_30x50": {
+   "name": "Small Hoop 30mm x 50mm",
+   "w": 50.0,
+   "h": 30.0
+  },
+  "Brother2000_40x30": {
+   "name": "Small Hoop 40mm x 30mm",
+   "w": 30.0,
+   "h": 40.0
+  },
+  "Brother3000_100x100": {
+   "name": "Regular Hoop 100mm x 100mm",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother3000_180x130": {
+   "name": "Medium Hoop 180mm x 130mm",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "Brother3000_20x60": {
+   "name": "Small Hoop 20mm x 60mm",
+   "w": 60.0,
+   "h": 20.0
+  },
+  "Brother3000_260x160": {
+   "name": "Large Hoop 260mm x 160mm",
+   "w": 160.0,
+   "h": 260.0
+  },
+  "Brother3000_30x50": {
+   "name": "Small Hoop 30mm x 50mm",
+   "w": 50.0,
+   "h": 30.0
+  },
+  "Brother3000_40x30": {
+   "name": "Small Hoop 40mm x 30mm",
+   "w": 30.0,
+   "h": 40.0
+  },
+  "BrotherInnov_100x100": {
+   "name": "Regular Hoop 100mm x 100mm",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "BrotherInnov_180x130": {
+   "name": "Medium Hoop 180mm x 130mm",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "BrotherInnov_20x60": {
+   "name": "Small Hoop 20mm x 60mm",
+   "w": 60.0,
+   "h": 20.0
+  },
+  "BrotherInnov_272x272": {
+   "name": "272mm x 272mm - Embroidery Frame",
+   "w": 272.0,
+   "h": 272.0
+  },
+  "BrotherInnov_300x180": {
+   "name": "Large Hoop 300mm x 180mm",
+   "w": 180.0,
+   "h": 300.0
+  },
+  "BrotherInnov_30x50": {
+   "name": "Small Hoop 30mm x 50mm",
+   "w": 50.0,
+   "h": 30.0
+  },
+  "BrotherInnov_408x272": {
+   "name": "Large Hoop 408mm x 272mm",
+   "w": 272.0,
+   "h": 408.0
+  },
+  "BrotherInnov_40x30": {
+   "name": "Small Hoop 40mm x 30mm",
+   "w": 30.0,
+   "h": 40.0
+  },
+  "BrotherPRCLP45B_45x24": {
+   "name": "PRCLP45B 45x24mm Clamp Frame",
+   "w": 45.0,
+   "h": 24.0
+  },
+  "BrotherPe_10x50": {
+   "name": "Extra Small Hoop 10mm x 50mm",
+   "w": 50.0,
+   "h": 10.0
+  },
+  "BrotherPe_110x110": {
+   "name": "Standard Hoop 110mm x 110mm",
+   "w": 110.0,
+   "h": 110.0
+  },
+  "BrotherPe_20x30": {
+   "name": "Extra Small Hoop (alternative setting) 20mm x 30mm",
+   "w": 30.0,
+   "h": 20.0
+  },
+  "BrotherPe_20x40": {
+   "name": "Extra Small Hoop 20mm x 40mm",
+   "w": 40.0,
+   "h": 20.0
+  },
+  "BrotherPe_25x20": {
+   "name": "Extra Small Hoop 25mm x 20mm",
+   "w": 20.0,
+   "h": 25.0
+  },
+  "BrotherPe_45x20": {
+   "name": "Extra Small Hoop (alternative setting) 45mm x 20mm",
+   "w": 20.0,
+   "h": 45.0
+  },
+  "BrotherPe_50x10": {
+   "name": "Extra Small Hoop (alternative setting) 50mm x 10mm",
+   "w": 10.0,
+   "h": 50.0
+  },
+  "BrotherPe_70x70": {
+   "name": "Small Hoop 70mm x 70mm",
+   "w": 70.0,
+   "h": 70.0
+  },
+  "Brother_150x150_Quilting": {
+   "name": "Quilting Hoop 150mm x 150mm",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "Brother_240x240": {
+   "name": "Embroidery Hoop 240mm x 240mm",
+   "w": 240.0,
+   "h": 240.0
+  },
+  "Brother_Border_100x300": {
+   "name": "Border Frame 100mm x 300mm",
+   "w": 100.0,
+   "h": 300.0
+  },
+  "Brother_EMP6_100": {
+   "name": "EMP6 100mm x 100mm Tote Bag and Purse Hoop",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother_EMP6_180": {
+   "name": "EMP6 180mm x 130mm Tote Bag and Purse Hoop",
+   "w": 180.0,
+   "h": 130.0
+  },
+  "Brother_EMP6_300": {
+   "name": "EMP6 300mm x 200mm Tote Bag and Purse Hoop",
+   "w": 300.0,
+   "h": 200.0
+  },
+  "Brother_EMP6_60": {
+   "name": "EMP6 60mm x 40mm Tote Bag and Purse Hoop",
+   "w": 60.0,
+   "h": 40.0
+  },
+  "Brother_PRCF3": {
+   "name": "PRCF3 130mm x 60mm Cap Hoop",
+   "w": 130.0,
+   "h": 60.0
+  },
+  "Brother_PRCFH1": {
+   "name": "PRCFH1 130mm x 50mm Cap Hoop",
+   "w": 130.0,
+   "h": 50.0
+  },
+  "Brother_PRCL1": {
+   "name": "PRCL1 90mm x 80mm Cylinder Frame",
+   "w": 80.0,
+   "h": 90.0
+  },
+  "Brother_PRCLPM1_Clamp_Frame_M_100x100": {
+   "name": "PRCLPM1 Clamp Frame M 100mm x 100mm",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother_PRH100": {
+   "name": "PRH100 100mm x 100mm Hoop",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother_PRH180": {
+   "name": "PRH180 180mm x 130mm Hoop",
+   "w": 180.0,
+   "h": 130.0
+  },
+  "Brother_PRH300": {
+   "name": "PRH300 300mm x 200mm Hoop",
+   "w": 300.0,
+   "h": 200.0
+  },
+  "Brother_PRH60": {
+   "name": "PRH60 60mm x 40mm Hoop",
+   "w": 60.0,
+   "h": 40.0
+  },
+  "Brother_PRHCK1_Compact_Frame_S_33x75": {
+   "name": "Compact Frame S 33mm x 75mm",
+   "w": 33.0,
+   "h": 75.0
+  },
+  "Brother_PRHCK1_Compact_Frame_S_38x44": {
+   "name": "Compact Frame S 38mm x 44mm",
+   "w": 44.0,
+   "h": 38.0
+  },
+  "Brother_PRHCK1_Compact_Frame_S_41x70": {
+   "name": "Compact Frame S 41mm x 70mm",
+   "w": 70.0,
+   "h": 41.0
+  },
+  "Brother_PRHCK1_Compact_Frame_S_50x50": {
+   "name": "Compact Frame S 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "Brother_PRHSL200": {
+   "name": "PRHSL200 Sleeve Frame 70mm x 200mm",
+   "w": 70.0,
+   "h": 200.0
+  },
+  "Brother_PRMF50_Magnetic_Frame_50x50": {
+   "name": "PRMF50 Magnetic Frame 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "Brother_PRPBF1": {
+   "name": "PRPBF1 300mm x 100mm Border Frame",
+   "w": 300.0,
+   "h": 100.0
+  },
+  "Brother_PRPCF1": {
+   "name": "PRPCF1 360mm x 60mm Wide Cap Frame",
+   "w": 360.0,
+   "h": 60.0
+  },
+  "Brother_PRPH360": {
+   "name": "PRPH360 360mm x 200mm Extra Large Frame",
+   "w": 360.0,
+   "h": 200.0
+  },
+  "Brother_PRPQF200": {
+   "name": "PRPQF200 200mm x 200mm Quilting Frame",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Brother_PRPRFK1_100": {
+   "name": "PRPRFK1 100mm Round Hoop",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Brother_PRPRFK1_130": {
+   "name": "PRPRFK1 130mm Round Hoop",
+   "w": 130.0,
+   "h": 130.0
+  },
+  "Brother_PRPRFK1_160": {
+   "name": "PRPRFK1 160mm Round Hoop",
+   "w": 160.0,
+   "h": 160.0
+  },
+  "Brother_SA419": {
+   "name": "Hat Hoop 110mm x 110mm",
+   "w": 110.0,
+   "h": 110.0
+  },
+  "Brother_SA441": {
+   "name": "Extra Large Hoop 160mm x 260mm",
+   "w": 160.0,
+   "h": 260.0
+  },
+  "Brother_SA446": {
+   "name": "Square Quilting Hoop 200mm x 200mm",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Brother_SA447": {
+   "name": "Jumbo Embroidery Hoop 200mm x 300mm",
+   "w": 200.0,
+   "h": 300.0
+  },
+  "Brother_SABF6000D": {
+   "name": "Border Hoop 100mm x 180mm",
+   "w": 100.0,
+   "h": 180.0
+  },
+  "Brother_SAFF022_2_5x4": {
+   "name": "SAFF022 Small Pocket Hoop 60mm x 100mm",
+   "w": 60.0,
+   "h": 100.0
+  },
+  "Brother_SAFF022_2x4": {
+   "name": "SAFF022 Mono Hoop 50mm x 100mm",
+   "w": 50.0,
+   "h": 100.0
+  },
+  "Brother_SAFF022_3x4": {
+   "name": "SAFF022 Large Pocket Hoop 80mm x 100mm",
+   "w": 80.0,
+   "h": 100.0
+  },
+  "Brother_SAFF022_5x4": {
+   "name": "SAFF022 Holiday Stocking Hoop 130mm x 100mm",
+   "w": 130.0,
+   "h": 100.0
+  },
+  "Brother_SAFF022_6r": {
+   "name": "SAFF022 Hat Hoop 150mm x 150mm",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "Brother_SAFF022_7x5": {
+   "name": "SAFF022 Attaché Case Hoop 180mm x 130mm",
+   "w": 180.0,
+   "h": 130.0
+  },
+  "Brother_SAFF022_7x7": {
+   "name": "SAFF022 Deep Bag Hoop 180mm x 180mm",
+   "w": 180.0,
+   "h": 180.0
+  },
+  "Brother_VRBF180_Border_180x100": {
+   "name": "VRBF180 Border Frame 180mm x 100mm",
+   "w": 180.0,
+   "h": 100.0
+  },
+  "Brother_VRFF200_200x200_Flat": {
+   "name": "VRFF200 Flat Frame 200mm x 200mm",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Brother_VRTF200_200x200": {
+   "name": "VRTF200 Embroidery Frame 200mm x 200mm",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Brother_XF9309-001_240x360": {
+   "name": "Super Large Embroidery Hoop 240mm x 360mm",
+   "w": 240.0,
+   "h": 360.0
+  },
+  "HV_260x150_Endless": {
+   "name": "260mm x 150mm - MEGA ENDLESS HOOP",
+   "w": 150.0,
+   "h": 260.0
+  },
+  "HV_80x80_SmallSquare": {
+   "name": "80mm x 80mm - SMALL SQUARE HOOP",
+   "w": 80.0,
+   "h": 80.0
+  },
+  "HappyHCD1201_285x290_Square_Frame": {
+   "name": "Square Frame 285mm x 290mm",
+   "w": 290.0,
+   "h": 285.0
+  },
+  "HappyHCD1201_67_Low_Profile_Cap_Frame": {
+   "name": "Low Profile Cap Frame 67mm x 180mm",
+   "w": 180.0,
+   "h": 67.0
+  },
+  "HappyHCD1201_67x290_Wide_Cap_Frame": {
+   "name": "Wide Cap Frame 67mm x 290mm",
+   "w": 290.0,
+   "h": 67.0
+  },
+  "HappyHCD1501_120_Small_Round_Hoop": {
+   "name": "Small Round Hoop 120mm x 120mm",
+   "w": 120.0,
+   "h": 120.0
+  },
+  "HappyHCD1501_150_Standard_Round_Hoop": {
+   "name": "Standard Round Hoop 150mm x 150mm",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "HappyHCD1501_180_Large_Round_Hoop": {
+   "name": "Large Round Hoop 180mm x 180mm",
+   "w": 180.0,
+   "h": 180.0
+  },
+  "HappyHCD1501_210_Extra_Large_Round_Hoop": {
+   "name": "Extra Large Round Hoop 210mm x 210mm",
+   "w": 210.0,
+   "h": 210.0
+  },
+  "HappyHCD1501_320x320_Square_Frame": {
+   "name": "Square Hoop 320mm x 320mm",
+   "w": 320.0,
+   "h": 320.0
+  },
+  "HappyHCD1501_420x440_Wooden_Hoop": {
+   "name": "Wooden Hoop 420mm x 440mm",
+   "w": 440.0,
+   "h": 420.0
+  },
+  "HappyHCD1501_70x180_Low_Profile_Cap_Frame": {
+   "name": "Low Profile Cap Frame 70mm x 180mm",
+   "w": 180.0,
+   "h": 70.0
+  },
+  "HappyHCD1501_80x360_Wide_Cap_Frame": {
+   "name": "Wide Cap Frame 80mm x 360mm",
+   "w": 360.0,
+   "h": 80.0
+  },
+  "Hv_100x100_Designer_Standard": {
+   "name": "100mm x 100mm - STANDARD HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Hv_100x100_Metal": {
+   "name": "100mm x 100mm - SMALL METAL HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Hv_100x100_Rose_Standard": {
+   "name": "100mm x 100mm - STANDARD HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Hv_100x100_Spring": {
+   "name": "100mm x 100mm - EMBROIDERY SPRING HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Hv_120x120": {
+   "name": "120mm x 120mm - DESIGNER™ Splendid Square Hoop",
+   "w": 120.0,
+   "h": 120.0
+  },
+  "Hv_150x150_Quilt": {
+   "name": "150mm x 150mm - DO ALL QUILTER'S HOOP",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "Hv_150x150_WrapAndTexture": {
+   "name": "150mm x 150mm - TEXTURE HOOP",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "Hv_170x100_Endless": {
+   "name": "170mm x 100mm - ENDLESS EMBROIDERY HOOP",
+   "w": 100.0,
+   "h": 170.0
+  },
+  "Hv_170x100_Mid": {
+   "name": "170mm x 100mm - MIDSIZE HOOP",
+   "w": 100.0,
+   "h": 170.0
+  },
+  "Hv_180x100_EndlessII": {
+   "name": "180mm x 100mm - ENDLESS EMBROIDERY HOOP II",
+   "w": 100.0,
+   "h": 180.0
+  },
+  "Hv_180x130_Air": {
+   "name": "180mm x 130mm - AIR EASE HOOP",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "Hv_180x130_Design": {
+   "name": "180mm x 130mm - 5\" x 7\" DESIGN HOOP",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "Hv_180x130_Metal": {
+   "name": "180mm x 130mm - MEDIUM METAL HOOP",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "Hv_200x200": {
+   "name": "200mm x 200mm - QUILTER'S HOOP",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Hv_200x200_Metal": {
+   "name": "200mm x 200mm - QUILTER'S METAL HOOP",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Hv_240x150_Jewel": {
+   "name": "240mm x 150mm - DESIGNER™ Jewel Hoop",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "Hv_240x150_Large": {
+   "name": "240mm x 150mm - LARGE HOOP",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "Hv_240x150_Metal": {
+   "name": "240mm x 150mm - LARGE METAL HOOP",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "Hv_260x200_Crown": {
+   "name": "260mm x 200mm - DESIGNER™ Crown Hoop",
+   "w": 200.0,
+   "h": 260.0
+  },
+  "Hv_260x260_Mega_Quilters_Hoop": {
+   "name": "260mm x 260mm - MEGA QUILTERS HOOP",
+   "w": 260.0,
+   "h": 260.0
+  },
+  "Hv_360x150_MegaSingle": {
+   "name": "360mm x 150mm - MEGA SINGLE HOOP",
+   "w": 150.0,
+   "h": 360.0
+  },
+  "Hv_360x200_Royal": {
+   "name": "360mm x 200mm - DESIGNER™ Royal Hoop",
+   "w": 200.0,
+   "h": 360.0
+  },
+  "Hv_360x260_Designer_Imperial": {
+   "name": "360mm x 260mm - DESIGNER™ Imperial Hoop",
+   "w": 260.0,
+   "h": 360.0
+  },
+  "Hv_40x40_Designer_MiniSpring": {
+   "name": "40mm x 40mm - MINI EMBROIDERY SPRING HOOP",
+   "w": 40.0,
+   "h": 40.0
+  },
+  "Hv_40x40_Rose_MiniSpring": {
+   "name": "40mm x 40mm - MINI EMBROIDERY SPRING HOOP",
+   "w": 40.0,
+   "h": 40.0
+  },
+  "JanomeASQ18B_184x184": {
+   "name": "184mm x 184mm - ASQ18b Hoop",
+   "w": 184.0,
+   "h": 184.0
+  },
+  "JanomeHH10b": {
+   "name": "Embroidery Hoop HH10B 90mm x 40mm",
+   "w": 100.0,
+   "h": 90.0
+  },
+  "JanomeMB4_100x126_Flat_Hat_Hoop": {
+   "name": "Flat Hat Hoop 126mm x 110mm",
+   "w": 126.0,
+   "h": 110.0
+  },
+  "JanomeMB4_100x25_QSnap": {
+   "name": "Quick-Snap 4\" x 1\" (100mm x 25mm)",
+   "w": 100.0,
+   "h": 25.0
+  },
+  "JanomeMB4_100x40_QSnap": {
+   "name": "Quick-Snap 4\" x 1½\" (100mm x 40mm)",
+   "w": 100.0,
+   "h": 40.0
+  },
+  "JanomeMB4_100x75_QSnap": {
+   "name": "Quick-Snap 4\" x 3\" (100mm x 75mm)",
+   "w": 100.0,
+   "h": 75.0
+  },
+  "JanomeMB4_110x126_M2": {
+   "name": "Hoop M2 126mm x 110mm",
+   "w": 126.0,
+   "h": 110.0
+  },
+  "JanomeMB4_110x95_J7": {
+   "name": "Monogram J7 Hoop 110mm x 95mm",
+   "w": 95.0,
+   "h": 110.0
+  },
+  "JanomeMB4_120x121_J8": {
+   "name": "Monogram J8 Hoop 120mm x 121mm",
+   "w": 121.0,
+   "h": 120.0
+  },
+  "JanomeMB4_125x125_QSnap": {
+   "name": "Quick-Snap 5\" x 5\" (125mm x 125mm)",
+   "w": 125.0,
+   "h": 125.0
+  },
+  "JanomeMB4_125x50_QSnap": {
+   "name": "Quick-Snap 5\" x 2\" (125mm x 50mm)",
+   "w": 125.0,
+   "h": 50.0
+  },
+  "JanomeMB4_125x65_QSnap": {
+   "name": "Quick-Snap 5\" x 2½\" (125mm x 65mm)",
+   "w": 125.0,
+   "h": 65.0
+  },
+  "JanomeMB4_150x150_QSnap": {
+   "name": "Quick-Snap 6\" x 6\" (150mm x 150mm)",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "JanomeMB4_150x200_QSnap": {
+   "name": "Quick-Snap 6\" x 7⅞\" (150mm x 200mm)",
+   "w": 150.0,
+   "h": 200.0
+  },
+  "JanomeMB4_150x50_QSnap": {
+   "name": "Quick-Snap 6\" x 2\" (150mm x 50mm)",
+   "w": 150.0,
+   "h": 50.0
+  },
+  "JanomeMB4_240x200_M1": {
+   "name": "Hoop M1 240mm x 200mm",
+   "w": 240.0,
+   "h": 200.0
+  },
+  "JanomeMB4_24x54_J2": {
+   "name": "Monogram J2 Hoop 24mm x 54mm",
+   "w": 24.0,
+   "h": 54.0
+  },
+  "JanomeMB4_25x150_QSnap": {
+   "name": "Quick-Snap 1\" x 6\" (25mm x 150mm)",
+   "w": 25.0,
+   "h": 150.0
+  },
+  "JanomeMB4_25x25_QSnap": {
+   "name": "Quick-Snap 1\" x 1\" (25mm x 25mm)",
+   "w": 25.0,
+   "h": 25.0
+  },
+  "JanomeMB4_25x50_QSnap": {
+   "name": "Quick-Snap 1\" x 2\" (25mm x 50mm)",
+   "w": 25.0,
+   "h": 50.0
+  },
+  "JanomeMB4_300x100_QSnap": {
+   "name": "Quick-Snap 11¾\" x 4\" (300mm x 100mm)",
+   "w": 300.0,
+   "h": 100.0
+  },
+  "JanomeMB4_300x200_QSnap": {
+   "name": "Quick-Snap 11¾\" x 7⅞\" (300mm x 200mm)",
+   "w": 300.0,
+   "h": 200.0
+  },
+  "JanomeMB4_300x40_QSnap": {
+   "name": "Quick-Snap 11¾\" x 1½\" (300mm x 40mm)",
+   "w": 300.0,
+   "h": 40.0
+  },
+  "JanomeMB4_300x65_QSnap": {
+   "name": "Quick-Snap 11¾\" x 2½\" (300mm x 65mm)",
+   "w": 300.0,
+   "h": 65.0
+  },
+  "JanomeMB4_300x75_QSnap": {
+   "name": "Quick-Snap 11¾\" x 3\" (300mm x 75mm)",
+   "w": 300.0,
+   "h": 75.0
+  },
+  "JanomeMB4_30x30_J1": {
+   "name": "Monogram J1 Hoop 30mm x 30mm",
+   "w": 30.0,
+   "h": 30.0
+  },
+  "JanomeMB4_40x200_Left_QSnap": {
+   "name": "Quick-Snap 1½\" x 7⅞\" (40mm x 200mm)",
+   "w": 40.0,
+   "h": 200.0
+  },
+  "JanomeMB4_42x67_J4": {
+   "name": "Monogram J4 Hoop 42mm x 67mm",
+   "w": 42.0,
+   "h": 67.0
+  },
+  "JanomeMB4_46x46_J5": {
+   "name": "Monogram J5 Hoop 46mm x 46mm",
+   "w": 46.0,
+   "h": 46.0
+  },
+  "JanomeMB4_50x100_QSnap": {
+   "name": "Quick-Snap 2\" x 4\" (50mm x 100mm)",
+   "w": 50.0,
+   "h": 100.0
+  },
+  "JanomeMB4_50x50_M3": {
+   "name": "Hoop M3 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "JanomeMB4_50x50_QSnap": {
+   "name": "Quick-Snap 2\" x 2\" (50mm x 50mm)",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "JanomeMB4_64x28_J3": {
+   "name": "Monogram J3 Hoop 64mm x 28mm",
+   "w": 64.0,
+   "h": 28.0
+  },
+  "JanomeMB4_66x66_J6": {
+   "name": "Monogram J6 Hoop 66mm x 66mm",
+   "w": 66.0,
+   "h": 66.0
+  },
+  "JanomeMB4_75x200_Left_QSnap": {
+   "name": "Quick-Snap 3\" x 7⅞\" (75mm x 200mm)",
+   "w": 75.0,
+   "h": 200.0
+  },
+  "JanomeMC10000_110x126_Hat_Hoop_Insert": {
+   "name": "Hat Hoop Insert (inside Large B frame) 90mm x 100mm",
+   "w": 100.0,
+   "h": 90.0
+  },
+  "JanomeMC10000_110x126_Spring_F": {
+   "name": "Embroidery Hoop - Spring F 126mm x 110mm",
+   "w": 126.0,
+   "h": 110.0
+  },
+  "JanomeMC11000_110x126_Hat_Hoop_Insert": {
+   "name": "Hat Hoop Insert (inside RE frame) 90mm x 100mm",
+   "w": 100.0,
+   "h": 90.0
+  },
+  "JanomeMC11000_200x140": {
+   "name": "Embroidery Hoop RE 200mm x 140mm",
+   "w": 140.0,
+   "h": 200.0
+  },
+  "JanomeMC200E_140x140": {
+   "name": "Large Hoop 140mm x 140mm",
+   "w": 140.0,
+   "h": 140.0
+  },
+  "JanomeMC200E_50x50": {
+   "name": "Small Hoop 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "JanomeMC9000_70x85_Circular": {
+   "name": "Circular Embroidery Hoop #2 70mm x 85mm",
+   "w": 85.0,
+   "h": 70.0
+  },
+  "JanomeMC9000_90x126_Circular": {
+   "name": "Circular Embroidery Hoop #3 126mm x 90mm",
+   "w": 126.0,
+   "h": 90.0
+  },
+  "JanomeMc10000_110x126": {
+   "name": "Embroidery Hoop A - Standard Hoop 126mm x 110mm",
+   "w": 126.0,
+   "h": 110.0
+  },
+  "JanomeMc10000_200x140": {
+   "name": "Embroidery Hoop B - Large Hoop 200mm x 140mm",
+   "w": 140.0,
+   "h": 200.0
+  },
+  "JanomeMc10000_50x50": {
+   "name": "Embroidery Hoop C - Free Arm 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "JanomeMc11000_110x126": {
+   "name": "Embroidery Hoop ST 110mm x 126mm",
+   "w": 126.0,
+   "h": 110.0
+  },
+  "JanomeMc11000_200x200": {
+   "name": "Embroidery Hoop SQ 200mm x 200mm",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "JanomeMc11000_50x50": {
+   "name": "Free Arm Embroidery Hoop 50mm x 50mm",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "JanomeMc9000_90x126": {
+   "name": "Rectangular Embroidery Hoop #1 90mm x 126mm",
+   "w": 126.0,
+   "h": 90.0
+  },
+  "JanomeRE10B_100x40": {
+   "name": "Embroidery Hoop RE10b 100mm x 40mm",
+   "w": 100.0,
+   "h": 40.0
+  },
+  "JanomeRE20B_140x200": {
+   "name": "Embroidery Hoop RE20b 140mm x 200mm",
+   "w": 140.0,
+   "h": 200.0
+  },
+  "JanomeRE28B_200x280": {
+   "name": "Embroidery Hoop RE28b 200mm x 280mm",
+   "w": 200.0,
+   "h": 280.0
+  },
+  "JanomeS1_37x59": {
+   "name": "Embroidery Hoop S1 37mm x 59mm",
+   "w": 37.0,
+   "h": 59.0
+  },
+  "JanomeS2_28x50": {
+   "name": "Embroidery Hoop S2 28mm x 50mm",
+   "w": 28.0,
+   "h": 50.0
+  },
+  "JanomeSQ14B_140x140": {
+   "name": "Embroidery Hoop SQ14B 140mm x 140mm",
+   "w": 140.0,
+   "h": 140.0
+  },
+  "JanomeSQ20B_200x200": {
+   "name": "Embroidery Hoop SQ20B 200mm x 200mm",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "JanomeT1_34x34": {
+   "name": "Embroidery Hoop T1 34mm x 34mm",
+   "w": 34.0,
+   "h": 34.0
+  },
+  "JanomeT2_54x54": {
+   "name": "Embroidery Hoop T2 54mm x 54mm",
+   "w": 54.0,
+   "h": 54.0
+  },
+  "JanomeT3_84x84": {
+   "name": "Embroidery Hoop T3 84mm x 84mm",
+   "w": 84.0,
+   "h": 84.0
+  },
+  "JanomeT4_112x112": {
+   "name": "Embroidery Hoop T4 112mm x 112mm",
+   "w": 112.0,
+   "h": 112.0
+  },
+  "JanomeT5_142x142": {
+   "name": "Embroidery Hoop T5 142mm x 142mm",
+   "w": 142.0,
+   "h": 142.0
+  },
+  "JanomeT6_78x168": {
+   "name": "Embroidery Hoop T6 78mm x 168mm",
+   "w": 78.0,
+   "h": 168.0
+  },
+  "Janome_Acufil_180x180": {
+   "name": "AcuFil Quilting Hoop 180mm x 180mm",
+   "w": 180.0,
+   "h": 180.0
+  },
+  "Janome_Acufil_200x140": {
+   "name": "AcuFil Quilting Hoop 200mm x 140mm",
+   "w": 140.0,
+   "h": 200.0
+  },
+  "Janome_Acufil_220x220": {
+   "name": "Acufil Quilting Hoop ASQ22 220mm x 220mm",
+   "w": 220.0,
+   "h": 220.0
+  },
+  "Janome_FA10": {
+   "name": "Free Arm Embroidery Hoop FA10 100mm x 40mm",
+   "w": 100.0,
+   "h": 40.0
+  },
+  "Janome_FA10a": {
+   "name": "Free Arm Embroidery Hoop FA10a 100mm x 40mm",
+   "w": 100.0,
+   "h": 40.0
+  },
+  "Janome_GR": {
+   "name": "Embroidery Hoop GR 230mm x 300mm",
+   "w": 230.0,
+   "h": 300.0
+  },
+  "Janome_HH10_100x90": {
+   "name": "Embroidery Hoop HH10 - 100mm x 90mm",
+   "w": 90.0,
+   "h": 100.0
+  },
+  "Janome_MC15000_180x140": {
+   "name": "Embroidery Hoop RE18 - 180mm x 140mm",
+   "w": 140.0,
+   "h": 180.0
+  },
+  "Janome_MC9900_200x170": {
+   "name": "Embroidery Hoop RE20a - 200mm x 170mm",
+   "w": 170.0,
+   "h": 200.0
+  },
+  "Janome_SQ14": {
+   "name": "Embroidery Hoop SQ14 140mm x 140mm",
+   "w": 140.0,
+   "h": 140.0
+  },
+  "Janome_SQ14a": {
+   "name": "Embroidery Hoop SQ14a 140mm x 140mm",
+   "w": 140.0,
+   "h": 140.0
+  },
+  "Janome_SQ23": {
+   "name": "Embroidery Hoop SQ23 230mm x 230mm",
+   "w": 230.0,
+   "h": 230.0
+  },
+  "Multineedle_110x110": {
+   "name": "110mm x 110mm - Medium Hoop",
+   "w": 110.0,
+   "h": 110.0
+  },
+  "Multineedle_190x140": {
+   "name": "190mm x 140mm - Large Hoop",
+   "w": 190.0,
+   "h": 140.0
+  },
+  "Multineedle_310x210": {
+   "name": "310mm x 210mm - Extra Large Hoop",
+   "w": 310.0,
+   "h": 210.0
+  },
+  "Multineedle_70x50": {
+   "name": "70mm x 50mm - Small Hoop",
+   "w": 70.0,
+   "h": 50.0
+  },
+  "Multineedle_AH-1814": {
+   "name": "180mm x 141mm - Metal Large Bag Hoop",
+   "w": 160.0,
+   "h": 121.0
+  },
+  "Multineedle_CH-1311": {
+   "name": "134mm x 118.5mm - Metal Small Bag Hoop",
+   "w": 114.0,
+   "h": 98.0
+  },
+  "Multineedle_Cap_260x60": {
+   "name": "260mm x 60mm - Cap Hoop",
+   "w": 260.0,
+   "h": 60.0
+  },
+  "Multineedle_HH-1514": {
+   "name": "152mm x 139mm - Metal Cap Hoop",
+   "w": 132.0,
+   "h": 119.0
+  },
+  "Multineedle_MH-0612": {
+   "name": "61mm x 121mm - Metal Small Pocket Hoop",
+   "w": 41.0,
+   "h": 101.0
+  },
+  "Multineedle_MH-0712": {
+   "name": "74mm x 121mm - Metal Medium Pocket Hoop",
+   "w": 54.0,
+   "h": 101.0
+  },
+  "Multineedle_MH-0812": {
+   "name": "86.5mm x 121mm - Metal Large Pocket Hoop",
+   "w": 66.0,
+   "h": 101.0
+  },
+  "Multineedle_SH-0823": {
+   "name": "84mm x 237.5mm - Metal Small Sleeve Hoop",
+   "w": 64.0,
+   "h": 217.0
+  },
+  "Multineedle_SH-1229": {
+   "name": "120mm x 290mm - Metal Large Sleeve Hoop",
+   "w": 100.0,
+   "h": 270.0
+  },
+  "P80_120x120": {
+   "name": "120mm x 120mm - creative™ 120 SQUARE HOOP",
+   "w": 120.0,
+   "h": 120.0
+  },
+  "P80_150x150": {
+   "name": "150mm x 150mm - creative™ ALL FABRIC HOOP II",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "P80_150x150_WrapAndTexture": {
+   "name": "150mm x 150mm - creative™ TEXTURE HOOP",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "P80_180x100_Endless": {
+   "name": "180mm x 100mm - creative™ ENDLESS HOOP II",
+   "w": 100.0,
+   "h": 180.0
+  },
+  "P80_180x130_Air": {
+   "name": "180mm x 130mm - creative™ AIR HOOP",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "P80_180x130_Metal": {
+   "name": "180mm x 130mm - creative™ METAL HOOP",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "P80_240x150": {
+   "name": "240mm x 150mm - creative™ MASTER HOOP",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "P80_260x200_Elite": {
+   "name": "260mm x 200mm - creative™ ELITE HOOP",
+   "w": 200.0,
+   "h": 260.0
+  },
+  "P80_260x260": {
+   "name": "260mm x 260mm - creative™ GRAND QUILTERS HOOP",
+   "w": 260.0,
+   "h": 260.0
+  },
+  "P80_360x200": {
+   "name": "360mm x 200mm - creative™ DELUXE HOOP",
+   "w": 200.0,
+   "h": 360.0
+  },
+  "Pff_100x100_Metal": {
+   "name": "100mm x 100mm - creative™ PETITE METAL HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Pff_100x100_Square": {
+   "name": "100mm x 100mm - creative™ 100 SQUARE HOOP",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "Pff_100x80_214x_Cap": {
+   "name": "80mm x 80mm - creative™ CAP HOOP (with Adapter)",
+   "w": 80.0,
+   "h": 100.0
+  },
+  "Pff_120x115_214x": {
+   "name": "120mm x 115mm - creative™ RECTANGULAR HOOP",
+   "w": 115.0,
+   "h": 120.0
+  },
+  "Pff_120x115_75xx": {
+   "name": "120mm x 115mm - creative™ RECTANGULAR HOOP 75xx",
+   "w": 115.0,
+   "h": 120.0
+  },
+  "Pff_120x115_Round": {
+   "name": "120mm x 115mm - creative™ ROUND HOOP",
+   "w": 115.0,
+   "h": 120.0
+  },
+  "Pff_130x130_AllFabric": {
+   "name": "130mm x 130mm - creative™ ALL FABRIC HOOP",
+   "w": 130.0,
+   "h": 130.0
+  },
+  "Pff_180x100_Endless": {
+   "name": "180mm x 100mm - creative™ ENDLESS HOOP",
+   "w": 100.0,
+   "h": 180.0
+  },
+  "Pff_200x200": {
+   "name": "200mm x 200mm - creative™ QUILTERS HOOP",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Pff_200x200_Metal": {
+   "name": "200mm x 200mm - creative™ QUILTERS METAL HOOP",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "Pff_225x140_Large": {
+   "name": "225mm x 140mm - creative™ LARGE HOOP",
+   "w": 140.0,
+   "h": 225.0
+  },
+  "Pff_240x150_Metal": {
+   "name": "240mm x 150mm - creative™ GRAND METAL HOOP",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "Pff_260x150_Endless": {
+   "name": "260mm x 150mm - creative™ GRAND ENDLESS HOOP",
+   "w": 150.0,
+   "h": 260.0
+  },
+  "Pff_360x260_Supreme": {
+   "name": "360mm x 260mm - creative™ SUPREME HOOP",
+   "w": 260.0,
+   "h": 360.0
+  },
+  "Pff_40x40_Spring": {
+   "name": "40mm x 40mm - creative™ PETITE SPRING HOOP",
+   "w": 40.0,
+   "h": 40.0
+  },
+  "Pff_80x50_Petite": {
+   "name": "50mm x 80mm - creative™ PETITE HOOP",
+   "w": 80.0,
+   "h": 50.0
+  },
+  "Pff_80x80_214x": {
+   "name": "80mm x 80mm - creative™ HOOP 80 (with Adapter)",
+   "w": 80.0,
+   "h": 80.0
+  },
+  "Pff_80x80_75xx": {
+   "name": "80mm x 80mm - creative™ HOOP 80",
+   "w": 80.0,
+   "h": 80.0
+  },
+  "Pff_80x80_PetiteSquare": {
+   "name": "80mm x 80mm - creative™ PETITE SQUARE HOOP",
+   "w": 80.0,
+   "h": 80.0
+  },
+  "Pff_80x80_Round": {
+   "name": "80mm x 80mm - creative™ ROUND HOOP 80",
+   "w": 80.0,
+   "h": 80.0
+  },
+  "SingerCE350_Large": {
+   "name": "170mm x 115mm - Large Hoop",
+   "w": 115.0,
+   "h": 170.0
+  },
+  "SingerCE350_Small": {
+   "name": "120mm x 80mm - Small Hoop",
+   "w": 80.0,
+   "h": 120.0
+  },
+  "SingerEM200_SE340_100x100": {
+   "name": "100mm x 100mm - Small Hoop",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "SingerEM200_SE340_180x100_Endless": {
+   "name": "180mm x 100mm - Endless Hoop",
+   "w": 100.0,
+   "h": 180.0
+  },
+  "SingerEM200_SE340_260x150": {
+   "name": "260mm x 150mm - Large Hoop",
+   "w": 150.0,
+   "h": 260.0
+  },
+  "SingerS10_140x140": {
+   "name": "140mm x 140mm - Large Hoop",
+   "w": 140.0,
+   "h": 140.0
+  },
+  "SingerS10_50x50": {
+   "name": "50mm x 50mm - Small Hoop",
+   "w": 50.0,
+   "h": 50.0
+  },
+  "SingerXL1000_Large": {
+   "name": "240mm x 130mm - Large Hoop",
+   "w": 130.0,
+   "h": 240.0
+  },
+  "SingerXL1000_Medium": {
+   "name": "114mm x 114mm - Medium Hoop",
+   "w": 114.0,
+   "h": 114.0
+  },
+  "SingerXL1000_Small": {
+   "name": "55mm x 55mm - Small Hoop",
+   "w": 55.0,
+   "h": 55.0
+  },
+  "SingerXL100_Large": {
+   "name": "114mm x 80mm - Large Hoop",
+   "w": 80.0,
+   "h": 114.0
+  },
+  "SingerXL100_Small": {
+   "name": "45mm x 18mm - Small Hoop",
+   "w": 18.0,
+   "h": 45.0
+  },
+  "SingerXL6000_Continuous": {
+   "name": "120mm x 50mm - Continuous Hoop",
+   "w": 50.0,
+   "h": 120.0
+  },
+  "SingerXL6000_Large": {
+   "name": "240mm x 140mm - Large Hoop",
+   "w": 140.0,
+   "h": 240.0
+  },
+  "SingerXL6000_Medium": {
+   "name": "114mm x 114mm - Medium Hoop",
+   "w": 114.0,
+   "h": 114.0
+  },
+  "SingerXL6000_Small": {
+   "name": "55mm x 55mm - Small Hoop",
+   "w": 55.0,
+   "h": 55.0
+  },
+  "Singer_Midsize_Hoop_170x100": {
+   "name": "170mm x 100mm - Embroidery Hoop",
+   "w": 100.0,
+   "h": 170.0
+  },
+  "Singer_Mini_Embroidery_Spring_Hoop_40x40": {
+   "name": "40mm x 40mm - Small Spring Embroidery Hoop",
+   "w": 40.0,
+   "h": 40.0
+  },
+  "Singer_Standard_Hoop_100x100": {
+   "name": "100mm x 100mm - Square Embroidery Hoop",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "ToyotaX_Arm21_Round": {
+   "name": "Arm-type Hoop 210mm Round",
+   "w": 180.0,
+   "h": 180.0
+  },
+  "ToyotaX_Arm25_Round": {
+   "name": "Arm-type Hoop 250mm Round",
+   "w": 220.0,
+   "h": 220.0
+  },
+  "ToyotaX_Arm32x25_Rect": {
+   "name": "Arm-type Hoop 320mm x 250mm Rectangle",
+   "w": 290.0,
+   "h": 220.0
+  },
+  "ToyotaX_Arm46x25_Rect": {
+   "name": "Arm-type Hoop 460mm x 250mm Rectangle",
+   "w": 420.0,
+   "h": 215.0
+  },
+  "ToyotaX_Arm46x30_Rect": {
+   "name": "Arm-type Hoop 460mm x 300mm Rectangle",
+   "w": 420.0,
+   "h": 260.0
+  },
+  "UniLarge1": {
+   "name": "180mm x 130mm - Universal Large Hoop 1",
+   "w": 130.0,
+   "h": 180.0
+  },
+  "UniLarge2": {
+   "name": "240mm x 150mm - Universal Large Hoop 2",
+   "w": 150.0,
+   "h": 240.0
+  },
+  "UniLarge3": {
+   "name": "260mm x 200mm - Universal Large Hoop 3",
+   "w": 200.0,
+   "h": 260.0
+  },
+  "UniLarge4": {
+   "name": "360mm x 200mm - Universal Large Hoop 4",
+   "w": 200.0,
+   "h": 360.0
+  },
+  "UniLarge5": {
+   "name": "360mm x 260mm - Universal Large Hoop 5",
+   "w": 260.0,
+   "h": 360.0
+  },
+  "UniMid1": {
+   "name": "170mm x 100mm - Universal Midsize Hoop 1",
+   "w": 100.0,
+   "h": 170.0
+  },
+  "UniSquare1": {
+   "name": "100mm x 100mm - Universal Square Hoop 1",
+   "w": 100.0,
+   "h": 100.0
+  },
+  "UniSquare2": {
+   "name": "150mm x 150mm - Universal Square Hoop 2",
+   "w": 150.0,
+   "h": 150.0
+  },
+  "UniSquare3": {
+   "name": "200mm x 200mm - Universal Square Hoop 3",
+   "w": 200.0,
+   "h": 200.0
+  },
+  "UniSquare4": {
+   "name": "120mm x 120mm - Universal Square Hoop 4",
+   "w": 120.0,
+   "h": 120.0
+  },
+  "UniSquare5": {
+   "name": "260mm x 260mm - Universal Square Hoop 5",
+   "w": 260.0,
+   "h": 260.0
+  }
+ }
+}
