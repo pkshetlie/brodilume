@@ -33,13 +33,21 @@ des couleurs, puis envoyer le résultat directement sur une clé USB.
 
 ## Installation (utilisateurs)
 
-1. Ouvrez la page **[Releases](../../releases)** du projet et téléchargez **`Brodilume.exe`** (un seul fichier, aucune installation).
-2. Double-cliquez dessus. Windows peut afficher « Windows a protégé votre PC » (l'application n'est pas
-   signée par un éditeur reconnu) : cliquez sur **Informations complémentaires**, puis **Exécuter quand même**.
-3. Si un antivirus (McAfee, Defender…) bloque ou met en quarantaine le fichier, ajoutez une exception
-   pour `Brodilume.exe` dans ses paramètres. Vérifiez que le fichier vient bien de cette page.
+Sur la page **[Releases](../../releases)**, deux fichiers au choix :
 
-Brodilume ne nécessite ni Python ni connexion Internet. Il crée ses réglages dans `%APPDATA%\Brodilume\`.
+- **`Brodilume-Setup.exe`** (recommandé) : installe Brodilume pour vous seul, **sans droits administrateur**,
+  dans `%LOCALAPPDATA%\Programs\Brodilume`. Il ajoute Brodilume au menu Démarrer, propose un raccourci
+  sur le Bureau, ouvre les projets `.brodi` d'un double-clic, et l'inscrit dans Paramètres > Applications
+  pour pouvoir le désinstaller. Vos projets et réglages sont conservés à la désinstallation.
+- **`Brodilume.exe`** (portable) : un seul fichier, sans installation, à lancer d'où vous voulez.
+
+Au premier lancement, Windows peut afficher « Windows a protégé votre PC » (le programme n'est pas signé
+par un éditeur reconnu) : cliquez sur **Informations complémentaires**, puis **Exécuter quand même**.
+Si un antivirus (McAfee, Defender…) bloque le fichier, ajoutez une exception pour lui dans ses paramètres,
+après avoir vérifié qu'il vient bien de cette page.
+
+Brodilume ne nécessite ni Python ni connexion Internet (sauf pour vérifier les mises à jour).
+Il crée ses réglages dans `%APPDATA%\Brodilume\`.
 
 **Fils nommés** : si le logiciel **mySewnet** (CREATIVATE Embroidery) est installé sur le PC, Brodilume lit
 ses nuanciers (lecture seule) pour proposer de vrais fils. Sans mySewnet, les couleurs sont gardées telles
@@ -56,6 +64,18 @@ quelles, sans nom de fil.
 
 Le détail complet de chaque réglage et de chaque raccourci est ci-dessous.
 
+## Version et mises à jour
+
+- **Version** : Fichier > À propos de Brodilume, ou Paramètres > Général.
+- Au démarrage, Brodilume vérifie en arrière-plan s'il existe une version plus récente sur les
+  « Releases » GitHub. Si oui, il propose de la télécharger ; « Mettre à jour » ferme l'application,
+  remplace le fichier `Brodilume.exe` et la relance seule. « Plus tard » ou « Ignorer cette version »
+  évitent de revoir la proposition.
+- Aucune donnée personnelle n'est envoyée : seule une requête anonyme « dernière version » part vers GitHub.
+- Pour désactiver la vérification au démarrage : Paramètres > Général > « Vérifier les mises à jour au démarrage ».
+  La vérification manuelle reste possible (Fichier > Vérifier les mises à jour).
+- Depuis le code source, la mise à jour ouvre simplement la page de téléchargement.
+
 ## Compiler soi-même l'exécutable
 
 Pour fabriquer `Brodilume.exe` depuis le code source (Windows 10/11, Python 3.10) :
@@ -65,7 +85,7 @@ build_exe.bat
 ```
 
 Le script crée un environnement propre (`.build-venv`) avec les seules dépendances du projet, puis
-produit `dist\Brodilume.exe`. Compilez depuis un environnement propre : un Python déjà chargé de
+produit `dist\Brodilume.exe` (portable) et `dist\Brodilume-Setup.exe` (installeur). Compilez depuis un environnement propre : un Python déjà chargé de
 nombreux paquets (torch, etc.) ferait grossir l'exécutable de plusieurs Go.
 
 ## Lancer depuis le code source
@@ -172,6 +192,9 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 - `vp4/export.py` : exports (vp4, vp3, pes, dst…) et détection des clés USB.
 - `vp4/project.py` : éléments (position, rotation, échelle), gomme, assemblage du motif final.
 - `vp4/render.py` : aperçu.
+- `updater.py` : numéro de version et mise à jour automatique depuis les Releases GitHub.
+- `install_win.py` / `installer.py` : installation pour l'utilisateur (raccourcis, `.brodi`, désinstallation) et fenêtre de `Brodilume-Setup.exe`.
+- `build_exe.bat` : fabrique `Brodilume.exe` et `Brodilume-Setup.exe`.
 - `tests/test_roundtrip.py` : vérifie que l'écriture reproduit à l'octet près un fichier exporté par le logiciel d'origine.
 - `assets/` : logo et icône Brodilume (SVG d'origine ; `python assets/build_assets.py` régénère PNG et ICO).
 

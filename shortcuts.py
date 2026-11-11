@@ -253,6 +253,16 @@ class SettingsDialog(tk.Toplevel):
         ttk.Label(gen, text="Cercles « Universal » de mySewnet. Jusqu'à 260 × 200 mm, le fichier indique le cercle "
                             "UniLarge3 (vérifié) ; au-delà, son nom Universal_LxH (à vérifier dans mySewnet).",
                   style="Muted.TLabel", wraplength=640).pack(anchor="w", pady=(4, 0))
+        ttk.Label(gen, text="Mises à jour", style="Title.TLabel").pack(anchor="w", pady=(18, 4))
+        import updater
+        self.v_updates = tk.BooleanVar(value=load_setting("check_updates", True))
+        ttk.Checkbutton(gen, text="Vérifier les mises à jour au démarrage", variable=self.v_updates,
+                        command=lambda: save_setting("check_updates", bool(self.v_updates.get()))).pack(anchor="w")
+        urow = ttk.Frame(gen)
+        urow.pack(anchor="w", pady=(4, 0))
+        ttk.Label(urow, text="Version %s" % updater.VERSION).pack(side="left")
+        ttk.Button(urow, text="Vérifier maintenant", command=lambda: app._start_update_check(manual=True)).pack(
+            side="left", padx=(12, 0))
         tab = ttk.Frame(nb, padding=8)
         nb.add(tab, text="Raccourcis clavier")
         ttk.Label(tab, text="Double-clic sur une action pour lui donner un nouveau raccourci. "

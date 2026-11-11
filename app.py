@@ -6,7 +6,9 @@ Lancement : double-clic sur « Brodilume.lnk » / « Brodilume.bat » (on peut y
 import copy
 import math
 import os
+import queue
 import sys
+import tempfile
 import threading
 import time
 import tkinter as tk
@@ -24,6 +26,7 @@ from vp4.project import (Item, normalize, compose, erase, thread_key, apply_edit
 from vp4 import threads as thr  # noqa: E402
 from vp4.format import Design, ColorBlock  # noqa: E402
 import shortcuts  # noqa: E402
+import updater  # noqa: E402
 import winsys  # noqa: E402
 from toolbar import ToolBar, Tooltip  # noqa: E402
 import theme  # noqa: E402
@@ -489,6 +492,10 @@ class App(BaseTk):
         self.after(500, self._watch_usb)
         self.protocol("WM_DELETE_WINDOW", self.quit_app)
         self._update_title()
+        self._update_q = queue.Queue()
+        self.after(500, self._poll_update)
+        if shortcuts.load_setting("check_updates", True):
+            self.after(4000, self._start_update_check)
         self.after(max(0, int(1800 - (time.time() - self._t0) * 1000)), self._show_main)
 
     # ------------------------------------------------------------------ démarrage
@@ -1182,6 +1189,88 @@ class App(BaseTk):
         v = shortcuts.load_setting("usb_formats", ["vp3", "vp4"])
         return [e for e in v if e in known] or ["vp3"]
 
+    # ------------------------------------------------------------------ version et mises à jour
+    def about(self):
+        self.message("À propos", text=(
+            "Brodilume %s\n\nImage → broderie .vp4 (Husqvarna Viking / Pfaff) et autres formats.\n"
+            "Licence : PolyForm Noncommercial 1.0.0 (usage non commercial).\n"
+            "Bibliothèques tierces : voir THIRD-PARTY-NOTICES.md.\n\nhttps://github.com/%s"
+            % (updater.VERSION, updater.REPO)))
+
+    def _start_update_check(self, manual=False):
+        """Interroge GitHub en arrière-plan ; le résultat revient par _poll_update (thread-safe)."""
+        def work():
+            try:
+                self._update_q.put(("found", updater.fetch_latest(), manual))
+            except Exception as e:
+                self._update_q.put(("err", str(e), manual))
+        threading.Thread(target=work, daemon=True).start()
+
+    def _poll_update(self):
+        try:
+            while True:
+                kind, data, manual = self._update_q.get_nowait()
+                if kind == "found":
+                    self._update_found(data, manual)
+                elif kind == "err" and manual:
+                    self.message("Mise à jour", kind="warning",
+                                 text="Impossible de vérifier les mises à jour :\n%s" % data)
+                elif kind == "dl_ok":
+                    self.v_status.set("Téléchargement terminé : redémarrage…")
+                    updater.install_and_restart(data)
+                    self.destroy()
+                    return
+                elif kind == "dl_err":
+                    self.message("Mise à jour", kind="error", text="Le téléchargement a échoué :\n%s" % data)
+                    self.v_status.set("Mise à jour annulée")
+        except queue.Empty:
+            pass
+        self.after(300, self._poll_update)
+
+    def _update_found(self, info, manual):
+        if not info:
+            if manual:
+                self.message("Mise à jour", text="Aucune version publiée pour le moment.")
+            return
+        if not updater.is_newer(info["version"]):
+            if manual:
+                self.message("Mise à jour", text="Brodilume %s est à jour." % updater.VERSION)
+            return
+        if not manual and shortcuts.load_setting("skip_version") == info["version"]:
+            return
+        notes = info["notes"].strip()
+        notes = (notes[:400] + "…") if len(notes) > 400 else notes
+        text = "Nouvelle version : %s (vous utilisez la %s)." % (info["version"], updater.VERSION)
+        if notes:
+            text += "\n\n" + notes
+        if not updater.is_frozen() or not info["asset"]:
+            if self.ask_yes_no("Mise à jour", text + "\n\nOuvrir la page de téléchargement ?"):
+                updater.open_page(info["url"])
+            return
+        choice = self._dialog("Mise à jour", text + "\n\nBrodilume se fermera puis se relancera tout seul.",
+                              [("Mettre à jour", "now"), ("Plus tard", "later"), ("Ignorer cette version", "skip")],
+                              icon="↑")
+        if choice == "skip":
+            shortcuts.save_setting("skip_version", info["version"])
+        elif choice == "now":
+            self._do_update(info)
+
+    def _do_update(self, info):
+        if self._job or self._queue:
+            if not self.ask_yes_no("Mise à jour", "Une image est encore en cours de génération. Continuer quand même ?"):
+                return
+        if not self.maybe_save():
+            return
+        dest = os.path.join(tempfile.gettempdir(), "Brodilume-%s.exe" % info["version"])
+        self.v_status.set("Téléchargement de la version %s…" % info["version"])
+
+        def work():
+            try:
+                self._update_q.put(("dl_ok", updater.download(info["asset"], dest), False))
+            except Exception as e:
+                self._update_q.put(("dl_err", str(e), False))
+        threading.Thread(target=work, daemon=True).start()
+
     def _watch_usb(self):
         """Le bouton « clé USB » s'active dès qu'une clé est branchée."""
         try:
@@ -1382,6 +1471,8 @@ class App(BaseTk):
         m.add_command(label=lbl, accelerator=k("usb"), command=self.send_usb_default, state=st(has and drives))
         m.add_separator()
         m.add_command(label="Paramètres…", accelerator=k("settings"), command=self.open_settings)
+        m.add_command(label="Vérifier les mises à jour…", command=lambda: self._start_update_check(manual=True))
+        m.add_command(label="À propos de Brodilume", command=self.about)
         m.add_separator()
         m.add_command(label="Fermer le projet", accelerator=k("close"), command=self.close_project)
         m.add_command(label="Quitter", accelerator=k("quit"), command=self.quit_app)
@@ -2824,6 +2915,17 @@ class App(BaseTk):
 
 
 if __name__ == "__main__":
+    if "--uninstall" in sys.argv[1:]:  # Paramètres > Applications > Brodilume > Désinstaller
+        import install_win
+        install_win.run_uninstall_ui()
+        sys.exit(0)
+    if updater.is_frozen():
+        try:
+            import install_win
+            if install_win.is_installed_copy(sys.executable):  # version à jour dans Paramètres > Applications
+                install_win.set_registered_version(updater.VERSION)
+        except Exception:
+            pass
     app = App()
     files = [a for a in sys.argv[1:] if os.path.exists(a)]
     if files:
