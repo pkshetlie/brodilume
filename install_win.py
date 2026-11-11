@@ -243,15 +243,16 @@ def _delete_after_exit(folder: str) -> None:
     lines = [
         "@echo off",
         ":attente",
-        'tasklist /FI "PID eq %d" 2>nul | find "%d" >nul' % (pid, pid),
-        "if not errorlevel 1 (timeout /t 1 /nobreak >nul & goto attente)",
+        'tasklist /NH /FI "PID eq %d" 2>nul | find " %d " >nul' % (pid, pid),
+        "if not errorlevel 1 (ping -n 2 127.0.0.1 >nul & goto attente)",  # « timeout » exige une console
         'rmdir /S /Q "%s"' % os.path.normpath(folder),
         'del "%~f0"',
         "",
     ]
     with open(bat, "w", encoding="mbcs", newline="\r\n") as f:
         f.write("\n".join(lines))
-    subprocess.Popen(["cmd", "/c", bat], creationflags=0x08000000 | 0x00000008, close_fds=True)
+    import updater
+    updater.spawn(["cmd", "/c", bat])
 
 
 def run_uninstall_ui() -> None:

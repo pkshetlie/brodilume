@@ -7,7 +7,6 @@ import copy
 import math
 import os
 import queue
-import subprocess
 import sys
 import tempfile
 import threading
@@ -1405,7 +1404,7 @@ class App(BaseTk):
         if self.project_path and os.path.exists(self.project_path):
             args.append(self.project_path)
         try:
-            subprocess.Popen(args, close_fds=True)
+            updater.spawn(args)
         except OSError as e:
             self.message(_("Relancer"), kind="error", text=str(e))
             return
@@ -1561,8 +1560,7 @@ class App(BaseTk):
             return
         if not manual and shortcuts.load_setting("skip_version") == info["version"]:
             return
-        notes = info["notes"].strip()
-        notes = (notes[:400] + "…") if len(notes) > 400 else notes
+        notes = updater.plain_notes(info["notes"])
         text = _("Nouvelle version : %s (vous utilisez la %s).") % (info["version"], updater.VERSION)
         if notes:
             text += "\n\n" + notes
@@ -3071,7 +3069,7 @@ class App(BaseTk):
         row.pack(fill="x")
         ttk.Label(row, text=icon, font=("Segoe UI", 20), foreground=C["accent"]).pack(side="left", anchor="n",
                                                                                    padx=(0, 12))
-        ttk.Label(row, text=text, wraplength=420, justify="left").pack(side="left", anchor="w")
+        ttk.Label(row, text=text, wraplength=520, justify="left").pack(side="left", anchor="w")
         res = []
         btns = ttk.Frame(frm)
         btns.pack(fill="x", pady=(14, 0))

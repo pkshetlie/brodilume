@@ -6,7 +6,6 @@ voir install_win.py pour ce qui est créé. Fabriqué par build_exe.bat.
 from __future__ import annotations
 
 import os
-import subprocess
 import sys
 import tkinter as tk
 from tkinter import ttk
@@ -123,8 +122,7 @@ class Setup(tk.Tk):
             self.v_status.set(_("L'installation a échoué :\n%s") % e)
             return
         if self.v_launch.get():
-            subprocess.Popen([exe], cwd=os.path.dirname(exe), close_fds=True,
-                             creationflags=0x00000008)  # DETACHED_PROCESS
+            updater.spawn([exe], cwd=os.path.dirname(exe))
             self.destroy()
             return
         self.v_status.set(_("Brodilume est installé. Vous le trouverez dans le menu Démarrer."))
