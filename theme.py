@@ -8,6 +8,8 @@ import sys
 import tkinter as tk
 from tkinter import ttk
 
+from i18n import _
+
 LIGHT = {
     "name": "light",
     "bg": "#f0f0f0", "panel": "#f0f0f0", "fg": "#1e1e1e", "muted": "#6b6b6b", "faint": "#8a8a8a",
@@ -34,7 +36,7 @@ DARK = {
 }
 C = dict(LIGHT)
 MODES = ("system", "light", "dark")
-MODE_LABELS = {"system": "Comme Windows", "light": "Clair", "dark": "Sombre"}
+MODE_LABELS = {"system": _("Comme Windows"), "light": _("Clair"), "dark": _("Sombre")}
 
 
 def system_is_dark():
@@ -158,6 +160,9 @@ def recolor_tree(widget):
                 w.configure(bg=C["panel"])
             elif cls == "Menu":
                 w.configure(bg=C["field"], fg=C["fg"], activebackground=C["list_sel"], activeforeground=C["fg"])
+            elif cls == "Text":
+                w.configure(bg=C["field"], fg=C["fg"], insertbackground=C["fg"], highlightbackground=C["border"],
+                            highlightcolor=C["accent"], selectbackground=C["list_sel"], selectforeground=C["fg"])
         except tk.TclError:
             pass
 

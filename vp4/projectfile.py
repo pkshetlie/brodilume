@@ -3,7 +3,10 @@
 C'est une archive zip :
     projet.json          réglages, cercle, et pour chaque élément : nom, type, position, rotation,
                          échelle, réglages de conversion, gomme, fusions et suppressions de couleurs
-    images/<n>.png       image d'origine d'un élément « image » (sans perte, transparence gardée)
+    images/<n>.png       image d'origine d'un élément « image » (sans perte, transparence gardée),
+                         ou lettres dessinées d'un élément « texte »
+    polices/<n>-<nom>    police importée dans Brodilume utilisée par un texte (le projet reste
+                         modifiable sur un autre PC ; les polices de Windows ne sont pas copiées)
     motifs/<n>.vp4       points de l'élément (repère local), au format .vp4
     apercu.png           petite vignette (pour l'Explorateur ou une future liste de projets)
 """
@@ -12,12 +15,14 @@ from __future__ import annotations
 import dataclasses
 import io
 import json
+import os
 import zipfile
 
 import numpy as np
 from PIL import Image
 
 from .digitize import Settings
+from . import fonts
 from .format import write_vp4, read_vp4
 from .project import Item
 
@@ -57,6 +62,13 @@ def save_project(path, items, hoop_mm, preview=None):
                 st = dataclasses.asdict(it.settings)
                 st["recolor"] = []  # les fusions sont gardées dans « recolors »
                 e["settings"] = st
+            if it.text is not None:
+                e["text"] = {k: _lists(v) for k, v in it.text.items()}
+                fpath = it.text.get("path") or ""
+                if fonts.is_imported(fpath) and os.path.exists(fpath):
+                    e["font_file"] = "polices/%d-%s" % (n, os.path.basename(fpath))
+                    with open(fpath, "rb") as f:
+                        z.writestr(e["font_file"], f.read())
             if it.image is not None:
                 buf = io.BytesIO()
                 it.image.save(buf, "PNG")
@@ -92,6 +104,15 @@ def load_project(path):
             if "settings" in e:
                 known = {f.name for f in dataclasses.fields(Settings)}
                 it.settings = Settings(**{k: v for k, v in e["settings"].items() if k in known})
+            if "text" in e:
+                it.text = dict(e["text"])
+                fpath = it.text.get("path") or ""
+                if not os.path.exists(fpath) and "font_file" in e:  # police importée, venue d'un autre PC
+                    try:
+                        name = os.path.basename(e["font_file"]).split("-", 1)[-1]
+                        it.text["path"] = fonts.install_bytes(name, z.read(e["font_file"]))
+                    except (OSError, KeyError):
+                        pass
             if "image" in e:
                 it.image = Image.open(io.BytesIO(z.read(e["image"])))
                 it.image.load()

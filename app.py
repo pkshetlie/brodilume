@@ -7,6 +7,7 @@ import copy
 import math
 import os
 import queue
+import subprocess
 import sys
 import tempfile
 import threading
@@ -25,12 +26,15 @@ from vp4.project import (Item, normalize, compose, erase, thread_key, apply_edit
                          remove_points, positions, merge_closest_colors)
 from vp4 import threads as thr  # noqa: E402
 from vp4.format import Design, ColorBlock  # noqa: E402
+from i18n import _  # noqa: E402
+import i18n  # noqa: E402
 import shortcuts  # noqa: E402
 import updater  # noqa: E402
 import winsys  # noqa: E402
 from toolbar import ToolBar, Tooltip  # noqa: E402
 import theme  # noqa: E402
 from vp4 import export as exporter  # noqa: E402
+from vp4 import fonts as fontlib  # noqa: E402
 from vp4.projectfile import save_project, load_project, EXT as PROJECT_EXT  # noqa: E402
 
 try:  # glisser-déposer dans la fenêtre (facultatif : pip install tkinterdnd2)
@@ -41,13 +45,13 @@ except Exception:
     BaseTk = tk.Tk
 
 APP_NAME = "Brodilume"
-APP_VERSION = "1.2"
+APP_VERSION = updater.VERSION
 # Ressources : dossier du script, ou dossier temporaire de l'exécutable compilé (PyInstaller)
 ASSETS = os.path.join(getattr(sys, "_MEIPASS", os.path.dirname(os.path.abspath(__file__))), "assets")
 INK, CREAM, MINT, PEACH = "#241B33", "#F9F5EF", "#B8F1D7", "#FFC396"   # couleurs du logo
 SEL = "#2f7de1"     # cadre de sélection
-NO_RANGE = "Couleurs exactes de l'image"
-DETAILS = ("Aucun", "Éclats et étoiles", "Tous (liserés, traits)")
+NO_RANGE = _("Couleurs exactes de l'image")
+DETAILS = (_("Aucun"), _("Éclats et étoiles"), _("Tous (liserés, traits)"))
 IMG_EXT = (".png", ".jpg", ".jpeg", ".bmp", ".gif", ".webp", ".tif", ".tiff")
 EMB_EXT = (".vp4", ".vp3")
 SPM = 700           # vitesse machine estimée (points / minute)
@@ -93,9 +97,9 @@ class Splash(tk.Toplevel):
             cv.create_image(self.W // 2, 120, image=self._logo)
         else:
             cv.create_text(self.W // 2, 120, text=APP_NAME, fill=INK, font=("Segoe UI", 40, "bold"))
-        cv.create_text(self.W // 2, 222, text="Vos images, prêtes à broder", fill=INK,
+        cv.create_text(self.W // 2, 222, text=_("Vos images, prêtes à broder"), fill=INK,
                        font=("Segoe UI", 15))
-        cv.create_text(self.W // 2, 250, text="Image → .vp4  ·  Visionneuse .vp4 / .vp3", fill="#6f6680",
+        cv.create_text(self.W // 2, 250, text=_("Image → .vp4  ·  Visionneuse .vp4 / .vp3"), fill="#6f6680",
                        font=("Segoe UI", 10))
         # barre de chargement : un « fil » menthe qui avance point par point
         self.x0, self.x1, self.y = 150, self.W - 150, 300
@@ -406,8 +410,8 @@ class View:
         cv.create_image(W // 2, H // 2, image=self._img, tags="img")
         if not self.app.items:
             cv.create_text(W // 2, H // 2, fill=C["hint"], font=("Segoe UI", 12),
-                           text="Glissez ici des images ou des broderies (.vp4 / .vp3)\n"
-                                "ou Ctrl+O pour les choisir, Ctrl+V pour coller une image copiée",
+                           text=_("Glissez ici des images ou des broderies (.vp4 / .vp3)\n"
+                                "ou Ctrl+O pour les choisir, Ctrl+V pour coller une image copiée"),
                            justify="center")
         self.app.draw_overlay()
 
@@ -418,7 +422,7 @@ class App(BaseTk):
         self.withdraw()
         self._splash = Splash(self) if splash else None
         self._t0 = time.time()
-        self._step(0.1, "Préparation de l'atelier…")
+        self._step(0.1, _("Préparation de l'atelier…"))
         self.title(APP_NAME)
         self._set_icon()
         self.theme_mode = shortcuts.load_setting("theme", "system")
@@ -468,17 +472,18 @@ class App(BaseTk):
         self.v_tool = tk.StringVar(value="move")
         self.v_erase_one = tk.BooleanVar(value=False)
         self.v_pos = tk.StringVar()
-        self.v_status = tk.StringVar(value="Prêt")
+        self.v_status = tk.StringVar(value=_("Prêt"))
         self.v_sim = tk.DoubleVar(value=0)
         self.v_speed = tk.IntVar(value=3)
-        self._step(0.3, "Chargement des nuanciers de fils…")
+        self._step(0.3, _("Chargement des nuanciers de fils…"))
         self.ranges = list(thr.available_ranges())
-        self._step(0.6, "Installation des outils…")
+        self._step(0.6, _("Installation des outils…"))
         self.v_range = tk.StringVar(value=thr.DEFAULT_RANGE if thr.DEFAULT_RANGE in self.ranges else NO_RANGE)
         self._build()
+        self._start_font_scan()
         self._bind_keys()
         theme.recolor_tree(self)
-        self._step(0.9, "Enfilage de l'aiguille…")
+        self._step(0.9, _("Enfilage de l'aiguille…"))
         for v in (self.v_colors, self.v_bg, self.v_spacing, self.v_stitch, self.v_angle,
                   self.v_minarea, self.v_underlay, self.v_range, self.v_details):
             v.trace_add("write", lambda *a: self._settings_changed())
@@ -507,7 +512,7 @@ class App(BaseTk):
         self.dirty = False
         self._update_title()
         if self._splash:
-            self._splash.progress(1.0, "Prêt !")
+            self._splash.progress(1.0, _("Prêt !"))
             self.after(250, self._splash.destroy)
             self._splash = None
         self.deiconify()
@@ -528,8 +533,8 @@ class App(BaseTk):
     def toggle_theme(self):
         """Bascule clair <-> sombre (le choix devient explicite, plus « comme Windows »)."""
         self.set_theme("light" if self._theme_name == "dark" else "dark")
-        self.v_status.set("Thème %s (Paramètres pour revenir à « comme Windows »)"
-                          % ("sombre" if self._theme_name == "dark" else "clair"))
+        self.v_status.set(_("Thème %s (Paramètres pour revenir à « comme Windows »)")
+                          % (_("sombre") if self._theme_name == "dark" else _("clair")))
 
     def apply_theme(self):
         self._theme_name = theme.apply(self, self.theme_mode)
@@ -568,12 +573,12 @@ class App(BaseTk):
         try:
             self._drop_on = winsys.enable_file_drop(self, self.on_drop)
         except Exception as e:
-            self.v_status.set("Glisser-déposer indisponible : %s" % e)
+            self.v_status.set(_("Glisser-déposer indisponible : %s") % e)
 
     def on_drop(self, files):
         ok = [f for f in files if f.lower().endswith(IMG_EXT + EMB_EXT + (PROJECT_EXT,))]
         if not ok:
-            self.v_status.set("Fichiers déposés ignorés (ni images, ni broderies .vp4 / .vp3, ni projets)")
+            self.v_status.set(_("Fichiers déposés ignorés (ni images, ni broderies .vp4 / .vp3, ni projets)"))
             return
         self.lift()
         self.add_paths(ok)
@@ -613,12 +618,13 @@ class App(BaseTk):
         top = ttk.Frame(self, padding=(8, 6, 8, 4))
         top.pack(side="top", fill="x")
         self.file_menu = tk.Menu(self, tearoff=0, postcommand=self._build_file_menu)
-        self.btn_file = ttk.Menubutton(top, text="☰  Fichier", menu=self.file_menu)
+        self.btn_file = ttk.Menubutton(top, text=_("☰  Fichier"), menu=self.file_menu)
         self.btn_file.pack(side="left", padx=(0, 10))
-        ttk.Button(top, text="＋ Importer…", style="Accent.TButton", command=self.add_files).pack(side="left",
+        ttk.Button(top, text=_("＋ Importer…"), style="Accent.TButton", command=self.add_files).pack(side="left",
                                                                                                 padx=(0, 4))
-        ttk.Button(top, text="Enregistrer", command=self.save).pack(side="left", padx=(0, 4))
-        self.btn_usb = ttk.Button(top, text="⇪ Envoyer sur la clé USB", command=self.send_usb_default)
+        ttk.Button(top, text=_("T  Texte…"), command=self.add_text).pack(side="left", padx=(0, 4))
+        ttk.Button(top, text=_("Enregistrer"), command=self.save).pack(side="left", padx=(0, 4))
+        self.btn_usb = ttk.Button(top, text=_("⇪ Envoyer sur la clé USB"), command=self.send_usb_default)
         self.btn_usb.pack(side="left", padx=(0, 4))
         Tooltip(self.btn_usb, lambda: self._usb_tip())
         ttk.Button(top, text="⚙", width=3, command=self.open_settings).pack(side="right")
@@ -627,11 +633,12 @@ class App(BaseTk):
         # ---- à droite : barre d'icônes des panneaux + un panneau ouvert à la fois (façon Photoshop)
         self.v_panel = tk.StringVar(value="layers")
         self.panelbar = ToolBar(self, self.v_panel, [
-            ("layers", "Calques : les éléments du projet", None),
-            ("props", "Propriétés : position, taille, rotation", None),
-            ("image", "Image : réglages de conversion", None),
-            ("colors", "Couleurs : fils de l'élément ou du projet", None),
-            ("info", "Infos : taille, points, durée", None),
+            ("layers", _("Calques : les éléments du projet"), None),
+            ("props", _("Propriétés : position, taille, rotation"), None),
+            ("text", _("Texte : contenu, police, couleur"), None),
+            ("image", _("Image : réglages de conversion"), None),
+            ("colors", _("Couleurs : fils de l'élément ou du projet"), None),
+            ("info", _("Infos : taille, points, durée"), None),
         ], self.key_label, toggle=True)
         self.panelbar.pack(side="right", fill="y")
         self.panel_host = ttk.Frame(self, padding=(8, 6, 8, 8), width=300)
@@ -642,7 +649,7 @@ class App(BaseTk):
         self.lbl_panel = ttk.Label(head, text="", style="Title.TLabel")
         self.lbl_panel.pack(side="left")
         ttk.Button(head, text="»", width=3, command=lambda: self.v_panel.set("")).pack(side="right")
-        self.panels = {k: ttk.Frame(self.panel_host) for k in ("layers", "props", "image", "colors", "info")}
+        self.panels = {k: ttk.Frame(self.panel_host) for k in ("layers", "props", "text", "image", "colors", "info")}
 
         main = ttk.Frame(self, padding=(4, 0, 4, 4))
         main.pack(side="left", fill="both", expand=True)
@@ -650,7 +657,7 @@ class App(BaseTk):
 
         # ---- panneau Calques
         pl = self.panels["layers"]
-        ttk.Label(pl, text="En haut de la liste : brodé en dernier (dessus).", style="Muted.TLabel").pack(anchor="w")
+        ttk.Label(pl, text=_("En haut de la liste : brodé en dernier (dessus)."), style="Muted.TLabel").pack(anchor="w")
         lw = ttk.Frame(pl)
         lw.pack(fill="both", expand=True, pady=(4, 4))
         self.items_cv = tk.Canvas(lw, highlightthickness=1, highlightbackground=C["border"], bg=C["list"])
@@ -664,22 +671,22 @@ class App(BaseTk):
         self.items_cv.bind("<Configure>", lambda e: self.items_cv.itemconfigure(self._items_win, width=e.width))
         acts = ttk.Frame(pl)
         acts.pack(fill="x")
-        for txt, cmd, tip in (("＋", self.add_files, "Ajouter"), ("⧉", self.duplicate_item, "Dupliquer"),
-                              ("▲", lambda: self.move_item(1), "Monter (brodé plus tard)"),
-                              ("▼", lambda: self.move_item(-1), "Descendre (brodé plus tôt)"),
-                              ("✕", self.delete_item, "Supprimer")):
+        for txt, cmd, tip in (("＋", self.add_files, _("Ajouter")), ("⧉", self.duplicate_item, _("Dupliquer")),
+                              ("▲", lambda: self.move_item(1), _("Monter (brodé plus tard)")),
+                              ("▼", lambda: self.move_item(-1), _("Descendre (brodé plus tôt)")),
+                              ("✕", self.delete_item, _("Supprimer"))):
             b = ttk.Button(acts, text=txt, width=3, command=cmd)
             b.pack(side="left", padx=(0, 3))
             Tooltip(b, lambda tip=tip: tip)
 
         # ---- panneau Propriétés
         pp = self.panels["props"]
-        pos = ttk.LabelFrame(pp, text="Position et taille", padding=8)
+        pos = ttk.LabelFrame(pp, text=_("Position et taille"), padding=8)
         pos.pack(fill="x")
         self.pos_box = pos
-        self.lbl_size = ttk.Label(pos, text="Largeur mm")
-        fields = (("X mm", self.v_x, -200, 200, 1), ("Y mm", self.v_y, -200, 200, 1),
-                  (None, self.v_size, 5, 400, 1), ("Rotation °", self.v_rot, -360, 360, 5))
+        self.lbl_size = ttk.Label(pos, text=_("Largeur mm"))
+        fields = ((_("X mm"), self.v_x, -200, 200, 1), (_("Y mm"), self.v_y, -200, 200, 1),
+                  (None, self.v_size, 5, 400, 1), (_("Rotation °"), self.v_rot, -360, 360, 5))
         for i, (txt, var, lo, hi, inc) in enumerate(fields):
             lab = self.lbl_size if txt is None else ttk.Label(pos, text=txt)
             lab.grid(row=i // 2, column=(i % 2) * 2, sticky="w", padx=(0, 4), pady=3)
@@ -689,60 +696,62 @@ class App(BaseTk):
         self.lbl_height.grid(row=2, column=0, columnspan=4, sticky="w", pady=(2, 0))
         quick = ttk.Frame(pos)
         quick.grid(row=3, column=0, columnspan=4, sticky="w", pady=(6, 0))
-        for txt, cmd in (("Centrer", self.center_item), ("↺ 90°", lambda: self.rotate_item(-90)),
+        for txt, cmd in ((_("Centrer"), self.center_item), ("↺ 90°", lambda: self.rotate_item(-90)),
                          ("↻ 90°", lambda: self.rotate_item(90))):
             ttk.Button(quick, text=txt, width=len(txt) + 1, command=cmd).pack(side="left", padx=(0, 2))
-        ttk.Button(pp, text="Annuler la gomme de cet élément", command=self.clear_erases).pack(fill="x", pady=(8, 0))
+        ttk.Button(pp, text=_("Annuler la gomme de cet élément"), command=self.clear_erases).pack(fill="x", pady=(8, 0))
+
+        self._build_text_panel(self.panels["text"])
 
         # ---- panneau Image (réglages de conversion)
-        box = ttk.LabelFrame(self.panels["image"], text="Réglages de l'image sélectionnée", padding=8)
+        box = ttk.LabelFrame(self.panels["image"], text=_("Réglages de l'image sélectionnée"), padding=8)
         box.pack(fill="x")
         self.settings_box = box
         rows = [
-            ("Nombre de couleurs", self.v_colors, 1, 15, 1),
-            ("Écart entre rangs (mm)", self.v_spacing, 0.25, 1.5, 0.05),
-            ("Longueur de point (mm)", self.v_stitch, 2, 7, 0.5),
-            ("Angle du remplissage (°)", self.v_angle, 0, 175, 5),
-            ("Zone mini (mm²)", self.v_minarea, 0, 50, 0.5),
+            (_("Nombre de couleurs"), self.v_colors, 1, 15, 1),
+            (_("Écart entre rangs (mm)"), self.v_spacing, 0.25, 1.5, 0.05),
+            (_("Longueur de point (mm)"), self.v_stitch, 2, 7, 0.5),
+            (_("Angle du remplissage (°)"), self.v_angle, 0, 175, 5),
+            (_("Zone mini (mm²)"), self.v_minarea, 0, 50, 0.5),
         ]
         for i, (txt, var, lo, hi, inc) in enumerate(rows):
             ttk.Label(box, text=txt).grid(row=i, column=0, sticky="w", pady=2)
             ttk.Spinbox(box, from_=lo, to=hi, increment=inc, textvariable=var, width=7).grid(
                 row=i, column=1, sticky="e", padx=(6, 0))
         r = len(rows)
-        ttk.Label(box, text="Gamme de fils").grid(row=r, column=0, columnspan=2, sticky="w", pady=(6, 0))
+        ttk.Label(box, text=_("Gamme de fils")).grid(row=r, column=0, columnspan=2, sticky="w", pady=(6, 0))
         ttk.Combobox(box, textvariable=self.v_range, values=[NO_RANGE] + self.ranges, state="readonly",
                      width=30).grid(row=r + 1, column=0, columnspan=2, sticky="we")
-        ttk.Label(box, text="Petits détails").grid(row=r + 2, column=0, sticky="w", pady=(6, 0))
+        ttk.Label(box, text=_("Petits détails")).grid(row=r + 2, column=0, sticky="w", pady=(6, 0))
         ttk.Combobox(box, textvariable=self.v_details, values=DETAILS, state="readonly", width=17).grid(
             row=r + 2, column=1, sticky="e", pady=(6, 0))
-        ttk.Checkbutton(box, text="Sous-couche (recommandé)", variable=self.v_underlay).grid(
+        ttk.Checkbutton(box, text=_("Sous-couche (recommandé)"), variable=self.v_underlay).grid(
             row=r + 3, column=0, columnspan=2, sticky="w", pady=(6, 0))
-        ttk.Checkbutton(box, text="Retirer le fond extérieur (non brodé)", variable=self.v_bg).grid(
+        ttk.Checkbutton(box, text=_("Retirer le fond extérieur (non brodé)"), variable=self.v_bg).grid(
             row=r + 4, column=0, columnspan=2, sticky="w")
-        ttk.Checkbutton(box, text="Régénérer à chaque changement", variable=self.v_auto).grid(
+        ttk.Checkbutton(box, text=_("Régénérer à chaque changement"), variable=self.v_auto).grid(
             row=r + 5, column=0, columnspan=2, sticky="w", pady=(6, 0))
-        self.btn_gen = ttk.Button(box, text="Régénérer  (F5)", command=lambda: self.regenerate(self.cur()))
+        self.btn_gen = ttk.Button(box, text=_("Régénérer  (F5)"), command=lambda: self.regenerate(self.cur()))
         self.btn_gen.grid(row=r + 6, column=0, columnspan=2, sticky="we", pady=(8, 0))
 
         # ---- panneau Couleurs
         pc = self.panels["colors"]
-        self.lbl_threads = ttk.Label(pc, text="Couleurs", style="Title.TLabel")
+        self.lbl_threads = ttk.Label(pc, text=_("Couleurs"), style="Title.TLabel")
         self.lbl_threads.pack(anchor="w")
         ncol = ttk.Frame(pc)
         ncol.pack(fill="x", pady=(4, 2))
-        ttk.Label(ncol, text="Nombre :").pack(side="left")
+        ttk.Label(ncol, text=_("Nombre :")).pack(side="left")
         ttk.Button(ncol, text="−", width=3, command=lambda: self.change_colors(-1)).pack(side="left", padx=(4, 0))
         self.lbl_ncol = ttk.Label(ncol, text="–", width=3, anchor="center", font=("Segoe UI", 10, "bold"))
         self.lbl_ncol.pack(side="left")
         ttk.Button(ncol, text="+", width=3, command=lambda: self.change_colors(1)).pack(side="left")
-        ttk.Button(ncol, text="Suggérer", command=self.suggest).pack(side="left", padx=(6, 0))
-        ttk.Label(pc, text="Pastille : couleur · ● : masquer · clic droit : menu",
+        ttk.Button(ncol, text=_("Suggérer"), command=self.suggest).pack(side="left", padx=(6, 0))
+        ttk.Label(pc, text=_("Pastille : couleur · ● : masquer · clic droit : menu"),
                   style="Muted.TLabel").pack(anchor="w")
         acts = ttk.Frame(pc)
         acts.pack(fill="x", pady=(2, 4))
         for txt, cmd, w in (("▲", lambda: self.move_block(-1), 3), ("▼", lambda: self.move_block(1), 3),
-                            ("Fusionner ↑", self.merge_up, 10), ("Supprimer", self.delete_selection, 9)):
+                            (_("Fusionner ↑"), self.merge_up, 10), (_("Supprimer"), self.delete_selection, 9)):
             ttk.Button(acts, text=txt, width=w, command=cmd).pack(side="left", padx=(0, 2))
         wrap = ttk.Frame(pc)
         wrap.pack(fill="both", expand=True)
@@ -764,9 +773,9 @@ class App(BaseTk):
         nb = ttk.Notebook(main)
         nb.pack(fill="both", expand=True)
         tab = ttk.Frame(nb)
-        nb.add(tab, text="Cercle à broder")
+        nb.add(tab, text=_("Cercle à broder"))
         self.cv_img = tk.Canvas(nb, bg=C["image_bg"], highlightthickness=0)
-        nb.add(self.cv_img, text="Image d'origine")
+        nb.add(self.cv_img, text=_("Image d'origine"))
         self.cv_img.bind("<Configure>", lambda e: self.show_image())
         self.nb = nb
 
@@ -777,16 +786,16 @@ class App(BaseTk):
         self.lbl_tool.pack(side="left", padx=(4, 8))
         self.opts = ttk.Frame(tools)
         self.opts.pack(side="left")
-        self.chk_one = ttk.Checkbutton(self.opts, text="seulement le fil sélectionné", variable=self.v_erase_one)
-        self.btn_merge = ttk.Button(self.opts, text="Fusionner les couleurs", command=self.merge_parts)
+        self.chk_one = ttk.Checkbutton(self.opts, text=_("seulement le fil sélectionné"), variable=self.v_erase_one)
+        self.btn_merge = ttk.Button(self.opts, text=_("Fusionner les couleurs"), command=self.merge_parts)
         self.btn_rot = [ttk.Button(self.opts, text=t, command=c) for t, c in
                         (("↺ 90°", lambda: self.rotate_item(-90)), ("↻ 90°", lambda: self.rotate_item(90)),
-                         ("Centrer", self.center_item))]
+                         (_("Centrer"), self.center_item))]
         ttk.Separator(tools, orient="vertical").pack(side="left", fill="y", padx=6)
-        for txt, cmd in (("Ajuster (0)", lambda: self.view.fit()), ("Cercle", lambda: self.view.fit(True)),
+        for txt, cmd in ((_("Ajuster (0)"), lambda: self.view.fit()), (_("Cercle"), lambda: self.view.fit(True)),
                          ("+", lambda: self.view.zoom_by(1.4)), ("−", lambda: self.view.zoom_by(1 / 1.4))):
             ttk.Button(tools, text=txt, width=len(txt) + 2, command=cmd).pack(side="left", padx=(0, 3))
-        ttk.Checkbutton(tools, text="Sauts", variable=self.v_jumps,
+        ttk.Checkbutton(tools, text=_("Sauts"), variable=self.v_jumps,
                         command=lambda: self.view.redraw()).pack(side="left", padx=8)
         self.lbl_hint = ttk.Label(tools, text="", style="Muted.TLabel")
         self.lbl_hint.pack(side="right", padx=(0, 6))
@@ -794,15 +803,15 @@ class App(BaseTk):
         body = tk.Frame(tab)
         body.pack(fill="both", expand=True)
         self.toolbar = ToolBar(body, self.v_tool, [
-            ("move", "Sélection : choisir, déplacer, taille, rotation", "tool_move"),
-            ("pick", "Couleurs : sélectionner des parties de fil", "tool_pick"),
-            ("erase", "Gomme : retirer des points", "tool_erase"),
+            ("move", _("Sélection : choisir, déplacer, taille, rotation"), "tool_move"),
+            ("pick", _("Couleurs : sélectionner des parties de fil"), "tool_pick"),
+            ("erase", _("Gomme : retirer des points"), "tool_erase"),
             None,
-            ("hand", "Main : faire glisser la vue", "tool_hand"),
-            ("zoom", "Zoom : clic = avant, Maj+clic = arrière", "tool_zoom"),
+            ("hand", _("Main : faire glisser la vue"), "tool_hand"),
+            ("zoom", _("Zoom : clic = avant, Maj+clic = arrière"), "tool_zoom"),
         ], self.key_label, commands=[
-            ("undo", "Annuler", "undo", lambda: self.undo()),
-            ("redo", "Rétablir", "redo", lambda: self.redo()),
+            ("undo", _("Annuler"), "undo", lambda: self.undo()),
+            ("redo", _("Rétablir"), "redo", lambda: self.redo()),
         ])
         self.toolbar.pack(side="left", fill="y")
         self.view = View(self, body)
@@ -810,13 +819,13 @@ class App(BaseTk):
 
         sim = ttk.Frame(tab, padding=(0, 6, 0, 0))
         sim.pack(fill="x")
-        self.btn_play = ttk.Button(sim, text="▶ Simuler", width=10, command=self.toggle_play)
+        self.btn_play = ttk.Button(sim, text=_("▶ Simuler"), width=13, command=self.toggle_play)
         self.btn_play.pack(side="left")
         self.scale = ttk.Scale(sim, from_=0, to=1, variable=self.v_sim, command=self._sim_changed)
         self.scale.pack(side="left", fill="x", expand=True, padx=8)
         self.lbl_sim = ttk.Label(sim, text="", width=24)
         self.lbl_sim.pack(side="left")
-        ttk.Label(sim, text="Vitesse").pack(side="left")
+        ttk.Label(sim, text=_("Vitesse")).pack(side="left")
         ttk.Spinbox(sim, from_=1, to=10, textvariable=self.v_speed, width=3).pack(side="left", padx=(4, 0))
 
         self.menu = tk.Menu(self, tearoff=0)
@@ -827,8 +836,8 @@ class App(BaseTk):
         self._show_panel()
         self._tool_changed()
 
-    PANEL_TITLES = {"layers": "Calques", "props": "Propriétés", "image": "Image", "colors": "Couleurs",
-                    "info": "Infos"}
+    PANEL_TITLES = {"layers": _("Calques"), "props": _("Propriétés"), "text": _("Texte"), "image": _("Image"),
+                    "colors": _("Couleurs"), "info": _("Infos")}
 
     def _show_panel(self):
         """Un seul panneau ouvert à droite ; aucun (icône active recliquée ou ») = cercle plus grand."""
@@ -849,7 +858,8 @@ class App(BaseTk):
     def _panel_availability(self):
         it = self.cur()
         self.panelbar.set_tool_enabled("props", it is not None)
-        self.panelbar.set_tool_enabled("image", it is not None and it.kind == "image")
+        self.panelbar.set_tool_enabled("image", it is not None and it.generated)
+        self.panelbar.set_tool_enabled("text", it is not None and it.text is not None)
         if not self.panelbar.tool_enabled(self.v_panel.get()):
             self.v_panel.set("layers")
 
@@ -868,6 +878,7 @@ class App(BaseTk):
             "select_all": lambda c: self.select_all(), "deselect": lambda c: self.clear_selection(),
             "merge_parts": lambda c: self.merge_parts(),
             "add": lambda c: self.add_files(), "new": lambda c: self.new_project(),
+            "add_text": lambda c: self.add_text(),
             "save": lambda c: self.save(), "export": lambda c: self.export_png(),
             "open": lambda c: self.open_project(), "save_as": lambda c: self.save_as(),
             "export_vp4": lambda c: self.export_format("vp4"), "usb": lambda c: self.send_usb_default(),
@@ -895,7 +906,7 @@ class App(BaseTk):
 
     def key_label(self, action):
         k = self.keys.get(action) or []
-        return k[0] if k else ""
+        return i18n.key(k[0]) if k else ""
 
     TEXT_KEYS = {"C", "X", "V", "A", "Z", "Y", "Gauche", "Droite", "Début", "Fin", "Retour", "Suppr"}
 
@@ -943,18 +954,18 @@ class App(BaseTk):
         ext = os.path.splitext(path)[1].lower()
         w, h = img.size
         if img.mode in ("RGBA", "LA", "PA") or "transparency" in img.info:
-            tip = "Fond transparent : il ne sera pas brodé, c'est l'idéal 👌"
+            tip = _("Fond transparent : il ne sera pas brodé, c'est l'idéal 👌")
         elif ext in (".jpg", ".jpeg"):
-            tip = ("Astuce : le JPEG brouille un peu les bords. Un PNG, idéalement avec fond transparent, "
-                   "donne des contours plus nets.")
+            tip = (_("Astuce : le JPEG brouille un peu les bords. Un PNG, idéalement avec fond transparent, "
+                   "donne des contours plus nets."))
         elif ext == ".gif":
-            tip = "Le GIF va très bien pour un logo aux couleurs franches (seule la 1re image d'un GIF animé est prise)."
+            tip = _("Le GIF va très bien pour un logo aux couleurs franches (seule la 1re image d'un GIF animé est prise).")
         elif ext == ".webp":
-            tip = "WebP bien reçu ! S'il a un fond transparent, il ne sera pas brodé."
+            tip = _("WebP bien reçu ! S'il a un fond transparent, il ne sera pas brodé.")
         else:
-            tip = "Image importée. Les dessins aux couleurs franches donnent les plus belles broderies."
+            tip = _("Image importée. Les dessins aux couleurs franches donnent les plus belles broderies.")
         if max(w, h) < 400:
-            tip += "  Image petite (%d × %d px) : une version plus grande donnera des contours plus fins." % (w, h)
+            tip += _("  Image petite (%d × %d px) : une version plus grande donnera des contours plus fins.") % (w, h)
         return tip
 
     def toast(self, text, ms=7000):
@@ -969,13 +980,13 @@ class App(BaseTk):
         self.after(ms, lambda: lab.winfo_exists() and lab.destroy())
 
     def add_files(self, kind="tout"):
-        imgs = ("Images (PNG, JPEG, GIF, WebP)", "*.png *.jpg *.jpeg *.gif *.webp *.bmp *.tif *.tiff")
-        embs = ("Broderies .vp4 / .vp3", "*.vp4 *.vp3")
+        imgs = (_("Images (PNG, JPEG, GIF, WebP)"), "*.png *.jpg *.jpeg *.gif *.webp *.bmp *.tif *.tiff")
+        embs = (_("Broderies .vp4 / .vp3"), "*.vp4 *.vp3")
         types = {"image": [imgs], "broderie": [embs]}.get(kind, [
-            ("Images et broderies", " ".join("*" + e for e in IMG_EXT + EMB_EXT)), imgs, embs])
+            (_("Images et broderies"), " ".join("*" + e for e in IMG_EXT + EMB_EXT)), imgs, embs])
         ps = filedialog.askopenfilenames(
-            title={"image": "Importer une image", "broderie": "Importer une broderie"}.get(kind, "Importer"),
-            filetypes=types + [("Tous les fichiers", "*.*")])
+            title={"image": _("Importer une image"), "broderie": _("Importer une broderie")}.get(kind, _("Importer")),
+            filetypes=types + [(_("Tous les fichiers"), "*.*")])
         if ps:
             self.add_paths(ps)
 
@@ -998,7 +1009,7 @@ class App(BaseTk):
             img = Image.open(p)
             img.load()
         except Exception as e:
-            self.message("Image", kind="error", text="Impossible d'ouvrir l'image :\n%s" % e)
+            self.message(_("Image"), kind="error", text=_("Impossible d'ouvrir l'image :\n%s") % e)
             return
         self.add_image_obj(img, os.path.basename(p))
         self.toast(self.image_tip(img, p))
@@ -1021,10 +1032,10 @@ class App(BaseTk):
         try:
             des = read_design(p)
         except Exception as e:
-            self.message("Broderie", kind="error", text="Impossible de lire le fichier :\n%s" % e)
+            self.message(_("Broderie"), kind="error", text=_("Impossible de lire le fichier :\n%s") % e)
             return
         if not des.blocks:
-            self.message("Broderie", kind="warning", text="Aucun point trouvé dans ce fichier.")
+            self.message(_("Broderie"), kind="warning", text=_("Aucun point trouvé dans ce fichier."))
             return
         des, (cx, cy) = normalize(des)
         it = Item(os.path.basename(p), "broderie", design=des, x=cx, y=cy)
@@ -1035,15 +1046,310 @@ class App(BaseTk):
         self.items.append(it)
         self.select_item(len(self.items) - 1)
         self.recompose(keep_view=len(self.items) > 1)
-        self.v_status.set("Ajouté : %s" % p)
+        self.v_status.set(_("Ajouté : %s") % p)
+
+    # ------------------------------------------------------------------ texte
+    ALIGNS = (("left", _("À gauche")), ("center", _("Centré")), ("right", _("À droite")))
+    TEXT_LINE_MM = 15      # hauteur d'une ligne de texte à l'ajout (mm)
+
+    def _start_font_scan(self):
+        """Polices du PC lues en arrière-plan (quelques secondes la première fois, puis en cache)."""
+        self._font_q = queue.Queue()
+
+        def work():
+            try:
+                self._font_q.put(fontlib.scan())
+            except Exception:
+                self._font_q.put([])
+        threading.Thread(target=work, daemon=True).start()
+        self.after(200, self._poll_fonts)
+
+    def _poll_fonts(self):
+        try:
+            faces = self._font_q.get_nowait()
+        except queue.Empty:
+            self.after(200, self._poll_fonts)
+            return
+        self._set_fonts(faces)
+
+    def _set_fonts(self, faces):
+        self.fonts = list(faces)
+        self._font_map = {f.name.lower(): f for f in self.fonts}
+        self.cb_font.configure(values=[f.name for f in self.fonts])
+        self.lbl_fonts.config(text=_("%d polices disponibles") % len(self.fonts))
+
+    def _default_face(self):
+        """Police d'un nouveau texte : la dernière choisie, sinon Arial gras."""
+        saved = shortcuts.load_setting("text_font") or {}
+        if isinstance(saved, dict) and saved.get("path") and os.path.exists(saved["path"]):
+            return fontlib.Face(saved.get("name") or os.path.basename(saved["path"]), saved["path"],
+                                int(saved.get("index", 0)))
+        for name in ("Arial Bold", "Arial Gras", "Arial", "Segoe UI Bold", "Segoe UI"):
+            if name.lower() in self._font_map:
+                return self._font_map[name.lower()]
+        windir = os.environ.get("WINDIR", r"C:\Windows")
+        for fn in ("arialbd.ttf", "arial.ttf", "segoeuib.ttf", "segoeui.ttf"):
+            faces = fontlib.read_faces(os.path.join(windir, "Fonts", fn))
+            if faces:
+                return faces[0]
+        return self.fonts[0] if self.fonts else None
+
+    def _remember_font(self, face):
+        try:
+            shortcuts.save_setting("text_font", {"name": face.name, "path": face.path, "index": face.index})
+        except OSError:
+            pass
+
+    @staticmethod
+    def _render_text(t):
+        return fontlib.render_text(t["text"], t["path"], int(t.get("index", 0)), tuple(t.get("rgb", (0, 0, 0))),
+                                   t.get("align", "center"), float(t.get("spacing", 1.2)))
+
+    @staticmethod
+    def _text_name(text):
+        lines = text.strip().splitlines()
+        first = lines[0].strip() if lines else ""
+        return _("Texte : %s") % (first[:24] + ("…" if len(first) > 24 else ""))
+
+    @staticmethod
+    def _text_settings(s):
+        """Réglages adaptés aux lettres : une couleur, fond retiré, contours peu lissés."""
+        s.colors = 1
+        s.remove_background = True
+        s.min_area_mm2 = 0.3
+        s.smooth_mm = 0.2
+        s.details = 1
+        s.notes = "Créé par Brodilume"
+        return s
+
+    def _clamp_width(self, w):
+        return round(max(10.0, min(w, self.hoop_mm[0] - 10, 400.0)), 1)
+
+    def add_text(self, text=None):
+        """Nouvel élément « texte » : lettres dessinées avec une police, puis brodées comme une image."""
+        face = self._default_face()
+        if face is None:
+            self.message(_("Texte"), kind="error",
+                         text=_("Aucune police trouvée sur ce PC : importez-en une (.ttf, .otf)."))
+            return
+        text = text or _("Mon texte")
+        t = {"text": text, "font": face.name, "path": face.path, "index": face.index, "rgb": [36, 27, 51],
+             "align": "center", "spacing": 1.2, "auto_name": True}
+        try:
+            img = self._render_text(t)
+        except Exception as e:
+            self.message(_("Texte"), kind="error",
+                         text=_("Impossible d'utiliser la police « %s » :\n%s") % (face.name, e))
+            return
+        s = self._text_settings(self.settings_from_vars() or Settings())
+        lines = max(1, len(text.strip().splitlines()))
+        s.width_mm = self._clamp_width(self.TEXT_LINE_MM * lines * img.width / img.height)
+        it = Item(self._text_name(text), "texte", image=img, settings=s, text=t)
+        it.gen_width = s.width_mm
+        self._snapshot()
+        self._place_new(it)
+        self.items.append(it)
+        self.select_item(len(self.items) - 1)
+        self.v_panel.set("text")
+        self.regenerate(it)
+        self.after(80, self._focus_text_box)
+
+    def _focus_text_box(self):
+        self.txt_box.focus_set()
+        self.txt_box.tag_add("sel", "1.0", "end-1c")
+        self.txt_box.mark_set("insert", "end-1c")
+
+    def _build_text_panel(self, parent):
+        self.fonts, self._font_map, self._text_after = [], {}, None
+        self.v_font = tk.StringVar()
+        self.v_align = tk.StringVar(value=self.ALIGNS[1][1])
+        self.v_tspacing = tk.DoubleVar(value=1.2)
+        box = ttk.LabelFrame(parent, text=_("Texte à broder"), padding=8)
+        box.pack(fill="x")
+        self.txt_box = tk.Text(box, height=4, width=30, wrap="word", font=("Segoe UI", 11), undo=True,
+                               relief="flat", bd=0, highlightthickness=1, padx=6, pady=4)
+        self.txt_box.pack(fill="x")
+        self.txt_box.bind("<<Modified>>", self._text_modified)
+        ttk.Label(box, text=_("Entrée : nouvelle ligne"), style="Muted.TLabel").pack(anchor="w", pady=(2, 0))
+        fb = ttk.LabelFrame(parent, text=_("Police"), padding=8)
+        fb.pack(fill="x", pady=(8, 0))
+        self.cb_font = ttk.Combobox(fb, textvariable=self.v_font, values=[], width=32)
+        self.cb_font.pack(fill="x")
+        self.cb_font.bind("<KeyRelease>", self._filter_fonts)
+        self.cb_font.bind("<<ComboboxSelected>>", lambda e: self._font_chosen())
+        self.cb_font.bind("<Return>", lambda e: self._font_chosen())
+        self.cb_font.bind("<FocusOut>", lambda e: self._font_chosen(quiet=True))
+        self.lbl_fonts = ttk.Label(fb, text=_("Lecture des polices…"), style="Muted.TLabel")
+        self.lbl_fonts.pack(anchor="w", pady=(4, 0))
+        ttk.Button(fb, text=_("Importer une police…"), command=self.import_font).pack(fill="x", pady=(6, 0))
+        ttk.Label(fb, text=_("Tapez une partie du nom pour filtrer la liste. Une police importée reste dans "
+                             "Brodilume : elle n'est pas installée dans Windows."),
+                  style="Muted.TLabel", wraplength=260, justify="left").pack(anchor="w", pady=(6, 0))
+        lb = ttk.LabelFrame(parent, text=_("Aspect"), padding=8)
+        lb.pack(fill="x", pady=(8, 0))
+        lb.columnconfigure(0, weight=1)
+        ttk.Label(lb, text=_("Couleur")).grid(row=0, column=0, sticky="w", pady=2)
+        self.sw_text = tk.Label(lb, width=6, relief="solid", bd=1, cursor="hand2", bg="#241b33")
+        self.sw_text.grid(row=0, column=1, sticky="e", pady=2)
+        self.sw_text.bind("<Button-1>", lambda e: self.pick_text_color())
+        ttk.Label(lb, text=_("Alignement")).grid(row=1, column=0, sticky="w", pady=2)
+        ttk.Combobox(lb, textvariable=self.v_align, values=[a[1] for a in self.ALIGNS], state="readonly",
+                     width=10).grid(row=1, column=1, sticky="e", pady=2)
+        ttk.Label(lb, text=_("Interligne")).grid(row=2, column=0, sticky="w", pady=2)
+        ttk.Spinbox(lb, from_=0.8, to=3.0, increment=0.1, textvariable=self.v_tspacing, width=6).grid(
+            row=2, column=1, sticky="e", pady=2)
+        ttk.Label(parent, text=_("Taille : largeur dans le panneau Propriétés, ou les coins du cadre. Des lettres "
+                                 "de moins de 5 mm de haut se brodent mal."),
+                  style="Muted.TLabel", wraplength=270, justify="left").pack(anchor="w", pady=(8, 0))
+        self.v_align.trace_add("write", lambda *a: self._text_changed(100))
+        self.v_tspacing.trace_add("write", lambda *a: self._text_changed())
+
+    def _fill_text_panel(self, it):
+        """Champs du panneau Texte = texte sélectionné (sans relancer de génération)."""
+        t = it.text
+        if self.txt_box.get("1.0", "end-1c") != t["text"]:
+            self.txt_box.delete("1.0", "end")
+            self.txt_box.insert("1.0", t["text"])
+            self.txt_box.edit_reset()
+        self.txt_box.edit_modified(False)
+        self.v_font.set(t.get("font", ""))
+        self.v_align.set(dict(self.ALIGNS).get(t.get("align", "center"), self.ALIGNS[1][1]))
+        self.v_tspacing.set(t.get("spacing", 1.2))
+        self.sw_text.config(bg="#%02x%02x%02x" % tuple(t.get("rgb", (0, 0, 0))))
+
+    def _text_modified(self, _e=None):
+        if not self.txt_box.edit_modified():
+            return
+        self.txt_box.edit_modified(False)
+        self._text_changed()
+
+    def _text_changed(self, delay=600):
+        it = self.cur()
+        if self._loading or not it or it.text is None:
+            return
+        if self._text_after:
+            self.after_cancel(self._text_after)
+        self._text_after = self.after(delay, self._apply_text)
+
+    def _text_fields(self, it):
+        """Texte d'après le panneau (None si l'interligne n'est pas un nombre)."""
+        t = dict(it.text)
+        t["text"] = self.txt_box.get("1.0", "end-1c")
+        t["align"] = next((k for k, v in self.ALIGNS if v == self.v_align.get()), "center")
+        try:
+            t["spacing"] = round(max(0.5, min(4.0, float(self.v_tspacing.get()))), 2)
+        except (tk.TclError, ValueError):
+            return None
+        return t
+
+    def _apply_text(self, t=None):
+        """Nouveau texte, police, couleur… : lettres redessinées, même taille de lettres, puis broderie
+        recalculée. La gomme et les fusions de couleurs de l'ancien texte sont oubliées."""
+        self._text_after = None
+        it = self.cur()
+        if not it or it.text is None:
+            return
+        t = t or self._text_fields(it)
+        if t is None:
+            return
+        if not t["text"].strip():
+            self.v_status.set(_("Texte vide : rien à broder"))
+            return
+        if t == it.text:
+            return
+        try:
+            img = self._render_text(t)
+        except Exception as e:
+            self.v_status.set(_("⚠ Police « %s » : %s") % (t.get("font", ""), e))
+            return
+        self._snapshot(merge_key=("text", id(it)))
+        mm_per_px = it.settings.width_mm / max(1, it.image.width)
+        w = self._clamp_width(mm_per_px * img.width)
+        if t.get("auto_name"):
+            it.name = self._text_name(t["text"])
+        it.text, it.image = t, img
+        it.settings.width_mm = w
+        it.erases, it.removed, it.recolors = [], set(), []
+        it.scale = w / it.gen_width
+        self.refresh_panels()
+        self.show_image()
+        self._update_title()
+        self.recompose(True)
+        self.regenerate(it)
+
+    def _filter_fonts(self, e):
+        if e.keysym in ("Return", "Up", "Down", "Escape", "Tab"):
+            return
+        q = self.v_font.get().strip().lower()
+        self.cb_font.configure(values=[f.name for f in self.fonts if q in f.name.lower()])
+
+    def _font_chosen(self, quiet=False):
+        it = self.cur()
+        if self._loading or not it or it.text is None:
+            return
+        f = self._font_map.get(self.v_font.get().strip().lower())
+        if f is None:
+            if not quiet:
+                self.v_status.set(_("Police inconnue : choisissez-la dans la liste"))
+            return
+        self.cb_font.configure(values=[x.name for x in self.fonts])
+        if f.path == it.text.get("path") and f.index == it.text.get("index", 0):
+            return
+        t = self._text_fields(it) or dict(it.text)
+        t.update(font=f.name, path=f.path, index=f.index)
+        self._remember_font(f)
+        self._apply_text(t)
+
+    def import_font(self):
+        """Police (.ttf, .otf, .ttc) copiée dans Brodilume, sans l'installer dans Windows."""
+        p = filedialog.askopenfilename(title=_("Importer une police"),
+                                       filetypes=[(_("Polices TrueType / OpenType"), "*.ttf *.otf *.ttc *.otc"),
+                                                  (_("Tous les fichiers"), "*.*")])
+        if not p:
+            return
+        try:
+            faces = fontlib.import_font(p)
+        except Exception as e:
+            self.message(_("Police"), kind="error", text=_("Ce fichier n'est pas une police utilisable :\n%s") % e)
+            return
+        names = {f.name.lower() for f in faces}
+        self._set_fonts(sorted([f for f in self.fonts if f.name.lower() not in names] + faces,
+                               key=lambda f: f.name.lower()))
+        face = faces[0]
+        self._remember_font(face)
+        it = self.cur()
+        if it and it.text is not None:
+            self._loading = True
+            self.v_font.set(face.name)
+            self._loading = False
+            t = self._text_fields(it) or dict(it.text)
+            t.update(font=face.name, path=face.path, index=face.index)
+            self._apply_text(t)
+        self.v_status.set(_("Police importée : %s (gardée dans Brodilume pour les prochains textes)") % face.name)
+
+    def pick_text_color(self):
+        it = self.cur()
+        if not it or it.text is None:
+            return
+        rgb = colorchooser.askcolor(color="#%02x%02x%02x" % tuple(it.text.get("rgb", (0, 0, 0))),
+                                    title=_("Couleur du texte"))[0]
+        if not rgb:
+            return
+        t = self._text_fields(it) or dict(it.text)
+        t["rgb"] = [int(v) for v in rgb]
+        self.sw_text.config(bg="#%02x%02x%02x" % tuple(t["rgb"]))
+        self._apply_text(t)
 
     # ------------------------------------------------------------------ projet (fichier .brodi)
     def project_name(self):
         if self.project_path:
             return os.path.splitext(os.path.basename(self.project_path))[0]
-        if self.items:
-            return os.path.splitext(self.items[0].name)[0]
-        return "Sans titre"
+        if self.items:  # sert aussi de nom de fichier proposé : sans caractères interdits par Windows
+            first = self.items[0]
+            if first.text is not None and first.text.get("text", "").strip():
+                return _safe_name(first.text["text"].strip().splitlines()[0][:40])
+            return _safe_name(os.path.splitext(first.name)[0])
+        return _("Sans titre")
 
     def _update_title(self):
         self.title("%s%s — %s" % ("• " if self.dirty else "", self.project_name(), APP_NAME))
@@ -1057,9 +1363,9 @@ class App(BaseTk):
         """Avant de fermer : propose d'enregistrer. Retourne False si l'utilisateur annule."""
         if not self.dirty or not self.items:
             return True
-        r = self._dialog("Modifications non enregistrées",
-                         "Enregistrer les modifications de « %s » avant de continuer ?" % self.project_name(),
-                         [("Enregistrer", "save"), ("Ne pas enregistrer", "drop"), ("Annuler", None)], icon="?")
+        r = self._dialog(_("Modifications non enregistrées"),
+                         _("Enregistrer les modifications de « %s » avant de continuer ?") % self.project_name(),
+                         [(_("Enregistrer"), "save"), (_("Ne pas enregistrer"), "drop"), (_("Annuler"), None)], icon="?")
         if r == "save":
             return self.save()
         return r == "drop"
@@ -1081,16 +1387,33 @@ class App(BaseTk):
     def new_project(self):
         if self.maybe_save():
             self._reset_project()
-            self.v_status.set("Nouveau projet")
+            self.v_status.set(_("Nouveau projet"))
 
     def close_project(self):
         if self.maybe_save():
             self._reset_project()
-            self.v_status.set("Projet fermé")
+            self.v_status.set(_("Projet fermé"))
+
+    def restart(self):
+        """Relance Brodilume (changement de langue), en rouvrant le projet enregistré."""
+        if self._job or self._queue:
+            if not self.ask_yes_no(_("Relancer"), _("Une image est encore en cours de génération. Relancer quand même ?")):
+                return
+        if not self.maybe_save():
+            return
+        args = [sys.executable] if updater.is_frozen() else [sys.executable, os.path.abspath(__file__)]
+        if self.project_path and os.path.exists(self.project_path):
+            args.append(self.project_path)
+        try:
+            subprocess.Popen(args, close_fds=True)
+        except OSError as e:
+            self.message(_("Relancer"), kind="error", text=str(e))
+            return
+        self.destroy()
 
     def quit_app(self):
         if self._job or self._queue:
-            if not self.ask_yes_no("Quitter", "Une image est encore en cours de génération. Quitter quand même ?"):
+            if not self.ask_yes_no(_("Quitter"), _("Une image est encore en cours de génération. Quitter quand même ?")):
                 return
         if self.maybe_save():
             self.destroy()
@@ -1099,51 +1422,51 @@ class App(BaseTk):
         if not self.maybe_save():
             return
         path = path or filedialog.askopenfilename(
-            title="Ouvrir un projet Brodilume", filetypes=[("Projet Brodilume", "*" + PROJECT_EXT)])
+            title=_("Ouvrir un projet Brodilume"), filetypes=[(_("Projet Brodilume"), "*" + PROJECT_EXT)])
         if not path:
             return
         try:
             items, hoop = load_project(path)
         except Exception as e:
-            self.message("Ouvrir", kind="error", text="Impossible d'ouvrir ce projet :\n%s" % e)
+            self.message(_("Ouvrir"), kind="error", text=_("Impossible d'ouvrir ce projet :\n%s") % e)
             self._forget_recent(path)
             return
         self.hoop_mm = (float(hoop[0]), float(hoop[1]))
         self.view.hoop = (self.hoop_mm[0] * 10, self.hoop_mm[1] * 10)
         self._reset_project(items, path)
         for it in self.items:  # image sans points enregistrés : on la régénère
-            if it.kind == "image" and it.design is None:
+            if it.generated and it.design is None:
                 self.regenerate(it)
         self._add_recent(path)
-        self.v_status.set("Projet ouvert : %s (%d éléments)" % (path, len(items)))
+        self.v_status.set(_("Projet ouvert : %s (%d éléments)") % (path, len(items)))
 
     def save(self, as_new=False):
         """Enregistre le projet (.brodi). Retourne True si c'est fait."""
         if not self.items:
-            self.message(APP_NAME, kind="info", text="Rien à enregistrer : importez d'abord une image ou une broderie.")
+            self.message(APP_NAME, kind="info", text=_("Rien à enregistrer : importez d'abord une image ou une broderie."))
             return False
         if any(it.generating or it in self._queue for it in self.items):
-            self.message(APP_NAME, kind="info", text="Une image est encore en cours de génération, réessayez dans un instant.")
+            self.message(APP_NAME, kind="info", text=_("Une image est encore en cours de génération, réessayez dans un instant."))
             return False
         path = self.project_path
         if as_new or not path:
             path = filedialog.asksaveasfilename(
-                title="Enregistrer le projet", defaultextension=PROJECT_EXT,
+                title=_("Enregistrer le projet"), defaultextension=PROJECT_EXT,
                 initialfile=self.project_name() + PROJECT_EXT,
-                filetypes=[("Projet Brodilume (modifiable)", "*" + PROJECT_EXT)])
+                filetypes=[(_("Projet Brodilume (modifiable)"), "*" + PROJECT_EXT)])
             if not path:
                 return False
         try:
             prev = render(self.design, width=360) if self.design and self.design.blocks else None
             save_project(path, self.items, self.hoop_mm, prev)
         except Exception as e:
-            self.message("Enregistrement", kind="error", text=str(e))
+            self.message(_("Enregistrement"), kind="error", text=str(e))
             return False
         self.project_path = path
         self.dirty = False
         self._update_title()
         self._add_recent(path)
-        self.v_status.set("Projet enregistré : %s" % path)
+        self.v_status.set(_("Projet enregistré : %s") % path)
         return True
 
     def save_as(self):
@@ -1153,10 +1476,10 @@ class App(BaseTk):
     def _design_for_output(self):
         des = self.final_design()
         if not des or not des.blocks:
-            self.message(APP_NAME, kind="info", text="Rien à exporter : importez d'abord une image ou une broderie.")
+            self.message(APP_NAME, kind="info", text=_("Rien à exporter : importez d'abord une image ou une broderie."))
             return None
         if any(it.generating or it in self._queue for it in self.items):
-            self.message(APP_NAME, kind="info", text="Une image est encore en cours de génération, réessayez dans un instant.")
+            self.message(APP_NAME, kind="info", text=_("Une image est encore en cours de génération, réessayez dans un instant."))
             return None
         return des
 
@@ -1165,23 +1488,23 @@ class App(BaseTk):
         if des is None:
             return
         name, machines = next(((n, m) for e, n, m, _x in exporter.FORMATS if e == ext), (ext.upper(), ""))
-        p = filedialog.asksaveasfilename(title="Exporter en .%s (%s)" % (ext, machines), defaultextension="." + ext,
+        p = filedialog.asksaveasfilename(title=_("Exporter en .%s (%s)") % (ext, machines), defaultextension="." + ext,
                                          initialfile=self.project_name() + "." + ext,
-                                         filetypes=[("Broderie %s" % name, "*." + ext)])
+                                         filetypes=[(_("Broderie %s") % name, "*." + ext)])
         if not p:
             return
         try:
             exporter.export(des, p)
         except Exception as e:
-            self.message("Exporter", kind="error", text=str(e))
+            self.message(_("Exporter"), kind="error", text=str(e))
             return
-        self.v_status.set("Exporté : %s (%d fils, %d points)" % (p, len(des.blocks), des.stitch_count()))
+        self.v_status.set(_("Exporté : %s (%d fils, %d points)") % (p, len(des.blocks), des.stitch_count()))
 
     def _usb_tip(self):
         d = exporter.usb_drives()
         if not d:
-            return "Aucune clé USB détectée : branchez-la, le bouton s'active tout seul"
-        return "Envoyer la broderie sur %s (choix du format à l'étape suivante)" % ", ".join(
+            return _("Aucune clé USB détectée : branchez-la, le bouton s'active tout seul")
+        return _("Envoyer la broderie sur %s (choix du format à l'étape suivante)") % ", ".join(
             "%s %s" % (r, n) for r, n, _f in d)
 
     def usb_formats(self):
@@ -1191,10 +1514,10 @@ class App(BaseTk):
 
     # ------------------------------------------------------------------ version et mises à jour
     def about(self):
-        self.message("À propos", text=(
-            "Brodilume %s\n\nImage → broderie .vp4 (Husqvarna Viking / Pfaff) et autres formats.\n"
+        self.message(_("À propos"), text=(
+            _("Brodilume %s\n\nImage → broderie .vp4 (Husqvarna Viking / Pfaff) et autres formats.\n"
             "Licence : PolyForm Noncommercial 1.0.0 (usage non commercial).\n"
-            "Bibliothèques tierces : voir THIRD-PARTY-NOTICES.md.\n\nhttps://github.com/%s"
+            "Bibliothèques tierces : voir THIRD-PARTY-NOTICES.md.\n\nhttps://github.com/%s")
             % (updater.VERSION, updater.REPO)))
 
     def _start_update_check(self, manual=False):
@@ -1213,16 +1536,16 @@ class App(BaseTk):
                 if kind == "found":
                     self._update_found(data, manual)
                 elif kind == "err" and manual:
-                    self.message("Mise à jour", kind="warning",
-                                 text="Impossible de vérifier les mises à jour :\n%s" % data)
+                    self.message(_("Mise à jour"), kind="warning",
+                                 text=_("Impossible de vérifier les mises à jour :\n%s") % data)
                 elif kind == "dl_ok":
-                    self.v_status.set("Téléchargement terminé : redémarrage…")
+                    self.v_status.set(_("Téléchargement terminé : redémarrage…"))
                     updater.install_and_restart(data)
                     self.destroy()
                     return
                 elif kind == "dl_err":
-                    self.message("Mise à jour", kind="error", text="Le téléchargement a échoué :\n%s" % data)
-                    self.v_status.set("Mise à jour annulée")
+                    self.message(_("Mise à jour"), kind="error", text=_("Le téléchargement a échoué :\n%s") % data)
+                    self.v_status.set(_("Mise à jour annulée"))
         except queue.Empty:
             pass
         self.after(300, self._poll_update)
@@ -1230,25 +1553,25 @@ class App(BaseTk):
     def _update_found(self, info, manual):
         if not info:
             if manual:
-                self.message("Mise à jour", text="Aucune version publiée pour le moment.")
+                self.message(_("Mise à jour"), text=_("Aucune version publiée pour le moment."))
             return
         if not updater.is_newer(info["version"]):
             if manual:
-                self.message("Mise à jour", text="Brodilume %s est à jour." % updater.VERSION)
+                self.message(_("Mise à jour"), text=_("Brodilume %s est à jour.") % updater.VERSION)
             return
         if not manual and shortcuts.load_setting("skip_version") == info["version"]:
             return
         notes = info["notes"].strip()
         notes = (notes[:400] + "…") if len(notes) > 400 else notes
-        text = "Nouvelle version : %s (vous utilisez la %s)." % (info["version"], updater.VERSION)
+        text = _("Nouvelle version : %s (vous utilisez la %s).") % (info["version"], updater.VERSION)
         if notes:
             text += "\n\n" + notes
         if not updater.is_frozen() or not info["asset"]:
-            if self.ask_yes_no("Mise à jour", text + "\n\nOuvrir la page de téléchargement ?"):
+            if self.ask_yes_no(_("Mise à jour"), text + _("\n\nOuvrir la page de téléchargement ?")):
                 updater.open_page(info["url"])
             return
-        choice = self._dialog("Mise à jour", text + "\n\nBrodilume se fermera puis se relancera tout seul.",
-                              [("Mettre à jour", "now"), ("Plus tard", "later"), ("Ignorer cette version", "skip")],
+        choice = self._dialog(_("Mise à jour"), text + _("\n\nBrodilume se fermera puis se relancera tout seul."),
+                              [(_("Mettre à jour"), "now"), (_("Plus tard"), "later"), (_("Ignorer cette version"), "skip")],
                               icon="↑")
         if choice == "skip":
             shortcuts.save_setting("skip_version", info["version"])
@@ -1257,12 +1580,12 @@ class App(BaseTk):
 
     def _do_update(self, info):
         if self._job or self._queue:
-            if not self.ask_yes_no("Mise à jour", "Une image est encore en cours de génération. Continuer quand même ?"):
+            if not self.ask_yes_no(_("Mise à jour"), _("Une image est encore en cours de génération. Continuer quand même ?")):
                 return
         if not self.maybe_save():
             return
         dest = os.path.join(tempfile.gettempdir(), "Brodilume-%s.exe" % info["version"])
-        self.v_status.set("Téléchargement de la version %s…" % info["version"])
+        self.v_status.set(_("Téléchargement de la version %s…") % info["version"])
 
         def work():
             try:
@@ -1284,29 +1607,29 @@ class App(BaseTk):
         """Fenêtre « Envoyer sur la clé USB » : clé, nom du fichier, format(s) avec des exemples de machines."""
         drives = exporter.usb_drives()
         if not drives:
-            self.message("Clé USB", kind="warning", text="Aucune clé USB détectée.\nBranchez-la puis réessayez.")
+            self.message(_("Clé USB"), kind="warning", text=_("Aucune clé USB détectée.\nBranchez-la puis réessayez."))
             return
         des = self._design_for_output()
         if des is None:
             return
         win = tk.Toplevel(self, bg=C["panel"])
-        win.title("Envoyer sur la clé USB")
+        win.title(_("Envoyer sur la clé USB"))
         win.transient(self)
         win.resizable(False, False)
         frm = ttk.Frame(win, padding=16)
         frm.pack(fill="both")
         row = ttk.Frame(frm)
         row.pack(fill="x")
-        ttk.Label(row, text="Clé :").pack(side="left")
-        labels = ["%s  %s  (%d Mo libres)" % d for d in drives]
+        ttk.Label(row, text=_("Clé :")).pack(side="left")
+        labels = [_("%s  %s  (%d Mo libres)") % d for d in drives]
         v_drive = tk.StringVar(value=labels[0])
         ttk.Combobox(row, textvariable=v_drive, values=labels, state="readonly", width=34).pack(side="left", padx=6)
         row2 = ttk.Frame(frm)
         row2.pack(fill="x", pady=(8, 0))
-        ttk.Label(row2, text="Nom :").pack(side="left")
+        ttk.Label(row2, text=_("Nom :")).pack(side="left")
         v_name = tk.StringVar(value=_safe_name(self.project_name()))
         ttk.Entry(row2, textvariable=v_name, width=36).pack(side="left", padx=6)
-        ttk.Label(frm, text="Format(s) à copier — choisissez celui de votre machine :",
+        ttk.Label(frm, text=_("Format(s) à copier — choisissez celui de votre machine :"),
                   style="Title.TLabel").pack(anchor="w", pady=(14, 4))
         chosen = set(self.usb_formats())
         vars_ = {}
@@ -1322,14 +1645,14 @@ class App(BaseTk):
                 cb.state(["disabled"])
             ttk.Label(r, text="ex. " + examples, style="Muted.TLabel", wraplength=520,
                       justify="left").pack(anchor="w", padx=(24, 0))
-        ttk.Label(frm, text="Listes données à titre indicatif : en cas de doute, cochez-en plusieurs, la machine "
-                            "n'affichera que ceux qu'elle sait lire.", style="Muted.TLabel", wraplength=560,
+        ttk.Label(frm, text=_("Listes données à titre indicatif : en cas de doute, cochez-en plusieurs, la machine "
+                            "n'affichera que ceux qu'elle sait lire."), style="Muted.TLabel", wraplength=560,
                   justify="left").pack(anchor="w", pady=(10, 0))
         res = []
         btns = ttk.Frame(frm)
         btns.pack(fill="x", pady=(14, 0))
-        ttk.Button(btns, text="Annuler", command=win.destroy).pack(side="right")
-        ttk.Button(btns, text="Envoyer", style="Accent.TButton",
+        ttk.Button(btns, text=_("Annuler"), command=win.destroy).pack(side="right")
+        ttk.Button(btns, text=_("Envoyer"), style="Accent.TButton",
                    command=lambda: (res.append(True), win.destroy())).pack(side="right", padx=6)
         win.bind("<Escape>", lambda e: win.destroy())
         win.update_idletasks()
@@ -1343,7 +1666,7 @@ class App(BaseTk):
             return
         formats = [e for e, v in vars_.items() if v.get()]
         if not formats:
-            self.message("Clé USB", kind="warning", text="Choisissez au moins un format.")
+            self.message(_("Clé USB"), kind="warning", text=_("Choisissez au moins un format."))
             return
         try:
             shortcuts.save_setting("usb_formats", formats)
@@ -1360,28 +1683,28 @@ class App(BaseTk):
         base = _safe_name(base or self.project_name())
         files = [os.path.join(root, base + "." + e) for e in formats]
         exist = [f for f in files if os.path.exists(f)]
-        if exist and not self.ask_yes_no("Clé USB", "%s existe déjà sur la clé.\nLe remplacer ?"
+        if exist and not self.ask_yes_no(_("Clé USB"), _("%s existe déjà sur la clé.\nLe remplacer ?")
                                          % ", ".join(os.path.basename(f) for f in exist)):
             return
         try:
             for f in files:
                 exporter.export(des, f)
         except Exception as e:
-            self.message("Clé USB", kind="error", text="L'écriture sur la clé a échoué :\n%s" % e)
+            self.message(_("Clé USB"), kind="error", text=_("L'écriture sur la clé a échoué :\n%s") % e)
             return
         names = [os.path.basename(f) for f in files]
-        self.message("Clé USB", text="Broderie copiée sur %s :\n%s\n\nPensez à éjecter la clé (icône de la barre "
-                                     "des tâches) avant de la retirer." % (root, "\n".join(names)))
-        self.v_status.set("Envoyé sur la clé %s : %s" % (root, ", ".join(names)))
+        self.message(_("Clé USB"), text=_("Broderie copiée sur %s :\n%s\n\nPensez à éjecter la clé (icône de la barre "
+                                     "des tâches) avant de la retirer.") % (root, "\n".join(names)))
+        self.v_status.set(_("Envoyé sur la clé %s : %s") % (root, ", ".join(names)))
 
     def export_sheet(self):
         """Fiche de broderie (PNG) : aperçu, dimensions, durée et liste des fils dans l'ordre."""
         des = self._design_for_output()
         if des is None:
             return
-        p = filedialog.asksaveasfilename(title="Fiche de broderie", defaultextension=".png",
+        p = filedialog.asksaveasfilename(title=_("Fiche de broderie"), defaultextension=".png",
                                          initialfile=self.project_name() + " - fiche.png",
-                                         filetypes=[("Image PNG", "*.png")])
+                                         filetypes=[(_("Image PNG"), "*.png")])
         if not p:
             return
         from PIL import ImageFont
@@ -1397,7 +1720,7 @@ class App(BaseTk):
         except OSError:
             f1 = f2 = ImageFont.load_default()
         dr.text((40, 26), self.project_name(), fill="#241B33", font=f1)
-        dr.text((40, 66), "%.0f × %.0f mm  ·  %d points  ·  %d fils  ·  environ %d min  ·  cercle %g × %g mm" % (
+        dr.text((40, 66), _("%.0f × %.0f mm  ·  %d points  ·  %d fils  ·  environ %d min  ·  cercle %g × %g mm") % (
             (x1 - x0) / 10, (y1 - y0) / 10, n, rows, round(n / SPM + rows), *self.hoop_mm), fill="#555", font=f2)
         sheet.paste(prev, (40, 110))
         y = prev.height + 130
@@ -1405,11 +1728,11 @@ class App(BaseTk):
             t = b.thread
             dr.rectangle((40, y, 80, y + 24), fill=tuple(t.rgb), outline="#888")
             pts = sum(1 for r in b.records if r[0] == STITCH)
-            dr.text((96, y), "%d.  %s  %s  —  %s  ·  %d points" % (i + 1, t.code, t.name, t.brand, pts),
+            dr.text((96, y), _("%d.  %s  %s  —  %s  ·  %d points") % (i + 1, t.code, t.name, t.brand, pts),
                     fill="#222", font=f2)
             y += 34
         sheet.save(p)
-        self.v_status.set("Fiche de broderie enregistrée : %s" % p)
+        self.v_status.set(_("Fiche de broderie enregistrée : %s") % p)
 
     # ------------------------------------------------------------------ projets récents
     def recent(self):
@@ -1435,8 +1758,8 @@ class App(BaseTk):
         k = self.key_label
         has = bool(self.items)
         st = lambda on: "normal" if on else "disabled"  # noqa: E731
-        m.add_command(label="Nouveau projet", accelerator=k("new"), command=self.new_project)
-        m.add_command(label="Ouvrir un projet…", accelerator=k("open"), command=self.open_project)
+        m.add_command(label=_("Nouveau projet"), accelerator=k("new"), command=self.new_project)
+        m.add_command(label=_("Ouvrir un projet…"), accelerator=k("open"), command=self.open_project)
         rec = tk.Menu(m, tearoff=0)
         recents = self.recent()
         for i, r in enumerate(recents):
@@ -1444,16 +1767,17 @@ class App(BaseTk):
                             state=st(os.path.exists(r)))
         if recents:
             rec.add_separator()
-            rec.add_command(label="Effacer la liste", command=lambda: shortcuts.save_setting("recent", []))
-        m.add_cascade(label="Projets récents", menu=rec, state=st(bool(recents)))
+            rec.add_command(label=_("Effacer la liste"), command=lambda: shortcuts.save_setting("recent", []))
+        m.add_cascade(label=_("Projets récents"), menu=rec, state=st(bool(recents)))
         m.add_separator()
-        m.add_command(label="Importer une image…  (PNG, JPEG, GIF, WebP)", accelerator=k("add"),
+        m.add_command(label=_("Importer une image…  (PNG, JPEG, GIF, WebP)"), accelerator=k("add"),
                       command=lambda: self.add_files("image"))
-        m.add_command(label="Importer une broderie…  (.vp4, .vp3)", command=lambda: self.add_files("broderie"))
-        m.add_command(label="Coller une image", accelerator=k("paste"), command=self.paste)
+        m.add_command(label=_("Importer une broderie…  (.vp4, .vp3)"), command=lambda: self.add_files("broderie"))
+        m.add_command(label=_("Ajouter un texte…"), accelerator=k("add_text"), command=self.add_text)
+        m.add_command(label=_("Coller une image"), accelerator=k("paste"), command=self.paste)
         m.add_separator()
-        m.add_command(label="Enregistrer", accelerator=k("save"), command=self.save, state=st(has))
-        m.add_command(label="Enregistrer sous…", accelerator=k("save_as"), command=self.save_as, state=st(has))
+        m.add_command(label=_("Enregistrer"), accelerator=k("save"), command=self.save, state=st(has))
+        m.add_command(label=_("Enregistrer sous…"), accelerator=k("save_as"), command=self.save_as, state=st(has))
         ex = tk.Menu(m, tearoff=0)
         for i, (ext, name, machines, _ex) in enumerate(exporter.FORMATS):
             if i == 2:
@@ -1463,19 +1787,19 @@ class App(BaseTk):
                            command=lambda e=ext: self.export_format(e),
                            state=st(ext == "vp4" or exporter.has_pyembroidery()))
         ex.add_separator()
-        ex.add_command(label="Aperçu en image (PNG)", accelerator=k("export"), command=self.export_png)
-        ex.add_command(label="Fiche de broderie (PNG : aperçu + liste des fils)", command=self.export_sheet)
-        m.add_cascade(label="Exporter", menu=ex, state=st(has))
+        ex.add_command(label=_("Aperçu en image (PNG)"), accelerator=k("export"), command=self.export_png)
+        ex.add_command(label=_("Fiche de broderie (PNG : aperçu + liste des fils)"), command=self.export_sheet)
+        m.add_cascade(label=_("Exporter"), menu=ex, state=st(has))
         drives = exporter.usb_drives()
-        lbl = "Envoyer sur la clé USB…" + ("" if drives else "  — aucune clé détectée")
+        lbl = _("Envoyer sur la clé USB…") + ("" if drives else _("  — aucune clé détectée"))
         m.add_command(label=lbl, accelerator=k("usb"), command=self.send_usb_default, state=st(has and drives))
         m.add_separator()
-        m.add_command(label="Paramètres…", accelerator=k("settings"), command=self.open_settings)
-        m.add_command(label="Vérifier les mises à jour…", command=lambda: self._start_update_check(manual=True))
-        m.add_command(label="À propos de Brodilume", command=self.about)
+        m.add_command(label=_("Paramètres…"), accelerator=k("settings"), command=self.open_settings)
+        m.add_command(label=_("Vérifier les mises à jour…"), command=lambda: self._start_update_check(manual=True))
+        m.add_command(label=_("À propos de Brodilume"), command=self.about)
         m.add_separator()
-        m.add_command(label="Fermer le projet", accelerator=k("close"), command=self.close_project)
-        m.add_command(label="Quitter", accelerator=k("quit"), command=self.quit_app)
+        m.add_command(label=_("Fermer le projet"), accelerator=k("close"), command=self.close_project)
+        m.add_command(label=_("Quitter"), accelerator=k("quit"), command=self.quit_app)
 
     def select_item(self, i):
         if i is not None and not 0 <= i < len(self.items):
@@ -1506,7 +1830,7 @@ class App(BaseTk):
             return
         self._snapshot()
         dup = it.clone()
-        dup.name = "Copie de " + it.name
+        dup.name = _("Copie de ") + it.name
         dup.x += 100
         dup.y += 100
         dup.generating = False
@@ -1558,27 +1882,27 @@ class App(BaseTk):
             return
         self._snapshot()
         it.erases = []
-        if it.kind == "image":
+        if it.generated:
             self.regenerate(it)
         else:
-            self.v_status.set("La gomme d'une broderie importée s'annule avec Ctrl+Z")
+            self.v_status.set(_("La gomme d'une broderie importée s'annule avec Ctrl+Z"))
 
     # ------------------------------------------------------------------ fichiers
     def ask_background(self, img):
         """Fond transparent : jamais brodé. Sinon on demande s'il faut broder la couleur du bord."""
         rgb = background_color(img)
         if rgb is None:
-            self.v_status.set("Fond transparent : il ne sera pas brodé")
+            self.v_status.set(_("Fond transparent : il ne sera pas brodé"))
             return True
         light = sum(rgb) > 600
-        name = "blanc" if light and max(rgb) - min(rgb) < 25 else "#%02x%02x%02x" % rgb
+        name = _("blanc") if light and max(rgb) - min(rgb) < 25 else "#%02x%02x%02x" % rgb
         return self.ask_yes_no(
-            "Fond de l'image",
-            "Le fond de l'image est %s.\n\n"
+            _("Fond de l'image"),
+            _("Le fond de l'image est %s.\n\n"
             "Oui : ne pas le broder (le tissu reste visible autour du motif).\n"
             "Non : le broder aussi (remplit tout le rectangle de l'image).\n\n"
             "Les zones de cette couleur à l'intérieur du motif sont brodées dans les deux cas.\n"
-            "Modifiable ensuite avec « Retirer le fond extérieur »." % name)
+            "Modifiable ensuite avec « Retirer le fond extérieur ».") % name)
 
     def final_design(self):
         """Motif enregistré : fils identiques consécutifs réunis (moins de changements de fil)."""
@@ -1589,14 +1913,14 @@ class App(BaseTk):
     def export_png(self):
         if not self.design:
             return
-        p = filedialog.asksaveasfilename(title="Exporter l'aperçu", defaultextension=".png",
-                                         filetypes=[("Image PNG", "*.png")])
+        p = filedialog.asksaveasfilename(title=_("Exporter l'aperçu"), defaultextension=".png",
+                                         filetypes=[(_("Image PNG"), "*.png")])
         if p:
             shown = compose(self.items)[0]
             shown.blocks = [b for k, b in enumerate(shown.blocks) if k not in self.view.skip]
             if shown.blocks:
                 render(shown, width=2000, show_jumps=self.v_jumps.get()).save(p)
-                self.v_status.set("Aperçu exporté : %s" % p)
+                self.v_status.set(_("Aperçu exporté : %s") % p)
 
     # ------------------------------------------------------------------ réglages / génération
     def settings_from_vars(self):
@@ -1613,19 +1937,20 @@ class App(BaseTk):
 
     def _settings_changed(self):
         it = self.cur()
-        if self._loading or not it or it.kind != "image":
+        if self._loading or not it or not it.generated:
             return
         s = self.settings_from_vars()
         if s is None:
-            self.v_status.set("⚠ Un réglage n'est pas un nombre valide")
+            self.v_status.set(_("⚠ Un réglage n'est pas un nombre valide"))
             return
-        s.width_mm = it.settings.width_mm
+        # réglages absents du panneau : gardés (largeur, lissage d'un texte…)
+        s.width_mm, s.smooth_mm, s.jump_mm = it.settings.width_mm, it.settings.smooth_mm, it.settings.jump_mm
         it.settings = s
         if self.v_auto.get():
             self.regenerate(it, delay=700)
 
     def regenerate(self, it, delay=0):
-        if not it or it.kind != "image":
+        if not it or not it.generated:
             return
         if delay:
             if id(it) in self._regen_after:
@@ -1655,7 +1980,7 @@ class App(BaseTk):
                 job["error"] = e
         self._job = job
         it.generating = True
-        self.v_status.set("Génération de « %s »…" % it.name)
+        self.v_status.set(_("Génération de « %s »…") % it.name)
         self.progress.pack(side="left", padx=8)
         self.progress["value"] = 0
         self.refresh_items()
@@ -1675,7 +2000,7 @@ class App(BaseTk):
         self.progress.pack_forget()
         if it in self.items:
             if job["error"]:
-                self.v_status.set("⚠ « %s » : %s" % (it.name, job["error"]))
+                self.v_status.set(_("⚠ « %s » : %s") % (it.name, job["error"]))
             elif it not in self._queue:  # pas déjà redemandée avec d'autres réglages
                 it.gen_width = job["width"]
                 # fils supprimés, parties supprimées et gomme : réappliqués à la nouvelle génération
@@ -1688,7 +2013,7 @@ class App(BaseTk):
                 first = self.design is None or not self.design.blocks
                 self.recompose(keep_view=not first)
                 self.refresh_palette()
-                self.v_status.set("« %s » générée — Ctrl+S pour enregistrer" % it.name)
+                self.v_status.set(_("« %s » générée — Ctrl+S pour enregistrer") % it.name)
         self.refresh_items()
         self._next_job()
 
@@ -1711,7 +2036,7 @@ class App(BaseTk):
 
     def _width_mm(self, it):
         """Image : largeur de l'image convertie ; broderie : largeur réelle des points."""
-        if it.kind == "image":
+        if it.generated:
             return it.gen_width * it.scale
         x0, y0, x1, y1 = it.local_bounds()
         return (x1 - x0) * it.scale / 10
@@ -1719,7 +2044,7 @@ class App(BaseTk):
     def _set_size(self, it, size_mm):
         """Image : nouvelle largeur -> aperçu étiré tout de suite, puis vraie régénération
         (densité des points conservée). Broderie : simple mise à l'échelle des points."""
-        if it.kind == "image":
+        if it.generated:
             if abs(size_mm - it.settings.width_mm) < 0.05:
                 return
             it.settings.width_mm = size_mm
@@ -1738,7 +2063,7 @@ class App(BaseTk):
                 self.v_x.set(round(it.x / 10, 1))
                 self.v_y.set(round(it.y / 10, 1))
                 self.v_rot.set(round(it.angle, 1))
-                if it.kind == "image":
+                if it.generated:
                     self.v_size.set(round(it.settings.width_mm, 1))
                     s = it.settings
                     self.v_colors.set(s.colors)
@@ -1752,10 +2077,12 @@ class App(BaseTk):
                     self.v_range.set(s.thread_range or NO_RANGE)
                 else:
                     self.v_size.set(round(self._width_mm(it), 1))
+                if it.text is not None:
+                    self._fill_text_panel(it)
             self._update_height()
         finally:
             self._loading = False
-        state = "!disabled" if it and it.kind == "image" else "disabled"
+        state = "!disabled" if it and it.generated else "disabled"
         for w in self.settings_box.winfo_children():
             try:
                 w.state([state])
@@ -1766,8 +2093,9 @@ class App(BaseTk):
                 w.state(["!disabled" if it else "disabled"])
             except (AttributeError, tk.TclError):
                 pass
-        self.settings_box.config(text="Réglages de l'image sélectionnée" if it and it.kind == "image"
-                                 else "Réglages (sélectionnez une image)")
+        self.settings_box.config(text=_("Réglages de conversion du texte") if it and it.text is not None
+                                 else _("Réglages de l'image sélectionnée") if it and it.generated
+                                 else _("Réglages (sélectionnez une image)"))
         self._update_height()
         self._panel_availability()
 
@@ -1775,12 +2103,12 @@ class App(BaseTk):
         it = self.cur()
         if it and it.design and it.design.blocks:
             x0, y0, x1, y1 = it.local_bounds()
-            self.lbl_height.config(text="Hauteur : %.1f mm (proportions gardées)" % ((y1 - y0) * it.scale / 10))
+            self.lbl_height.config(text=_("Hauteur : %.1f mm (proportions gardées)") % ((y1 - y0) * it.scale / 10))
         else:
             self.lbl_height.config(text="")
 
     # ------------------------------------------------------------------ souris sur le cercle
-    TOOL_NAMES = {"move": "Sélection", "pick": "Couleurs", "erase": "Gomme", "hand": "Main", "zoom": "Zoom"}
+    TOOL_NAMES = {"move": _("Sélection"), "pick": _("Couleurs"), "erase": _("Gomme"), "hand": _("Main"), "zoom": _("Zoom")}
 
     def _tool_changed(self):
         tool = self.v_tool.get()
@@ -1790,11 +2118,11 @@ class App(BaseTk):
         shown = {"erase": [self.chk_one], "pick": [self.btn_merge], "move": self.btn_rot}.get(tool, [])
         for w in shown:
             w.pack(side="left", padx=(0, 4))
-        self.lbl_hint.config(text={"erase": "Entourez les points à retirer",
-                                   "pick": "Ctrl+clic : ajouter · double-clic : tout le fil",
-                                   "hand": "Glisser : déplacer la vue",
-                                   "zoom": "Clic : zoom avant · Maj+clic : arrière",
-                                   }.get(tool, "Coins : taille · rond : rotation (Maj : 15°)"))
+        self.lbl_hint.config(text={"erase": _("Entourez les points à retirer"),
+                                   "pick": _("Ctrl+clic : ajouter · double-clic : tout le fil"),
+                                   "hand": _("Glisser : déplacer la vue"),
+                                   "zoom": _("Clic : zoom avant · Maj+clic : arrière"),
+                                   }.get(tool, _("Coins : taille · rond : rotation (Maj : 15°)")))
         if tool != "pick" and self.parts:
             self.parts = set()
             self.view.redraw()
@@ -1834,7 +2162,7 @@ class App(BaseTk):
             return "pencil" if self.items else ""
         if self.v_tool.get() == "pick":
             return "hand2" if self.view.hit_part(sx, sy) else ""
-        kind, _ = self._hit(sx, sy, x, y)
+        kind, _i = self._hit(sx, sy, x, y)
         return {"rotate": "exchange", "scale": "sizing", "move": "fleur"}.get(kind, "")
 
     def on_press(self, sx, sy, x, y, shift=False, ctrl=False):
@@ -1920,7 +2248,7 @@ class App(BaseTk):
             self._apply_lasso()
             return
         it = self.cur()
-        if act[0] == "scale" and it.kind == "image":
+        if act[0] == "scale" and it.generated:
             it.settings.width_mm = round(it.gen_width * it.scale, 1)
             self.regenerate(it, delay=10)
         self.refresh_panels()
@@ -1931,6 +2259,12 @@ class App(BaseTk):
             self.add_files()
         elif self.v_tool.get() == "pick":
             self.pick_part(sx, sy, whole=True, add=add)
+        elif self.v_tool.get() == "move":  # double-clic sur un texte : on le modifie
+            kind, i = self._hit(sx, sy, x, y)
+            if kind == "move" and self.items[i].text is not None:
+                self.select_item(i)
+                self.v_panel.set("text")
+                self.after(50, self._focus_text_box)
 
     def _apply_lasso(self):
         poly, self._lasso = np.array(self._lasso, float), []
@@ -1941,7 +2275,7 @@ class App(BaseTk):
         key = None
         if self.v_erase_one.get():
             if not self._valid(self.thread_sel):
-                self.v_status.set("Gomme : sélectionnez d'abord un fil dans la liste de droite")
+                self.v_status.set(_("Gomme : sélectionnez d'abord un fil dans la liste de droite"))
                 self.draw_overlay()
                 return
             it, b = self._block(self.thread_sel)
@@ -1958,7 +2292,7 @@ class App(BaseTk):
         self.thread_sel = None
         self.recompose(True)
         self.refresh_palette()
-        self.v_status.set("Gomme : %d points retirés (Ctrl+Z pour annuler)" % (before - after))
+        self.v_status.set(_("Gomme : %d points retirés (Ctrl+Z pour annuler)") % (before - after))
 
     def draw_overlay(self, ghost=False):
         cv = self.view.cv
@@ -2008,32 +2342,32 @@ class App(BaseTk):
             self.toolbar.set_enabled("redo", bool(self.redo_stack))
 
     def _restore(self, state):
-        items, sel, _ = state
+        items, sel, _m = state
         self.items = items
         self.sel = sel if sel is not None and sel < len(items) else None
         self.thread_sel = None
         self.parts = set()
         for it in self.items:  # une image dont la génération était en cours : on la relance
-            if it.kind == "image" and it.design is None:
+            if it.generated and it.design is None:
                 self.regenerate(it)
         self.refresh_all()
         self._history_buttons()
 
     def undo(self):
         if not self.undo_stack:
-            self.v_status.set("Rien à annuler")
+            self.v_status.set(_("Rien à annuler"))
             return
         self.redo_stack.append(self._state())
         self._restore(self.undo_stack.pop())
-        self.v_status.set("Annulé (%s pour rétablir)" % self.key_label("redo"))
+        self.v_status.set(_("Annulé (%s pour rétablir)") % self.key_label("redo"))
 
     def redo(self):
         if not self.redo_stack:
-            self.v_status.set("Rien à rétablir")
+            self.v_status.set(_("Rien à rétablir"))
             return
         self.undo_stack.append(self._state())
         self._restore(self.redo_stack.pop())
-        self.v_status.set("Rétabli")
+        self.v_status.set(_("Rétabli"))
 
     # ------------------------------------------------------------------ copier / couper / coller
     def _extract(self):
@@ -2065,7 +2399,7 @@ class App(BaseTk):
             return None
         des, (cx, cy) = normalize(des)
         src = self.items[self.owners[next(iter(chosen))[0]][0]].name
-        it = Item("Extrait de " + src, "broderie", design=des, x=cx, y=cy)
+        it = Item(_("Extrait de ") + src, "broderie", design=des, x=cx, y=cy)
         it.gen_width = 0.1
         return it
 
@@ -2073,18 +2407,18 @@ class App(BaseTk):
         ext = self._extract()
         if ext is not None:
             self.clip = [ext]
-            what = "%d partie(s) copiée(s) — %s pour coller (nouvel élément)" % (
+            what = _("%d partie(s) copiée(s) — %s pour coller (nouvel élément)") % (
                 len(self.parts) or 1, self.key_label("paste"))
         elif self.cur():
             self.clip = [self.cur().clone()]
-            what = "Élément « %s » copié — %s pour coller" % (self.cur().name, self.key_label("paste"))
+            what = _("Élément « %s » copié — %s pour coller") % (self.cur().name, self.key_label("paste"))
         else:
-            self.v_status.set("Rien à copier : sélectionnez un élément ou des parties (outil Couleurs)")
+            self.v_status.set(_("Rien à copier : sélectionnez un élément ou des parties (outil Couleurs)"))
             return False
         self._paste_n = 0
         try:  # le presse-papiers Windows retient qu'on a copié un élément (et plus une image)
             self.clipboard_clear()
-            self.clipboard_append("Brodilume : " + self.clip[0].name)
+            self.clipboard_append(_("Brodilume : ") + self.clip[0].name)
         except tk.TclError:
             pass
         self.v_status.set(what)
@@ -2093,23 +2427,23 @@ class App(BaseTk):
     def cut(self):
         if self.copy():
             self.delete_selection()
-            self.v_status.set("Coupé — %s pour coller" % self.key_label("paste"))
+            self.v_status.set(_("Coupé — %s pour coller") % self.key_label("paste"))
 
     def paste(self):
         kind, data = winsys.clipboard_content()
         if kind == "image":
             self._paste_n += 1
-            self.add_image_obj(data, "Image collée %d" % self._paste_n)
+            self.add_image_obj(data, _("Image collée %d") % self._paste_n)
             return
         if kind == "files":
             ok = [f for f in data if f.lower().endswith(IMG_EXT + EMB_EXT)]
             if ok:
                 self.add_paths(ok)
             else:
-                self.v_status.set("Le presse-papiers contient des fichiers qui ne sont ni des images ni des broderies")
+                self.v_status.set(_("Le presse-papiers contient des fichiers qui ne sont ni des images ni des broderies"))
             return
         if not self.clip:
-            self.v_status.set("Presse-papiers vide : copiez un élément, des parties ou une image")
+            self.v_status.set(_("Presse-papiers vide : copiez un élément, des parties ou une image"))
             return
         self._snapshot()
         self._paste_n += 1
@@ -2120,11 +2454,11 @@ class App(BaseTk):
             it.x += 50 * self._paste_n
             it.y += 50 * self._paste_n
             self.items.insert(at + k, it)
-            if it.kind == "image" and it.design is None:
+            if it.generated and it.design is None:
                 self.regenerate(it)
         self.select_item(at + len(self.clip) - 1)
         self.recompose(True)
-        self.v_status.set("Collé : « %s »" % self.items[self.sel].name)
+        self.v_status.set(_("Collé : « %s »") % self.items[self.sel].name)
 
     def select_all(self):
         if not self.items:
@@ -2134,7 +2468,7 @@ class App(BaseTk):
         self.v_tool.set("pick")
         self.parts = {(b, r) for b, _p, _i, r, _k in self.view.segs if b in bis}
         self.view.redraw()
-        self.v_status.set("%d parties sélectionnées" % len(self.parts))
+        self.v_status.set(_("%d parties sélectionnées") % len(self.parts))
 
     # ------------------------------------------------------------------ fils et parties de couleur
     def _valid(self, ref):
@@ -2199,7 +2533,7 @@ class App(BaseTk):
         b = self.items[ii].design.blocks[lb]
         n = sum(len(p) - 1 for bb, p, _i, rr, _k in self.view.segs if (bb, rr) in self.parts)
         nc = len({thread_key(self.design.blocks[bb].thread) for bb, _r in self.parts})
-        self.v_status.set("%d partie(s) · %d points · %d couleur(s) — %s : fusionner, Suppr : supprimer"
+        self.v_status.set(_("%d partie(s) · %d points · %d couleur(s) — %s : fusionner, Suppr : supprimer")
                           % (len(self.parts), n, nc, self.key_label("merge_parts")))
         return True
 
@@ -2210,11 +2544,11 @@ class App(BaseTk):
         est remplie d'un seul tenant). Broderie importée : les points sont gardés et passent au fil
         choisi (brodés avec lui)."""
         if self.v_tool.get() != "pick" or not self.parts:
-            self.v_status.set("Outil Couleurs : sélectionnez les parties à fusionner (Ctrl+clic pour en ajouter)")
+            self.v_status.set(_("Outil Couleurs : sélectionnez les parties à fusionner (Ctrl+clic pour en ajouter)"))
             return
         owners = {self.owners[bi] for bi, _r in self.parts}
         if len({ii for ii, _ in owners}) > 1:
-            self.v_status.set("Fusion impossible : les parties viennent de plusieurs éléments")
+            self.v_status.set(_("Fusion impossible : les parties viennent de plusieurs éléments"))
             return
         ii = next(iter(owners))[0]
         it = self.items[ii]
@@ -2225,14 +2559,14 @@ class App(BaseTk):
                 c = count.setdefault(thread_key(t), [t, 0])
                 c[1] += len(pts) - 1
         if len(count) < 2:
-            self.v_status.set("Ces parties ont déjà la même couleur")
+            self.v_status.set(_("Ces parties ont déjà la même couleur"))
             return
         keep = self.ask_keep_color([v for v in count.values()])
         if keep is None:
             return
         kkey = thread_key(keep)
         self._snapshot()
-        if it.kind == "image":
+        if it.generated:
             for key in count:
                 if key == kkey:
                     continue
@@ -2248,7 +2582,7 @@ class App(BaseTk):
                                     (keep.brand, keep.code, keep.name, tuple(keep.rgb))))
             self.parts, self.thread_sel = set(), None
             self.regenerate(it)
-            self.v_status.set("Fusion vers %s %s : recalcul de la broderie…" % (keep.code, keep.name))
+            self.v_status.set(_("Fusion vers %s %s : recalcul de la broderie…") % (keep.code, keep.name))
             return
         # broderie importée : les parties passent dans le bloc du fil gardé
         masks = {}
@@ -2289,7 +2623,7 @@ class App(BaseTk):
         self.parts, self.thread_sel = set(), None
         self.recompose(True)
         self.refresh_palette()
-        self.v_status.set("Fusion vers %s %s (broderie importée : points gardés, pas de recalcul)"
+        self.v_status.set(_("Fusion vers %s %s (broderie importée : points gardés, pas de recalcul)")
                           % (keep.code, keep.name))
 
     def ask_keep_color(self, choices):
@@ -2297,11 +2631,11 @@ class App(BaseTk):
         if getattr(self, "_ask_color_override", None):
             return self._ask_color_override(choices)
         win = tk.Toplevel(self, bg=C["panel"])
-        win.title("Fusionner les couleurs")
+        win.title(_("Fusionner les couleurs"))
         theme.title_bar(win, C["name"] == "dark")
         win.transient(self)
         win.resizable(False, False)
-        ttk.Label(win, text="Quelle couleur garder pour les parties sélectionnées ?",
+        ttk.Label(win, text=_("Quelle couleur garder pour les parties sélectionnées ?"),
                   padding=(14, 12, 14, 6)).pack(anchor="w")
         choices = sorted(choices, key=lambda c: -c[1])
         var = tk.IntVar(value=0)
@@ -2312,17 +2646,17 @@ class App(BaseTk):
             sw = tk.Label(row, bg="#%02x%02x%02x" % t.rgb, width=4, relief="solid", bd=1)
             sw.pack(side="left", padx=6)
             sw.bind("<Button-1>", lambda e, i=i: var.set(i))
-            lb = ttk.Label(row, text="%s %s — %d points sélectionnés" % (t.code, t.name, n))
+            lb = ttk.Label(row, text=_("%s %s — %d points sélectionnés") % (t.code, t.name, n))
             lb.pack(side="left")
             lb.bind("<Button-1>", lambda e, i=i: var.set(i))
-        ttk.Label(win, text="Image : la broderie est recalculée (zone fusionnée remplie d'un seul tenant).\n"
-                            "Broderie importée : les points sont gardés et changent de fil.",
+        ttk.Label(win, text=_("Image : la broderie est recalculée (zone fusionnée remplie d'un seul tenant).\n"
+                            "Broderie importée : les points sont gardés et changent de fil."),
                   style="Muted.TLabel", padding=(14, 8)).pack(anchor="w")
         res = []
         btns = ttk.Frame(win, padding=(14, 0, 14, 12))
         btns.pack(fill="x")
-        ttk.Button(btns, text="Annuler", command=win.destroy).pack(side="right")
-        ttk.Button(btns, text="Fusionner", command=lambda: (res.append(choices[var.get()][0]), win.destroy())
+        ttk.Button(btns, text=_("Annuler"), command=win.destroy).pack(side="right")
+        ttk.Button(btns, text=_("Fusionner"), command=lambda: (res.append(choices[var.get()][0]), win.destroy())
                    ).pack(side="right", padx=6)
         win.bind("<Return>", lambda e: (res.append(choices[var.get()][0]), win.destroy()))
         win.bind("<Escape>", lambda e: win.destroy())
@@ -2355,7 +2689,7 @@ class App(BaseTk):
             it = self.items[ii]
             blk = it.design.blocks[lb]
             pos = positions(blk)
-            if it.kind == "image":  # mémorisé pour la prochaine génération de l'image
+            if it.generated:  # mémorisé pour la prochaine génération de l'image
                 it.erases.append((hull(pos[hit]) / (it.gen_width * 10), thread_key(blk.thread)))
             before = sum(1 for r in blk.records if r[0] == STITCH)
             nb = remove_points(blk, hit)
@@ -2371,12 +2705,12 @@ class App(BaseTk):
         self.parts, self.thread_sel = set(), None
         self.recompose(True)
         self.refresh_palette()
-        self.v_status.set("%d partie(s) supprimée(s), %d points en moins (Ctrl+Z pour annuler)" % (n, removed))
+        self.v_status.set(_("%d partie(s) supprimée(s), %d points en moins (Ctrl+Z pour annuler)") % (n, removed))
 
     def delete_thread(self, ref=None):
         ref = ref or self.thread_sel
         if not self._valid(ref):
-            self.v_status.set("Sélectionnez d'abord un fil")
+            self.v_status.set(_("Sélectionnez d'abord un fil"))
             return
         it, b = self._block(ref)
         key = thread_key(b.thread)
@@ -2387,7 +2721,7 @@ class App(BaseTk):
         self.parts, self.thread_sel = set(), None
         self.recompose(True)
         self.refresh_palette()
-        self.v_status.set("Fil supprimé : %s %s (Ctrl+Z pour annuler)" % (b.thread.code, b.thread.name))
+        self.v_status.set(_("Fil supprimé : %s %s (Ctrl+Z pour annuler)") % (b.thread.code, b.thread.name))
 
     def _color_target(self):
         it = self.cur()
@@ -2399,9 +2733,9 @@ class App(BaseTk):
         """Une couleur de plus ou de moins pour l'élément sélectionné."""
         it = self._color_target()
         if not it:
-            self.v_status.set("Sélectionnez un élément")
+            self.v_status.set(_("Sélectionnez un élément"))
             return
-        if it.kind == "image":
+        if it.generated:
             n = max(1, min(15, it.settings.colors + delta))
             if n == it.settings.colors:
                 return
@@ -2411,7 +2745,7 @@ class App(BaseTk):
             it.recolors = []
             self.refresh_panels()
             self.regenerate(it)
-            self.v_status.set("« %s » : %d couleurs, génération…" % (it.name, n))
+            self.v_status.set(_("« %s » : %d couleurs, génération…") % (it.name, n))
         elif delta < 0:
             self._snapshot()
             res = merge_closest_colors(it.design)
@@ -2421,16 +2755,16 @@ class App(BaseTk):
             self.thread_sel = None
             self.recompose(True)
             self.refresh_palette()
-            self.v_status.set("Couleur fusionnée : %s %s → %s %s" % (res[0].code, res[0].name,
+            self.v_status.set(_("Couleur fusionnée : %s %s → %s %s") % (res[0].code, res[0].name,
                                                                      res[1].code, res[1].name))
         else:
-            self.v_status.set("Une broderie importée n'a pas d'image d'origine : on ne peut que réduire "
-                              "ses couleurs")
+            self.v_status.set(_("Une broderie importée n'a pas d'image d'origine : on ne peut que réduire "
+                              "ses couleurs"))
 
     def suggest(self):
         it = self._color_target()
-        if not it or it.kind != "image":
-            self.v_status.set("La suggestion fonctionne sur une image (pas sur une broderie importée)")
+        if not it or not it.generated:
+            self.v_status.set(_("La suggestion fonctionne sur une image (pas sur une broderie importée)"))
             return
         n, errs = suggest_colors(it.image, it.settings)
         if n != it.settings.colors:
@@ -2440,8 +2774,8 @@ class App(BaseTk):
             it.recolors = []
             self.refresh_panels()
             self.regenerate(it)
-        self.v_status.set("Suggestion pour « %s » : %d couleurs (au-delà, une couleur de plus change peu "
-                          "le résultat)" % (it.name, n))
+        self.v_status.set(_("Suggestion pour « %s » : %d couleurs (au-delà, une couleur de plus change peu "
+                          "le résultat)") % (it.name, n))
 
     def move_block(self, step, ref=None):
         ref = ref or self.thread_sel
@@ -2464,7 +2798,7 @@ class App(BaseTk):
         """Fusionne le fil dans le précédent du même élément : un changement de fil en moins."""
         ref = ref or self.thread_sel
         if not self._valid(ref) or not ref[1]:
-            self.v_status.set("Sélectionnez un fil (pas le premier) à fusionner avec le précédent")
+            self.v_status.set(_("Sélectionnez un fil (pas le premier) à fusionner avec le précédent"))
             return
         ii, i = ref
         it = self.items[ii]
@@ -2484,7 +2818,7 @@ class App(BaseTk):
         self.thread_sel = (ii, i - 1)
         self.recompose(True)
         self.refresh_palette()
-        self.v_status.set("Fils fusionnés : %s %s" % (a.thread.code, a.thread.name))
+        self.v_status.set(_("Fils fusionnés : %s %s") % (a.thread.code, a.thread.name))
 
     def toggle_hidden(self, ref):
         it = self.items[ref[0]]
@@ -2495,7 +2829,7 @@ class App(BaseTk):
     def pick_color(self, ref):
         it, block = self._block(ref)
         i = ref[1]
-        rgb = colorchooser.askcolor(color="#%02x%02x%02x" % block.thread.rgb, title="Couleur du fil")[0]
+        rgb = colorchooser.askcolor(color="#%02x%02x%02x" % block.thread.rgb, title=_("Couleur du fil"))[0]
         if not rgb:
             return
         self._snapshot()
@@ -2524,25 +2858,25 @@ class App(BaseTk):
         m = self.menu
         m.delete(0, "end")
         n = len(it.design.blocks)
-        m.add_command(label="Changer la couleur…", command=lambda: self.pick_color(ref))
-        m.add_command(label="Supprimer ce fil", command=lambda: self.delete_thread(ref))
-        m.add_command(label="Sélectionner ses parties sur le cercle",
+        m.add_command(label=_("Changer la couleur…"), command=lambda: self.pick_color(ref))
+        m.add_command(label=_("Supprimer ce fil"), command=lambda: self.delete_thread(ref))
+        m.add_command(label=_("Sélectionner ses parties sur le cercle"),
                       command=lambda: self._select_all_parts(ref))
         m.add_separator()
-        m.add_command(label="Afficher" if i in it.hidden else "Masquer dans l'aperçu",
+        m.add_command(label=_("Afficher") if i in it.hidden else _("Masquer dans l'aperçu"),
                       command=lambda: self.toggle_hidden(ref))
-        m.add_command(label="Afficher seulement ce fil",
+        m.add_command(label=_("Afficher seulement ce fil"),
                       command=lambda: (setattr(it, "hidden", set(range(n)) - {i}), self.refresh_palette(),
                                        self._update_skip()))
-        m.add_command(label="Tout afficher", command=lambda: (it.hidden.clear(), self.refresh_palette(),
+        m.add_command(label=_("Tout afficher"), command=lambda: (it.hidden.clear(), self.refresh_palette(),
                                                               self._update_skip()))
-        m.add_command(label="Gommer seulement ce fil",
+        m.add_command(label=_("Gommer seulement ce fil"),
                       command=lambda: (self.v_erase_one.set(True), self.v_tool.set("erase")))
         m.add_separator()
-        m.add_command(label="Monter", command=lambda: self.move_block(-1, ref), state="normal" if i else "disabled")
-        m.add_command(label="Descendre", command=lambda: self.move_block(1, ref),
+        m.add_command(label=_("Monter"), command=lambda: self.move_block(-1, ref), state="normal" if i else "disabled")
+        m.add_command(label=_("Descendre"), command=lambda: self.move_block(1, ref),
                       state="normal" if i < n - 1 else "disabled")
-        m.add_command(label="Fusionner avec le fil précédent", command=lambda: self.merge_up(ref),
+        m.add_command(label=_("Fusionner avec le fil précédent"), command=lambda: self.merge_up(ref),
                       state="normal" if i else "disabled")
         m.tk_popup(e.x_root, e.y_root)
 
@@ -2552,7 +2886,7 @@ class App(BaseTk):
         self.v_tool.set("pick")
         self.parts = {(b, r) for b, _p, _i, r, _k in self.view.segs if b in bis}
         self.view.redraw()
-        self.v_status.set("%d parties sélectionnées — Suppr pour supprimer, Maj+clic pour en retirer"
+        self.v_status.set(_("%d parties sélectionnées — Suppr pour supprimer, Maj+clic pour en retirer")
                           % len(self.parts))
 
     # ------------------------------------------------------------------ simulation
@@ -2564,7 +2898,7 @@ class App(BaseTk):
             return
         if self.view.limit is None or self.view.limit >= self.view.total:
             self.view.limit = 0
-        self.btn_play.config(text="⏸ Pause")
+        self.btn_play.config(text=_("⏸ Pause"))
         self._tick()
 
     def stop_play(self):
@@ -2572,7 +2906,7 @@ class App(BaseTk):
             self.after_cancel(self._play_after)
             self._play_after = None
             self.view.redraw()
-        self.btn_play.config(text="▶ Simuler")
+        self.btn_play.config(text=_("▶ Simuler"))
 
     def _tick(self):
         v = self.view
@@ -2604,8 +2938,8 @@ class App(BaseTk):
         for bi, pts, i0, *_r in v.segs:
             if i0 <= lim:
                 k = bi
-        color = " · fil %d" % (k + 1) if v.limit is not None and self.design and self.design.blocks else ""
-        self.lbl_sim.config(text="%d / %d points%s" % (lim, v.total, color))
+        color = _(" · fil %d") % (k + 1) if v.limit is not None and self.design and self.design.blocks else ""
+        self.lbl_sim.config(text=_("%d / %d points%s") % (lim, v.total, color))
 
     # ------------------------------------------------------------------ affichage
     def _apply_hoop(self, des):
@@ -2633,7 +2967,7 @@ class App(BaseTk):
         self.view.hoop = (self.hoop_mm[0] * 10, self.hoop_mm[1] * 10)
         self.recompose(True)
         self.view.fit(True)
-        self.v_status.set("Espace de broderie : %g × %g mm" % self.hoop_mm)
+        self.v_status.set(_("Espace de broderie : %g × %g mm") % self.hoop_mm)
 
     def recompose(self, keep_view=False):
         self.mark_dirty()
@@ -2675,11 +3009,13 @@ class App(BaseTk):
             cache[key] = ImageTk.PhotoImage(box)
         return cache[key]
 
+    KIND_NAMES = {"image": _("image"), "texte": _("texte"), "broderie": _("broderie")}
+
     def refresh_items(self):
         for w in self.items_box.winfo_children():
             w.destroy()
         if not self.items:
-            tk.Label(self.items_box, text="Aucun élément\nCtrl+O ou glissez des fichiers ici", bg=C["list"],
+            tk.Label(self.items_box, text=_("Aucun élément\nCtrl+O ou glissez des fichiers ici"), bg=C["list"],
                      fg=C["faint"], pady=14).pack(fill="x")
             return
         for i in range(len(self.items) - 1, -1, -1):  # comme les calques : le dessus en haut
@@ -2695,14 +3031,14 @@ class App(BaseTk):
             th = self._thumb(it)
             tl = tk.Label(f, image=th, bg=bg) if th else tk.Label(f, text="…", width=6, bg=bg, fg=C["faint"])
             tl.pack(side="left", padx=(2, 6))
-            state = " · génération…" if it.generating or it in self._queue else ""
+            state = _(" · génération…") if it.generating or it in self._queue else ""
             if it.design and it.design.blocks:
                 x0, y0, x1, y1 = it.local_bounds()
                 size = "%.0f × %.0f mm" % ((x1 - x0) * it.scale / 10, (y1 - y0) * it.scale / 10)
             else:
                 size = ""
             fg = C["list_fg"] if it.visible else C["hidden_fg"]
-            lb = tk.Label(f, text="%s\n%s · %s%s%s" % (it.name[:30], it.kind, size,
+            lb = tk.Label(f, text="%s\n%s · %s%s%s" % (it.name[:30], self.KIND_NAMES.get(it.kind, it.kind), size,
                                                       " · %d°" % it.angle if it.angle else "", state),
                           bg=bg, fg=fg, anchor="w", justify="left",
                           font=("Segoe UI", 9, "bold") if sel else ("Segoe UI", 9))
@@ -2719,8 +3055,8 @@ class App(BaseTk):
         it = self.items[i]
         it.visible = not it.visible
         self.recompose(True)
-        self.v_status.set("« %s » %s" % (it.name, "affiché" if it.visible else
-                                          "masqué (ni affiché ni enregistré)"))
+        self.v_status.set(_("« %s » %s") % (it.name, _("affiché") if it.visible else
+                                          _("masqué (ni affiché ni enregistré)")))
 
     def _dialog(self, title, text, buttons, icon="ℹ"):
         """Boîte de message aux couleurs du thème (celles de Windows restent toujours claires).
@@ -2755,7 +3091,7 @@ class App(BaseTk):
         self.wait_window(win)
         return res[0] if res else None
 
-    def ask_yes_no(self, title, text, yes="Oui", no="Non"):
+    def ask_yes_no(self, title, text, yes=_("Oui"), no=_("Non")):
         return self._dialog(title, text, [(yes, True), (no, False)], icon="?") is True
 
     def message(self, title, text="", kind="info"):
@@ -2776,7 +3112,7 @@ class App(BaseTk):
         res = []
         btns = ttk.Frame(frm)
         btns.pack(fill="x")
-        ttk.Button(btns, text="Annuler", command=win.destroy).pack(side="right")
+        ttk.Button(btns, text=_("Annuler"), command=win.destroy).pack(side="right")
         ttk.Button(btns, text="OK", command=lambda: (res.append(var.get()), win.destroy())).pack(side="right", padx=6)
         win.bind("<Return>", lambda e: (res.append(var.get()), win.destroy()))
         win.bind("<Escape>", lambda e: win.destroy())
@@ -2789,10 +3125,12 @@ class App(BaseTk):
 
     def rename_item(self, i):
         it = self.items[i]
-        name = self.ask_text("Renommer", "Nom de l'élément :", it.name)
+        name = self.ask_text(_("Renommer"), _("Nom de l'élément :"), it.name)
         if name and name.strip():
             self._snapshot()
             it.name = name.strip()
+            if it.text is not None:  # nommé à la main : le nom ne suit plus le texte
+                it.text = dict(it.text, auto_name=False)
             self.refresh_items()
 
     def layer_menu(self, e, i):
@@ -2800,20 +3138,22 @@ class App(BaseTk):
         m = self.menu
         m.delete(0, "end")
         it = self.items[i]
-        m.add_command(label="Propriétés…", command=lambda: self.v_panel.set("props"))
-        if it.kind == "image":
-            m.add_command(label="Réglages de l'image…", command=lambda: self.v_panel.set("image"))
-        m.add_command(label="Couleurs…", command=lambda: self.v_panel.set("colors"))
+        m.add_command(label=_("Propriétés…"), command=lambda: self.v_panel.set("props"))
+        if it.text is not None:
+            m.add_command(label=_("Modifier le texte…"), command=lambda: self.v_panel.set("text"))
+        if it.generated:
+            m.add_command(label=_("Réglages de l'image…"), command=lambda: self.v_panel.set("image"))
+        m.add_command(label=_("Couleurs…"), command=lambda: self.v_panel.set("colors"))
         m.add_separator()
-        m.add_command(label="Renommer…", command=lambda: self.rename_item(i))
-        m.add_command(label="Masquer" if it.visible else "Afficher", command=lambda: self.toggle_item_visible(i))
-        m.add_command(label="Dupliquer", command=self.duplicate_item)
-        m.add_command(label="Monter (brodé plus tard)", command=lambda: self.move_item(1),
+        m.add_command(label=_("Renommer…"), command=lambda: self.rename_item(i))
+        m.add_command(label=_("Masquer") if it.visible else _("Afficher"), command=lambda: self.toggle_item_visible(i))
+        m.add_command(label=_("Dupliquer"), command=self.duplicate_item)
+        m.add_command(label=_("Monter (brodé plus tard)"), command=lambda: self.move_item(1),
                       state="normal" if i < len(self.items) - 1 else "disabled")
-        m.add_command(label="Descendre (brodé plus tôt)", command=lambda: self.move_item(-1),
+        m.add_command(label=_("Descendre (brodé plus tôt)"), command=lambda: self.move_item(-1),
                       state="normal" if i else "disabled")
         m.add_separator()
-        m.add_command(label="Supprimer", command=self.delete_item)
+        m.add_command(label=_("Supprimer"), command=self.delete_item)
         m.tk_popup(e.x_root, e.y_root)
 
     def refresh_palette(self):
@@ -2823,19 +3163,19 @@ class App(BaseTk):
         it = self.cur()
         if it:
             groups = [(self.sel, it)]
-            self.lbl_threads.config(text="Couleurs de « %s »" % it.name[:30])
+            self.lbl_threads.config(text=_("Couleurs de « %s »") % it.name[:30])
         else:
             groups = list(enumerate(self.items))
-            self.lbl_threads.config(text="Toutes les couleurs du projet")
+            self.lbl_threads.config(text=_("Toutes les couleurs du projet"))
         tgt = self._color_target()
         if tgt is None or not tgt.design:
             self.lbl_ncol.config(text="–")
-        elif tgt.kind == "image":
+        elif tgt.generated:
             self.lbl_ncol.config(text=str(tgt.settings.colors))
         else:
             self.lbl_ncol.config(text=str(len({thread_key(b.thread) for b in tgt.design.blocks})))
         if not any(g.design for _, g in groups):
-            tk.Label(self.pal, text="Ajoutez une image ou une broderie", bg=C["list"], fg=C["faint"]).pack(pady=8)
+            tk.Label(self.pal, text=_("Ajoutez une image ou une broderie"), bg=C["list"], fg=C["faint"]).pack(pady=8)
             return
         for ii, g in groups:
             if not g.design:
@@ -2861,8 +3201,7 @@ class App(BaseTk):
                 sw.bind("<Button-1>", lambda e, ref=ref: self.pick_color(ref))
                 n = sum(1 for r in b.records if r[0] == STITCH)
                 parts = sum(1 for r in b.records if r[0] == JUMP) + 1
-                txt = "%d. %s %s\n    %d pts · %d partie%s" % (i + 1, b.thread.code, b.thread.name, n, parts,
-                                                              "s" if parts > 1 else "")
+                txt = _("%d. %s %s\n    %d pts · %d partie(s)") % (i + 1, b.thread.code, b.thread.name, n, parts)
                 lb = tk.Label(f, text=txt, bg=bg, justify="left", anchor="w", fg=C["hidden_fg"] if hid else C["list_fg"])
                 lb.pack(side="left", fill="x", expand=True)
                 dl = tk.Label(f, text="✕", bg=bg, fg=C["danger"], cursor="hand2", font=("Segoe UI", 10))
@@ -2885,19 +3224,20 @@ class App(BaseTk):
         n = des.stitch_count()
         jumps = sum(1 for b in des.blocks for r in b.records if r[0] == JUMP)
         changes = sum(1 for a, b in zip(des.blocks, des.blocks[1:]) if a.thread != b.thread)
-        txt = ("Éléments : %d\nTaille totale : %.1f × %.1f mm\nPoints : %d\nChangements de fil : %d\n"
-               "Sauts / coupes : %d\nDurée estimée : %d min"
+        txt = (_("Éléments : %d\nTaille totale : %.1f × %.1f mm\nPoints : %d\nChangements de fil : %d\n"
+               "Sauts / coupes : %d\nDurée estimée : %d min")
                % (len(self.items), (x1 - x0) / 10, (y1 - y0) / 10, n, changes, jumps,
                   round(n / SPM + len(des.blocks))))
         hw, hh = self.view.hoop
-        if x0 < -hw / 2 or x1 > hw / 2 or y0 < -hh / 2 or y1 > hh / 2:
-            txt += "\n⚠ Dépasse le cercle %d × %d mm" % (hw / 10, hh / 10)
+        over = x0 < -hw / 2 or x1 > hw / 2 or y0 < -hh / 2 or y1 > hh / 2
+        if over:
+            txt += _("\n⚠ Dépasse le cercle %d × %d mm") % (hw / 10, hh / 10)
         if hidden:
-            txt += "\n%d élément(s) masqué(s) : non enregistré(s)" % hidden
+            txt += _("\n%d élément(s) masqué(s) : non enregistré(s)") % hidden
         self.stats.config(text=txt)
-        self.lbl_summary.config(text="%.0f × %.0f mm · %d points · %d changement%s de fil · ~%d min%s" % (
-            (x1 - x0) / 10, (y1 - y0) / 10, n, changes, "s" if changes > 1 else "",
-            round(n / SPM + len(des.blocks)), "  ⚠ dépasse le cercle" if "Dépasse" in txt else ""))
+        self.lbl_summary.config(text=_("%.0f × %.0f mm · %d points · %d changement(s) de fil · ~%d min") % (
+            (x1 - x0) / 10, (y1 - y0) / 10, n, changes, round(n / SPM + len(des.blocks)))
+            + (_("  ⚠ dépasse le cercle") if over else ""))
 
     def show_image(self):
         cv = self.cv_img
@@ -2905,7 +3245,7 @@ class App(BaseTk):
         W, H = max(50, cv.winfo_width()), max(50, cv.winfo_height())
         it = self.cur()
         if not it or it.image is None:
-            cv.create_text(W // 2, H // 2, fill=C["faint"], text="Sélectionnez une image dans la liste des éléments")
+            cv.create_text(W // 2, H // 2, fill=C["faint"], text=_("Sélectionnez une image dans la liste des éléments"))
             return
         img = it.image.convert("RGB")
         sc = min(W / img.width, H / img.height, 1.0)

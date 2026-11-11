@@ -23,7 +23,7 @@ from .render import to_display
 @dataclass
 class Item:
     name: str
-    kind: str                          # "image" ou "broderie"
+    kind: str                          # "image", "texte" ou "broderie"
     image: object = None               # PIL.Image pour une image
     settings: object = None            # digitize.Settings pour une image
     design: Design | None = None       # motif local (déjà gommé, couleurs retouchées)
@@ -38,6 +38,14 @@ class Item:
     generating: bool = False
     visible: bool = True               # œil des calques : masqué = ni affiché ni enregistré
     gen_width: float = 0.1             # image : largeur (mm) du motif généré ; broderie : 0,1
+    # texte : {"text", "font" (nom), "path", "index", "rgb", "align", "spacing", "auto_name"} ;
+    # son image (lettres dessinées avec la police) est convertie comme une image importée
+    text: dict | None = None
+
+    @property
+    def generated(self):
+        """Image ou texte : points calculés à partir d'une image (régénérables)."""
+        return self.kind in ("image", "texte")
 
     def local_bounds(self):
         if not self.design or not self.design.blocks:
@@ -77,6 +85,8 @@ class Item:
         it.hidden = set(self.hidden)
         it.removed = set(self.removed)
         it.recolors = list(self.recolors)
+        if self.text is not None:
+            it.text = dict(self.text)
         return it
 
 

@@ -93,7 +93,15 @@ def _info(d, c):  # infos : i dans un rond
     d.rounded_rectangle((38, 38, 50, 68), radius=4, fill=c)
 
 
-ICONS = {"layers": _layers, "props": _props, "image": _image, "colors": _colors, "info": _info,
+def _text(d, c):  # texte : un grand T avec empattements
+    d.rectangle((14, 12, 74, 24), fill=c)
+    d.rectangle((38, 12, 50, 74), fill=c)
+    d.rectangle((28, 68, 60, 78), fill=c)
+    d.rectangle((14, 12, 22, 32), fill=c)
+    d.rectangle((66, 12, 74, 32), fill=c)
+
+
+ICONS = {"layers": _layers, "props": _props, "text": _text, "image": _image, "colors": _colors, "info": _info,
          "undo": _undo, "redo": _redo, "move": _select, "pick": _wand, "erase": _eraser, "hand": _hand, "zoom": _zoom}
 
 

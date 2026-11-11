@@ -9,78 +9,82 @@ import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 
+import i18n
+from i18n import _
+
 # (identifiant, libellé, raccourcis par défaut) — groupés par rubrique pour la fenêtre des réglages
 ACTIONS = [
-    ("Édition", [
-        ("undo", "Annuler", ["Ctrl+Z"]),
-        ("redo", "Rétablir", ["Ctrl+Y", "Ctrl+Maj+Z"]),
-        ("copy", "Copier (élément ou parties sélectionnées)", ["Ctrl+C"]),
-        ("cut", "Couper", ["Ctrl+X"]),
-        ("paste", "Coller (élément copié, image ou fichiers du presse-papiers)", ["Ctrl+V", "Maj+Inser"]),
-        ("duplicate", "Dupliquer l'élément", ["Ctrl+D"]),
-        ("delete", "Supprimer la sélection", ["Suppr", "Retour"]),
-        ("select_all", "Sélectionner toutes les parties de l'élément", ["Ctrl+A"]),
-        ("merge_parts", "Fusionner les couleurs sélectionnées", ["Ctrl+G"]),
-        ("deselect", "Désélectionner", ["Échap"]),
+    (_("Édition"), [
+        ("undo", _("Annuler"), ["Ctrl+Z"]),
+        ("redo", _("Rétablir"), ["Ctrl+Y", "Ctrl+Maj+Z"]),
+        ("copy", _("Copier (élément ou parties sélectionnées)"), ["Ctrl+C"]),
+        ("cut", _("Couper"), ["Ctrl+X"]),
+        ("paste", _("Coller (élément copié, image ou fichiers du presse-papiers)"), ["Ctrl+V", "Maj+Inser"]),
+        ("duplicate", _("Dupliquer l'élément"), ["Ctrl+D"]),
+        ("delete", _("Supprimer la sélection"), ["Suppr", "Retour"]),
+        ("select_all", _("Sélectionner toutes les parties de l'élément"), ["Ctrl+A"]),
+        ("merge_parts", _("Fusionner les couleurs sélectionnées"), ["Ctrl+G"]),
+        ("deselect", _("Désélectionner"), ["Échap"]),
     ]),
-    ("Fichier", [
-        ("new", "Nouveau projet", ["Ctrl+N"]),
-        ("open", "Ouvrir un projet (.brodi)", ["Ctrl+O"]),
-        ("add", "Importer une image / broderie", ["Ctrl+I"]),
-        ("save", "Enregistrer le projet", ["Ctrl+S"]),
-        ("save_as", "Enregistrer le projet sous…", ["Ctrl+Maj+S"]),
-        ("export_vp4", "Exporter en .vp4", ["Ctrl+E"]),
-        ("export", "Exporter l'aperçu PNG", ["Ctrl+Maj+E"]),
-        ("usb", "Envoyer sur la clé USB", ["Ctrl+U"]),
-        ("regen", "Régénérer l'image", ["F5"]),
-        ("settings", "Paramètres et raccourcis", ["Ctrl+,", "F1"]),
-        ("close", "Fermer le projet", ["Ctrl+W"]),
-        ("quit", "Quitter", ["Ctrl+Q"]),
+    (_("Fichier"), [
+        ("new", _("Nouveau projet"), ["Ctrl+N"]),
+        ("open", _("Ouvrir un projet (.brodi)"), ["Ctrl+O"]),
+        ("add", _("Importer une image / broderie"), ["Ctrl+I"]),
+        ("add_text", _("Ajouter un texte"), ["Ctrl+T"]),
+        ("save", _("Enregistrer le projet"), ["Ctrl+S"]),
+        ("save_as", _("Enregistrer le projet sous…"), ["Ctrl+Maj+S"]),
+        ("export_vp4", _("Exporter en .vp4"), ["Ctrl+E"]),
+        ("export", _("Exporter l'aperçu PNG"), ["Ctrl+Maj+E"]),
+        ("usb", _("Envoyer sur la clé USB"), ["Ctrl+U"]),
+        ("regen", _("Régénérer l'image"), ["F5"]),
+        ("settings", _("Paramètres et raccourcis"), ["Ctrl+,", "F1"]),
+        ("close", _("Fermer le projet"), ["Ctrl+W"]),
+        ("quit", _("Quitter"), ["Ctrl+Q"]),
     ]),
-    ("Outils", [
-        ("tool_move", "Outil Sélection (choisir, déplacer, taille, rotation)", ["V"]),
-        ("tool_pick", "Outil Couleurs", ["C"]),
-        ("tool_erase", "Outil Gomme", ["E"]),
-        ("tool_hand", "Outil Main (faire glisser la vue)", ["H"]),
-        ("tool_zoom", "Outil Zoom", ["Z"]),
+    (_("Outils"), [
+        ("tool_move", _("Outil Sélection (choisir, déplacer, taille, rotation)"), ["V"]),
+        ("tool_pick", _("Outil Couleurs"), ["C"]),
+        ("tool_erase", _("Outil Gomme"), ["E"]),
+        ("tool_hand", _("Outil Main (faire glisser la vue)"), ["H"]),
+        ("tool_zoom", _("Outil Zoom"), ["Z"]),
     ]),
-    ("Élément", [
-        ("rot_cw", "Tourner de 90° (sens horaire)", ["R"]),
-        ("rot_ccw", "Tourner de 90° (sens inverse)", ["Maj+R"]),
-        ("center", "Centrer dans le cercle", ["Début"]),
-        ("order_up", "Broder plus tôt (monter dans la liste)", ["PgPréc"]),
-        ("order_down", "Broder plus tard (descendre dans la liste)", ["PgSuiv"]),
-        ("colors_less", "Une couleur de moins", ["Ctrl+-"]),
-        ("colors_more", "Une couleur de plus", ["Ctrl++"]),
-        ("move_left", "Déplacer l'élément à gauche (1 mm, Maj : 10 mm ; sans sélection : la vue)", ["Gauche"]),
-        ("move_right", "Déplacer à droite", ["Droite"]),
-        ("move_up", "Déplacer vers le haut", ["Haut"]),
-        ("move_down", "Déplacer vers le bas", ["Bas"]),
+    (_("Élément"), [
+        ("rot_cw", _("Tourner de 90° (sens horaire)"), ["R"]),
+        ("rot_ccw", _("Tourner de 90° (sens inverse)"), ["Maj+R"]),
+        ("center", _("Centrer dans le cercle"), ["Début"]),
+        ("order_up", _("Broder plus tôt (monter dans la liste)"), ["PgPréc"]),
+        ("order_down", _("Broder plus tard (descendre dans la liste)"), ["PgSuiv"]),
+        ("colors_less", _("Une couleur de moins"), ["Ctrl+-"]),
+        ("colors_more", _("Une couleur de plus"), ["Ctrl++"]),
+        ("move_left", _("Déplacer l'élément à gauche (1 mm, Maj : 10 mm ; sans sélection : la vue)"), ["Gauche"]),
+        ("move_right", _("Déplacer à droite"), ["Droite"]),
+        ("move_up", _("Déplacer vers le haut"), ["Haut"]),
+        ("move_down", _("Déplacer vers le bas"), ["Bas"]),
     ]),
-    ("Vue", [
-        ("fit", "Ajuster la vue au motif", ["0"]),
-        ("hoop", "Voir le cercle entier", ["Ctrl+1"]),
-        ("zoom_100", "Taille réelle (100 %)", ["Ctrl+0"]),
-        ("pan_left", "Faire défiler la vue à gauche (Maj : plus vite)", ["Ctrl+Gauche"]),
-        ("pan_right", "Faire défiler la vue à droite", ["Ctrl+Droite"]),
-        ("pan_up", "Faire défiler la vue vers le haut", ["Ctrl+Haut"]),
-        ("pan_down", "Faire défiler la vue vers le bas", ["Ctrl+Bas"]),
-        ("zoom_in", "Zoom avant", ["+"]),
-        ("zoom_out", "Zoom arrière", ["-"]),
-        ("play", "Simuler / pause (Espace maintenu + glisser : main)", ["Espace"]),
-        ("jumps", "Afficher les sauts", ["J"]),
-        ("theme", "Basculer thème clair / sombre", ["Ctrl+Maj+T"]),
+    (_("Vue"), [
+        ("fit", _("Ajuster la vue au motif"), ["0"]),
+        ("hoop", _("Voir le cercle entier"), ["Ctrl+1"]),
+        ("zoom_100", _("Taille réelle (100 %)"), ["Ctrl+0"]),
+        ("pan_left", _("Faire défiler la vue à gauche (Maj : plus vite)"), ["Ctrl+Gauche"]),
+        ("pan_right", _("Faire défiler la vue à droite"), ["Ctrl+Droite"]),
+        ("pan_up", _("Faire défiler la vue vers le haut"), ["Ctrl+Haut"]),
+        ("pan_down", _("Faire défiler la vue vers le bas"), ["Ctrl+Bas"]),
+        ("zoom_in", _("Zoom avant"), ["+"]),
+        ("zoom_out", _("Zoom arrière"), ["-"]),
+        ("play", _("Simuler / pause (Espace maintenu + glisser : main)"), ["Espace"]),
+        ("jumps", _("Afficher les sauts"), ["J"]),
+        ("theme", _("Basculer thème clair / sombre"), ["Ctrl+Maj+T"]),
     ]),
 ]
 
 MOUSE_HELP = [
-    ("Ctrl + molette (ou Alt + molette)", "Zoom sous la souris"),
-    ("Molette", "Faire défiler la vue de haut en bas"),
-    ("Maj + molette", "Faire défiler la vue de gauche à droite"),
-    ("Bouton du milieu (ou droit) + glisser", "Déplacer la vue"),
-    ("… avec Maj", "Déplacer la vue sur un seul axe"),
-    ("Espace maintenu + glisser", "Déplacer la vue (main temporaire)"),
-    ("Double-clic (outil Couleurs)", "Toutes les parties du fil"),
+    (_("Ctrl + molette (ou Alt + molette)"), _("Zoom sous la souris")),
+    (_("Molette"), _("Faire défiler la vue de haut en bas")),
+    (_("Maj + molette"), _("Faire défiler la vue de gauche à droite")),
+    (_("Bouton du milieu (ou droit) + glisser"), _("Déplacer la vue")),
+    (_("… avec Maj"), _("Déplacer la vue sur un seul axe")),
+    (_("Espace maintenu + glisser"), _("Déplacer la vue (main temporaire)")),
+    (_("Double-clic (outil Couleurs)"), _("Toutes les parties du fil")),
 ]
 HOOPS = [(100, 100), (120, 115), (120, 120), (150, 150), (170, 100), (180, 130), (200, 200), (225, 140),
          (240, 150), (260, 200), (260, 260), (360, 200), (360, 260), (360, 350)]
@@ -208,7 +212,7 @@ class SettingsDialog(tk.Toplevel):
     def __init__(self, app):
         super().__init__(app)
         self.app = app
-        self.title("Paramètres — Brodilume")
+        self.title(_("Paramètres — Brodilume"))
         self.geometry("760x780")
         self.transient(app)
         self.keys = {a: list(v) for a, v in app.keys.items()}
@@ -218,60 +222,71 @@ class SettingsDialog(tk.Toplevel):
         nb = ttk.Notebook(self)
         nb.pack(fill="both", expand=True, padx=10, pady=(10, 0))
         gen = ttk.Frame(nb, padding=12)
-        nb.add(gen, text="Général")
-        ttk.Label(gen, text="Thème", style="Title.TLabel").pack(anchor="w")
+        nb.add(gen, text=_("Général"))
+        ttk.Label(gen, text=_("Thème"), style="Title.TLabel").pack(anchor="w")
         self.v_theme = tk.StringVar(value=app.theme_mode)
         for m in theme.MODES:
             ttk.Radiobutton(gen, text=theme.MODE_LABELS[m], value=m, variable=self.v_theme,
                             command=lambda: app.set_theme(self.v_theme.get())).pack(anchor="w", pady=1)
-        ttk.Label(gen, text="« Comme Windows » suit Paramètres > Personnalisation > Couleurs, même pendant que "
-                            "Brodilume est ouvert.", style="Muted.TLabel", wraplength=640).pack(anchor="w", pady=(4, 0))
-        ttk.Label(gen, text="Espace de broderie (cercle)", style="Title.TLabel").pack(anchor="w", pady=(18, 4))
+        ttk.Label(gen, text=_("« Comme Windows » suit Paramètres > Personnalisation > Couleurs, même pendant que "
+                            "Brodilume est ouvert."), style="Muted.TLabel", wraplength=640).pack(anchor="w", pady=(4, 0))
+        ttk.Label(gen, text=_("Langue"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
+        lrow = ttk.Frame(gen)
+        lrow.pack(anchor="w")
+        self.v_lang = tk.StringVar(value=i18n.LANGS[i18n.lang])
+        lcb = ttk.Combobox(lrow, textvariable=self.v_lang, values=list(i18n.LANGS.values()), state="readonly",
+                           width=14)
+        lcb.pack(side="left")
+        lcb.bind("<<ComboboxSelected>>", lambda e: self.set_language())
+        self.btn_restart = ttk.Button(lrow, text="", command=app.restart)
+        self.lbl_lang = ttk.Label(gen, text="", style="Muted.TLabel", wraplength=640)
+        self.lbl_lang.pack(anchor="w", pady=(4, 0))
+        ttk.Label(gen, text=_("Espace de broderie (cercle)"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
         hrow = ttk.Frame(gen)
         hrow.pack(anchor="w")
         w0, h0 = app.hoop_mm
-        names = ["%d × %d mm" % wh for wh in HOOPS] + ["Personnalisé"]
+        names = ["%d × %d mm" % wh for wh in HOOPS] + [_("Personnalisé")]
         cur = "%d × %d mm" % (w0, h0)
-        self.v_hoop = tk.StringVar(value=cur if cur in names else "Personnalisé")
+        self.v_hoop = tk.StringVar(value=cur if cur in names else _("Personnalisé"))
         self.v_hw, self.v_hh = tk.DoubleVar(value=w0), tk.DoubleVar(value=h0)
         cb = ttk.Combobox(hrow, textvariable=self.v_hoop, values=names, state="readonly", width=16)
         cb.pack(side="left")
-        ttk.Label(hrow, text="  largeur").pack(side="left")
+        ttk.Label(hrow, text="  " + _("largeur")).pack(side="left")
         ttk.Spinbox(hrow, from_=50, to=500, increment=5, textvariable=self.v_hw, width=6).pack(side="left", padx=4)
-        ttk.Label(hrow, text="hauteur").pack(side="left")
+        ttk.Label(hrow, text=_("hauteur")).pack(side="left")
         ttk.Spinbox(hrow, from_=50, to=500, increment=5, textvariable=self.v_hh, width=6).pack(side="left", padx=4)
         ttk.Label(hrow, text="mm").pack(side="left")
-        ttk.Button(hrow, text="Appliquer", command=self.apply_hoop).pack(side="left", padx=(10, 0))
+        ttk.Button(hrow, text=_("Appliquer"), command=self.apply_hoop).pack(side="left", padx=(10, 0))
 
         def preset(_e=None):
-            if self.v_hoop.get() != "Personnalisé":
+            if self.v_hoop.get() != _("Personnalisé"):
                 w, h = HOOPS[names.index(self.v_hoop.get())]
                 self.v_hw.set(w)
                 self.v_hh.set(h)
                 self.apply_hoop()
         cb.bind("<<ComboboxSelected>>", preset)
-        ttk.Label(gen, text="Cercles « Universal » de mySewnet. Jusqu'à 260 × 200 mm, le fichier indique le cercle "
-                            "UniLarge3 (vérifié) ; au-delà, son nom Universal_LxH (à vérifier dans mySewnet).",
+        ttk.Label(gen, text=_("Cercles « Universal » de mySewnet. Jusqu'à 260 × 200 mm, le fichier indique le cercle "
+                            "UniLarge3 (vérifié) ; au-delà, son nom Universal_LxH (à vérifier dans mySewnet)."),
                   style="Muted.TLabel", wraplength=640).pack(anchor="w", pady=(4, 0))
-        ttk.Label(gen, text="Mises à jour", style="Title.TLabel").pack(anchor="w", pady=(18, 4))
+        ttk.Label(gen, text=_("Mises à jour"), style="Title.TLabel").pack(anchor="w", pady=(18, 4))
         import updater
         self.v_updates = tk.BooleanVar(value=load_setting("check_updates", True))
-        ttk.Checkbutton(gen, text="Vérifier les mises à jour au démarrage", variable=self.v_updates,
+        ttk.Checkbutton(gen, text=_("Vérifier les mises à jour au démarrage"), variable=self.v_updates,
                         command=lambda: save_setting("check_updates", bool(self.v_updates.get()))).pack(anchor="w")
         urow = ttk.Frame(gen)
         urow.pack(anchor="w", pady=(4, 0))
-        ttk.Label(urow, text="Version %s" % updater.VERSION).pack(side="left")
-        ttk.Button(urow, text="Vérifier maintenant", command=lambda: app._start_update_check(manual=True)).pack(
+        ttk.Label(urow, text=_("Version %s") % updater.VERSION).pack(side="left")
+        ttk.Button(urow, text=_("Vérifier maintenant"), command=lambda: app._start_update_check(manual=True)).pack(
             side="left", padx=(12, 0))
         tab = ttk.Frame(nb, padding=8)
-        nb.add(tab, text="Raccourcis clavier")
-        ttk.Label(tab, text="Double-clic sur une action pour lui donner un nouveau raccourci. "
-                            "Une action peut en avoir plusieurs.", style="Muted.TLabel").pack(anchor="w")
+        nb.add(tab, text=_("Raccourcis clavier"))
+        ttk.Label(tab, text=_("Double-clic sur une action pour lui donner un nouveau raccourci. "
+                            "Une action peut en avoir plusieurs."), style="Muted.TLabel").pack(anchor="w")
         cols = ttk.Frame(tab)
         cols.pack(fill="both", expand=True, pady=6)
         self.tree = ttk.Treeview(cols, columns=("keys",), selectmode="browse")
-        self.tree.heading("#0", text="Action")
-        self.tree.heading("keys", text="Raccourci(s)")
+        self.tree.heading("#0", text=_("Action"))
+        self.tree.heading("keys", text=_("Raccourci(s)"))
         self.tree.column("#0", width=420)
         self.tree.column("keys", width=220)
         sb = ttk.Scrollbar(cols, orient="vertical", command=self.tree.yview)
@@ -281,22 +296,22 @@ class SettingsDialog(tk.Toplevel):
         self.tree.bind("<Double-1>", lambda e: self.capture(replace=True))
         btns = ttk.Frame(tab)
         btns.pack(fill="x")
-        for txt, cmd in (("Modifier…", lambda: self.capture(replace=True)),
-                         ("Ajouter un raccourci…", lambda: self.capture(replace=False)),
-                         ("Retirer les raccourcis", self.clear), ("Par défaut (cette action)", self.reset_one),
-                         ("Tout par défaut", self.reset_all)):
+        for txt, cmd in ((_("Modifier…"), lambda: self.capture(replace=True)),
+                         (_("Ajouter un raccourci…"), lambda: self.capture(replace=False)),
+                         (_("Retirer les raccourcis"), self.clear), (_("Par défaut (cette action)"), self.reset_one),
+                         (_("Tout par défaut"), self.reset_all)):
             ttk.Button(btns, text=txt, command=cmd).pack(side="left", padx=(0, 4))
-        ttk.Label(tab, text="Dans un champ de saisie, Ctrl+C / X / V / A / Z / Y gardent leur rôle habituel "
-                            "(texte).", style="Muted.TLabel").pack(anchor="w", pady=(8, 0))
-        mouse = ttk.LabelFrame(tab, text="Souris", padding=6)
+        ttk.Label(tab, text=_("Dans un champ de saisie, Ctrl+C / X / V / A / Z / Y gardent leur rôle habituel "
+                            "(texte)."), style="Muted.TLabel").pack(anchor="w", pady=(8, 0))
+        mouse = ttk.LabelFrame(tab, text=_("Souris"), padding=6)
         mouse.pack(fill="x", pady=(8, 0))
         for i, (k_, v_) in enumerate(MOUSE_HELP):
             ttk.Label(mouse, text=k_).grid(row=i, column=0, sticky="w", padx=(0, 16))
             ttk.Label(mouse, text=v_, style="Muted.TLabel").grid(row=i, column=1, sticky="w")
         bottom = ttk.Frame(self, padding=10)
         bottom.pack(fill="x")
-        ttk.Label(bottom, text="Enregistré dans " + config_path(), style="Muted.TLabel").pack(side="left")
-        ttk.Button(bottom, text="Annuler", command=self.destroy).pack(side="right")
+        ttk.Label(bottom, text=_("Enregistré dans ") + config_path(), style="Muted.TLabel").pack(side="left")
+        ttk.Button(bottom, text=_("Annuler"), command=self.destroy).pack(side="right")
         ttk.Button(bottom, text="OK", command=self.ok).pack(side="right", padx=6)
         self.fill()
         self.grab_set()
@@ -306,8 +321,9 @@ class SettingsDialog(tk.Toplevel):
         self.tree.delete(*self.tree.get_children())
         for group, acts in ACTIONS:
             g = self.tree.insert("", "end", text=group, open=True)
-            for a, label, _ in acts:
-                self.tree.insert(g, "end", iid=a, text=label, values=("   ou   ".join(self.keys[a]) or "—",))
+            for a, label, _k in acts:
+                self.tree.insert(g, "end", iid=a, text=label,
+                                 values=(_("   ou   ").join(i18n.key(k) for k in self.keys[a]) or "—",))
         if sel and self.tree.exists(sel[0]):
             self.tree.selection_set(sel[0])
             self.tree.see(sel[0])
@@ -322,12 +338,12 @@ class SettingsDialog(tk.Toplevel):
             return
         import theme
         win = tk.Toplevel(self, bg=theme.C["panel"])
-        win.title("Nouveau raccourci")
+        win.title(_("Nouveau raccourci"))
         theme.title_bar(win, theme.C["name"] == "dark")
         win.transient(self)
         win.geometry("+%d+%d" % (self.winfo_rootx() + 150, self.winfo_rooty() + 200))
-        ttk.Label(win, text="« %s »\n\nAppuyez sur la combinaison de touches voulue.\n"
-                            "(Échap seul : annuler)" % LABELS[a], padding=20, justify="center").pack()
+        ttk.Label(win, text=_("« %s »\n\nAppuyez sur la combinaison de touches voulue.\n"
+                            "(Échap seul : annuler)") % LABELS[a], padding=20, justify="center").pack()
         win.focus_force()
         win.grab_set()
 
@@ -340,8 +356,8 @@ class SettingsDialog(tk.Toplevel):
                 return "break"
             other = next((b for b, cs in self.keys.items() if c in cs and b != a), None)
             if other and not self.app.ask_yes_no(
-                    "Raccourci déjà utilisé", "« %s » sert déjà à : %s.\n\nLe donner à « %s » à la place ?"
-                    % (c, LABELS[other], LABELS[a])):
+                    _("Raccourci déjà utilisé"), _("« %s » sert déjà à : %s.\n\nLe donner à « %s » à la place ?")
+                    % (i18n.key(c), LABELS[other], LABELS[a])):
                 return "break"
             if other:
                 self.keys[other].remove(c)
@@ -373,6 +389,23 @@ class SettingsDialog(tk.Toplevel):
         self.keys = {a: list(v) for a, v in DEFAULTS.items()}
         self.fill()
 
+    def set_language(self):
+        """La langue choisie est enregistrée ; elle s'applique au prochain lancement de Brodilume."""
+        code = next(k for k, v in i18n.LANGS.items() if v == self.v_lang.get())
+        try:
+            save_setting("language", code)
+        except OSError:
+            return
+        if code == i18n.lang:
+            self.lbl_lang.config(text="")
+            self.btn_restart.pack_forget()
+            return
+        # message écrit dans la langue choisie : c'est elle que l'utilisateur sait lire
+        self.lbl_lang.config(text=i18n.translate(code, "La nouvelle langue s'appliquera au prochain lancement "
+                                                       "de Brodilume."))
+        self.btn_restart.config(text=i18n.translate(code, "Relancer maintenant"))
+        self.btn_restart.pack(side="left", padx=(10, 0))
+
     def apply_hoop(self):
         try:
             w, h = float(self.v_hw.get()), float(self.v_hh.get())
@@ -386,5 +419,5 @@ class SettingsDialog(tk.Toplevel):
         try:
             save_bindings(self.keys)
         except OSError as e:
-            self.app.message("Paramètres", "Raccourcis appliqués mais non enregistrés :\n%s" % e, kind="warning")
+            self.app.message(_("Paramètres"), _("Raccourcis appliqués mais non enregistrés :\n%s") % e, kind="warning")
         self.destroy()

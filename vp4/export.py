@@ -12,23 +12,29 @@ import sys
 
 from .format import Design, write_vp4, STITCH, JUMP, TRIM
 
+try:  # traduction de l'interface (absente quand vp4 est utilisé seul)
+    from i18n import _
+except ImportError:
+    def _(s):
+        return s
+
 # (extension, nom affiché, marques, exemples de machines — liste non exhaustive)
 FORMATS = [
-    ("vp4", "VP4", "Husqvarna Viking / Pfaff (mySewnet)",
-     "format du logiciel mySewnet ; machines récentes connectées (Designer Epic 3, creative icon 2…) — à vérifier"),
-    ("vp3", "VP3", "Husqvarna Viking / Pfaff",
-     "Designer Epic, Ruby, Topaz, Jade, Sapphire ; Pfaff creative icon, ambition, sensation, 4.5…"),
-    ("pes", "PES", "Brother, Baby Lock",
-     "Brother Innov-is, Stellaire, Luminaire, PE / SE ; Baby Lock Destiny, Solaris, Flare…"),
-    ("jef", "JEF", "Janome, Elna",
-     "Janome Memory Craft (MC 400E, 500E, 550E, 9850…) ; Elna eXpressive…"),
-    ("exp", "EXP", "Bernina, Melco",
-     "Bernina 5, 7 et 8 Series, Aurora ; Melco…"),
-    ("xxx", "XXX", "Singer",
-     "Singer Futura, Quantum XL, SE / Legacy…"),
-    ("dst", "DST", "format universel des pros",
-     "Tajima, Ricoma, Happy, SWF, Barudan ; Brother PR ; la plupart des machines multi-têtes"),
-    ("u01", "U01", "Barudan", "Barudan, Toyota (machines professionnelles)"),
+    ("vp4", "VP4", _("Husqvarna Viking / Pfaff (mySewnet)"),
+     _("format du logiciel mySewnet ; machines récentes connectées (Designer Epic 3, creative icon 2…) — à vérifier")),
+    ("vp3", "VP3", _("Husqvarna Viking / Pfaff"),
+     _("Designer Epic, Ruby, Topaz, Jade, Sapphire ; Pfaff creative icon, ambition, sensation, 4.5…")),
+    ("pes", "PES", _("Brother, Baby Lock"),
+     _("Brother Innov-is, Stellaire, Luminaire, PE / SE ; Baby Lock Destiny, Solaris, Flare…")),
+    ("jef", "JEF", _("Janome, Elna"),
+     _("Janome Memory Craft (MC 400E, 500E, 550E, 9850…) ; Elna eXpressive…")),
+    ("exp", "EXP", _("Bernina, Melco"),
+     _("Bernina 5, 7 et 8 Series, Aurora ; Melco…")),
+    ("xxx", "XXX", _("Singer"),
+     _("Singer Futura, Quantum XL, SE / Legacy…")),
+    ("dst", "DST", _("format universel des pros"),
+     _("Tajima, Ricoma, Happy, SWF, Barudan ; Brother PR ; la plupart des machines multi-têtes")),
+    ("u01", "U01", _("Barudan"), _("Barudan, Toyota (machines professionnelles)")),
 ]
 
 
@@ -71,7 +77,7 @@ def export(des: Design, path: str):
         write_vp4(des, path)
         return
     if not has_pyembroidery():
-        raise RuntimeError("Pour ce format, installez pyembroidery : python -m pip install pyembroidery")
+        raise RuntimeError(_("Pour ce format, installez pyembroidery : python -m pip install pyembroidery"))
     import pyembroidery as pe
     pe.write(to_pattern(des), path)
 
@@ -97,5 +103,5 @@ def usb_drives():
             continue
         free = ctypes.c_ulonglong(0)
         k32.GetDiskFreeSpaceExW(root, None, None, ctypes.byref(free))
-        out.append((root, name.value or "Clé USB", free.value // (1024 * 1024)))
+        out.append((root, name.value or _("Clé USB"), free.value // (1024 * 1024)))
     return out

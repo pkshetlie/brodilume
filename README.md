@@ -12,6 +12,8 @@ des couleurs, puis envoyer le résultat directement sur une clé USB.
 
 - **Image → broderie en quelques clics** : réduction des couleurs, remplissage tatami, sous-couche,
   points droits pour les petits détails (étoiles, reflets, liserés).
+- **Texte brodé** : écrivez un texte (plusieurs lignes possibles) avec n'importe quelle police installée sur
+  le PC, ou une police importée seulement dans Brodilume (.ttf, .otf, .ttc).
 - **Plusieurs éléments dans un même cercle** : redimensionner, déplacer, tourner, réordonner, masquer.
 - **Édition fine** : gomme autour des points, sélection et suppression d'une partie de couleur,
   fusion de deux couleurs (Ctrl+clic), nombre de couleurs à régler (et suggestion automatique).
@@ -20,6 +22,7 @@ des couleurs, puis envoyer le résultat directement sur une clé USB.
 - **Clé USB** : détection automatique, choix du format avec des exemples de machines.
 - **Interface** Photoshop-like : panneaux de calques et de propriétés, thème clair ou sombre (suit Windows),
   raccourcis clavier configurables, annuler / rétablir (60 étapes).
+- **Langues** : français (par défaut), anglais, allemand (Paramètres > Général > Langue).
 - **Projets `.brodi`** : enregistrez votre travail (images d'origine, réglages, positions) et rouvrez-le plus tard.
 
 ## Captures d'écran
@@ -97,6 +100,26 @@ python app.py
 
 Sur Windows, `Brodilume.bat` lance l'application sans fenêtre de console, et accepte un fichier en
 argument (glisser une image ou un .vp4 sur le .bat l'ouvre directement).
+
+## Texte
+
+- **T Texte…** (barre du haut, Ctrl+T ou Fichier > Ajouter un texte) crée un élément « texte » et ouvre
+  le panneau **Texte** : contenu (Entrée = nouvelle ligne), police, couleur, alignement, interligne.
+  Double-cliquer sur un texte dans le cercle (outil Sélection) le rouvre.
+- **Police** : la liste contient toutes les polices installées sur le PC (lues au premier lancement, puis
+  gardées en cache). Tapez une partie du nom pour filtrer.
+- **Importer une police…** : un fichier .ttf / .otf / .ttc est copié dans `%APPDATA%\Brodilume\polices`.
+  Il n'est pas installé dans Windows et reste disponible dans Brodilume pour les textes suivants.
+  Un projet `.brodi` qui l'utilise l'emporte avec lui : il reste modifiable sur un autre PC.
+- Les lettres sont brodées comme une image d'une seule couleur (remplissage tatami) : la taille se règle
+  dans Propriétés ou avec les coins du cadre, la densité et l'angle dans le panneau Image.
+  Des lettres de moins de 5 mm de haut se brodent mal ; les polices très fines rendent mieux en grand.
+
+## Langue
+
+Paramètres > Général > **Langue** : Français, English, Deutsch. Le changement s'applique au prochain
+lancement (bouton « Relancer maintenant »). Les traductions sont dans `lang/en.json` et `lang/de.json` :
+chaque texte français du code y a sa traduction ; `python tests/test_i18n.py` vérifie qu'il n'en manque aucune.
 
 ## Composer plusieurs éléments
 
@@ -189,6 +212,8 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 - `vp4/digitize.py` : image → points (réduction des couleurs, remplissage tatami, coupes et sauts).
 - `vp4/vp3.py` : lecture du format .vp3.
 - `vp4/projectfile.py` : fichier projet .brodi.
+- `vp4/fonts.py` : polices (installées, importées) et dessin du texte à broder.
+- `i18n.py` et `lang/` : traduction de l'interface (français, anglais, allemand).
 - `vp4/export.py` : exports (vp4, vp3, pes, dst…) et détection des clés USB.
 - `vp4/project.py` : éléments (position, rotation, échelle), gomme, assemblage du motif final.
 - `vp4/render.py` : aperçu.
@@ -196,6 +221,7 @@ python -m vp4 image.png -o motif.vp4 --width 120 --colors 4 --preview apercu.png
 - `install_win.py` / `installer.py` : installation pour l'utilisateur (raccourcis, `.brodi`, désinstallation) et fenêtre de `Brodilume-Setup.exe`.
 - `build_exe.bat` : fabrique `Brodilume.exe` et `Brodilume-Setup.exe`.
 - `tests/test_roundtrip.py` : vérifie que l'écriture reproduit à l'octet près un fichier exporté par le logiciel d'origine.
+- `tests/test_i18n.py` : vérifie que chaque texte de l'interface est traduit (mêmes marqueurs %s / %d).
 - `assets/` : logo et icône Brodilume (SVG d'origine ; `python assets/build_assets.py` régénère PNG et ICO).
 
 ## Limites

@@ -13,7 +13,7 @@ import tempfile
 import urllib.request
 import webbrowser
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 REPO = "pkshetlie/brodilume"          # dépôt GitHub public (propriétaire/nom)
 API_LATEST = "https://api.github.com/repos/%s/releases/latest" % REPO
 PAGE_LATEST = "https://github.com/%s/releases/latest" % REPO

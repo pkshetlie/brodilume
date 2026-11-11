@@ -258,17 +258,18 @@ def run_uninstall_ui() -> None:
     """« Brodilume.exe --uninstall » (lancé depuis Paramètres > Applications)."""
     import tkinter as tk
     from tkinter import messagebox
+    from i18n import _
     root = tk.Tk()
     root.withdraw()
-    if not messagebox.askyesno("Désinstaller Brodilume",
-                               "Désinstaller Brodilume ?\n\nVos projets (.brodi) et vos réglages sont conservés."):
+    if not messagebox.askyesno(_("Désinstaller Brodilume"),
+                               _("Désinstaller Brodilume ?\n\nVos projets (.brodi) et vos réglages sont conservés.")):
         root.destroy()
         return
     left = uninstall()
     if left:
-        messagebox.showwarning("Désinstaller Brodilume",
-                               "Brodilume est désinstallé, mais ces éléments n'ont pas pu être retirés :\n\n"
+        messagebox.showwarning(_("Désinstaller Brodilume"),
+                               _("Brodilume est désinstallé, mais ces éléments n'ont pas pu être retirés :\n\n")
                                + "\n".join(left))
     else:
-        messagebox.showinfo("Désinstaller Brodilume", "Brodilume a été désinstallé.")
+        messagebox.showinfo(_("Désinstaller Brodilume"), _("Brodilume a été désinstallé."))
     root.destroy()
