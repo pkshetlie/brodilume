@@ -3,3 +3,4 @@
 *.brodi binary
 *.ico binary
 *.png binary
+*.bat text eol=crlf
